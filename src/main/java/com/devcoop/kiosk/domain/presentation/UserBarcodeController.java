@@ -25,7 +25,6 @@ public class UserBarcodeController {
 
             if (userEntity != null) {
                 UserResponseDto userResponseDto = new UserResponseDto();
-                userResponseDto.setStudentNumber(userEntity.getStudentNumber());
                 userResponseDto.setStudentName(userEntity.getStudentName());
                 userResponseDto.setPoint(userEntity.getPoint());
 

@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserResponseDto {
-    private String studentName;
-    private int point;
+public class ItemResponseDto {
+    private String name;
+    private int price;
 }
