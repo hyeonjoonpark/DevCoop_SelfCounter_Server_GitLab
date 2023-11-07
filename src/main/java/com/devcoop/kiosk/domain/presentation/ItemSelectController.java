@@ -24,17 +24,17 @@ public class ItemSelectController {
 
     @GetMapping("/itemSelect")
     public ResponseEntity<List<ItemResponseDto>> getItemsByBarcodes(@RequestParam List<String> barcodes) {
-        List<ItemResponseDto> itemResponses = new ArrayList<>();
+        List<ItemResponseDto> itemResponseDtos = new ArrayList<>();
 
         for (String barcode : barcodes) {
             ItemEntity item = itemRepository.findByBarcode(barcode);
 
             if (item != null) {
                 ItemResponseDto itemResponse = new ItemResponseDto(item.getItemName(), item.getItemPrice());
-                itemResponses.add(itemResponse);
+                itemResponseDtos.add(itemResponse);
             }
         }
 
-        return ResponseEntity.ok(itemResponses);
+        return ResponseEntity.ok(itemResponseDtos);
     }
 }
