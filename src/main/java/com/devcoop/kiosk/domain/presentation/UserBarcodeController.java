@@ -4,17 +4,14 @@ import com.devcoop.kiosk.domain.entity.UserEntity;
 import com.devcoop.kiosk.domain.presentation.dto.UserResponseDto;
 import com.devcoop.kiosk.domain.repository.UserRepository;
 import com.devcoop.kiosk.global.exception.enums.ErrorCode;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/kiosk")
 public class UserBarcodeController {
-    private final UserRepository userRepository;
-
-    public UserBarcodeController(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    @Autowired UserRepository userRepository;
 
     @GetMapping("/userinfo")
     public ResponseEntity<UserResponseDto> getUserInfoByCodeNumber(

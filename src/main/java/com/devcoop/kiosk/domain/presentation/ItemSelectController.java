@@ -5,6 +5,7 @@ import com.devcoop.kiosk.domain.entity.ItemEntity;
 import com.devcoop.kiosk.domain.presentation.dto.ItemResponseDto;
 import com.devcoop.kiosk.domain.repository.InventoryRepository;
 import com.devcoop.kiosk.domain.repository.ItemRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/kiosk")
 public class ItemSelectController {
-
-    private final ItemRepository itemRepository;
-    private final InventoryRepository inventoryRepository;
-
-    public ItemSelectController(ItemRepository itemRepository, InventoryRepository inventoryRepository) {
-        this.itemRepository = itemRepository;
-        this.inventoryRepository = inventoryRepository;
-    }
+    @Autowired ItemRepository itemRepository;
+    @Autowired InventoryRepository inventoryRepository;
 
     @PutMapping("/itemSelect")
     public ResponseEntity<List<ItemResponseDto>> updateItemsByBarcodes(@RequestBody BarcodeRequest barcodeRequest) {
