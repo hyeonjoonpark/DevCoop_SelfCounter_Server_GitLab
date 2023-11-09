@@ -10,5 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     UserEntity findByCodeNumber(String codeNumber);
-    UserEntity getUserInfoByCodeNumber(String codeNumber);
+
+    boolean existsByCodeNumberAndPin(String codeNumber, String pin);
 }
