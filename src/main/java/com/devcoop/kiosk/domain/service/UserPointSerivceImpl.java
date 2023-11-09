@@ -6,19 +6,13 @@ import com.devcoop.kiosk.domain.repository.UserRepository;
 import com.devcoop.kiosk.global.exception.enums.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 public class UserPointSerivceImpl implements UserPointService {
 
-    @Autowired
-    private final UserRepository userRepository;
+    @Autowired UserRepository userRepository;
 
-    public UserPointSerivceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    public Object deductPoints(@RequestBody UserPointRequestDto requestDto) {
+    public Object deductPoints(UserPointRequestDto requestDto) {
         UserEntity user = userRepository.findByCodeNumber(requestDto.getCodeNumber());
 
         try {
