@@ -22,7 +22,7 @@ import java.util.Date;
 @Component
 @RequiredArgsConstructor
 public class TokenProvider {
-    private final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 120;
+    private final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 10;
     private final long REFRESH_TOKEN_EXPIRE_TIME = ACCESS_TOKEN_EXPIRE_TIME * 12 * 7;
 
     @AllArgsConstructor
