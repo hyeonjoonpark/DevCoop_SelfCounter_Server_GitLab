@@ -4,7 +4,6 @@ import com.devcoop.kiosk.domain.presentation.dto.UserPointRequestDto;
 import com.devcoop.kiosk.domain.service.UserPointService;
 import com.devcoop.kiosk.global.exception.enums.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
