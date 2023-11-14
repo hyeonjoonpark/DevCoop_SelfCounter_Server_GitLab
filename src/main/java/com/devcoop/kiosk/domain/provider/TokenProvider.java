@@ -14,13 +14,14 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class TokenProvider {
     private final long ACCESS_TOKEN_EXPIRE_TIME = 1000 * 60 * 10;
+    private String secretKey = "KiOSkSEcrET";
 
     private Key getSignInKey(String secretKey) {
         return Keys.secretKeyFor(SignatureAlgorithm.HS512);
     }
 
     public String createJwt(String codeNumber) {
-        String secretKey = "KiOSkSEcrET";
+
         return Jwts.builder()
                 .signWith(getSignInKey(secretKey))
                 .setSubject(codeNumber)
