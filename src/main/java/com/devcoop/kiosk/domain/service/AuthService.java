@@ -48,8 +48,6 @@ public class AuthService {
             return ResponseDto.setFailed("Database Error");
         }
 
-        userEntity.setCodeNumber("");
-
         String token = tokenProvider.createJwt(codeNumber);
         System.out.println(token);
         int exprTime = 600000; // 10 minutes

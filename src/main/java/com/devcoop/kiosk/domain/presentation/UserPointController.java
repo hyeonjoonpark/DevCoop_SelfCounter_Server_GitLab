@@ -16,6 +16,7 @@ public class UserPointController {
     @PutMapping("/pay")
     public Object deductPoints(@RequestBody UserPointRequestDto requestDto) {
         try {
+            System.out.println("요청옴");
             return userPointService.deductPoints(requestDto);
         } catch(Exception e) {
             e.printStackTrace();

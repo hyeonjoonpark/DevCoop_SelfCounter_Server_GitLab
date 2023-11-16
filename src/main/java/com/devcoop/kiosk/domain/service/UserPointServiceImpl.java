@@ -14,11 +14,16 @@ public class UserPointServiceImpl implements UserPointService {
     @Autowired ReceiptRepository receiptRepository;
 
     public Object deductPoints(UserPointRequestDto userPointRequestDto) {
+        System.out.println("deductPoint 실행");
         UserEntity user = userRepository.findByCodeNumber(userPointRequestDto.getCodeNumber());
+
+        System.out.println(user);
 
         try {
             if (user != null && user.getPoint() >= userPointRequestDto.getTotalPrice()) {
+                System.out.println("if 문 통과");
                 int newPoint = user.getPoint() - userPointRequestDto.getTotalPrice();
+                System.out.println(newPoint);
                 user.setPoint(newPoint);
                 userRepository.save(user);
 
