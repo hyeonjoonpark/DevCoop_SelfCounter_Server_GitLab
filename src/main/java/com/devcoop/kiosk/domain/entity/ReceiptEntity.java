@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity(name = "receipt")
@@ -30,5 +31,5 @@ public class ReceiptEntity {
     @Column(name = "sale_qty")
     private Short saleQty;
     @Column(name = "date")
-    private Date date;
+    private LocalDate date;
 }
