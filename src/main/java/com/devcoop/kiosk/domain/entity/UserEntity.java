@@ -4,12 +4,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 @Entity(name = "users")
 @Table(name = "users")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Component
 public class UserEntity {
     @Id
     @Column(name = "student_number")
