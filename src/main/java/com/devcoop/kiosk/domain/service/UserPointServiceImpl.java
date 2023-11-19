@@ -9,7 +9,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserPointServiceImpl implements UserPointService {
 
-    @Autowired UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    @Autowired
+    public UserPointServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public Object deductPoints(UserPointRequestDto userPointRequestDto) {
         System.out.println("deductPoint 실행");

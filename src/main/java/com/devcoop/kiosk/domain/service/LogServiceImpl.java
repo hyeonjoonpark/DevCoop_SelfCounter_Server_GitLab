@@ -13,13 +13,18 @@ import java.time.LocalDate;
 @Service
 public class LogServiceImpl implements LogService {
 
-    @Autowired
-    private PayLogRepository payLogRepository;
+    private final PayLogRepository payLogRepository;
+
+    private final UserRepository userRepository;
+
+    private final PayLogEntity payLogEntity;
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired PayLogEntity payLogEntity;
+    public LogServiceImpl(PayLogRepository payLogRepository, UserRepository userRepository, PayLogEntity payLogEntity) {
+        this.payLogRepository = payLogRepository;
+        this.userRepository = userRepository;
+        this.payLogEntity = payLogEntity;
+    }
 
     @Override
     public void savePayLog(PayLogRequestDto payLogRequestDto) {

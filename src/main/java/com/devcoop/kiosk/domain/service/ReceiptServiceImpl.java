@@ -10,8 +10,15 @@ import java.time.LocalDate;
 
 @Service
 public class ReceiptServiceImpl implements ReceiptService {
-    @Autowired KioskReceiptEntity kioskReceiptEntity;
-    @Autowired KioskReceiptRepository kioskReceiptRepository;
+    private final KioskReceiptEntity kioskReceiptEntity;
+    private final KioskReceiptRepository kioskReceiptRepository;
+
+    @Autowired
+    public ReceiptServiceImpl(KioskReceiptEntity kioskReceiptEntity, KioskReceiptRepository kioskReceiptRepository) {
+        this.kioskReceiptEntity = kioskReceiptEntity;
+        this.kioskReceiptRepository = kioskReceiptRepository;
+    }
+
     @Override
     public void saveReceipt(KioskDto kioskDto) {
         kioskReceiptEntity.setDcmSaleAmt(kioskDto.getDcmSaleAmt());
