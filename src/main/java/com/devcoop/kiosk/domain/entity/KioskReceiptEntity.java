@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 
-@Entity(name = "KioskReceipts")
-@Table(name = "KioskReceipts")
+@Entity(name = "kiosk_receipts")
+@Table(name = "kiosk_receipts")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

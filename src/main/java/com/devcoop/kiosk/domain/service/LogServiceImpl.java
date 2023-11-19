@@ -19,9 +19,10 @@ public class LogServiceImpl implements LogService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired PayLogEntity payLogEntity;
+
     @Override
     public void savePayLog(PayLogRequestDto payLogRequestDto) {
-        PayLogEntity payLogEntity = new PayLogEntity();
         payLogEntity.setCodeNumber(payLogRequestDto.getCodeNumber());
         payLogEntity.setDate(LocalDate.now());
         payLogEntity.setInnerPoint(payLogRequestDto.getInnerPoint());
