@@ -1,5 +1,6 @@
 package com.devcoop.kiosk.domain.entity;
 
+import com.devcoop.kiosk.domain.entity.enums.ReceiptType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,15 +8,14 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.Date;
 
-@Entity(name = "receipt")
-@Table(name = "receipt")
+@Entity(name = "KioskReceipts")
+@Table(name = "KioskReceipts")
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Component
-public class ReceiptEntity {
+public class KioskReceiptEntity {
     @Id
     @Column(name = "number")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +25,8 @@ public class ReceiptEntity {
     @Column(name = "item_id")
     private int itemId;
     @Column(name = "sale_yn")
-    private Character saleYn;
+    @Enumerated(EnumType.STRING)
+    private ReceiptType saleYn;
     @Column(name = "bill_num")
     private int billNum;
     @Column(name = "item_name")
