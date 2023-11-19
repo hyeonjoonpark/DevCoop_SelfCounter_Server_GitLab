@@ -1,8 +1,8 @@
 package com.devcoop.kiosk.domain.service;
 
 import com.devcoop.kiosk.domain.presentation.dto.KioskDto;
-import com.devcoop.kiosk.domain.presentation.dto.PayLogRequestDto;
+import org.springframework.http.ResponseEntity;
 
 public interface ReceiptService {
-    void saveReceipt(KioskDto kioskDto);
+    ResponseEntity<Object> saveReceipt(KioskDto kioskDto);
 }
