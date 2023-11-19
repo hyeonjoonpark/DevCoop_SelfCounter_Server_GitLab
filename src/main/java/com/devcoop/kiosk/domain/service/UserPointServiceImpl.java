@@ -2,7 +2,6 @@ package com.devcoop.kiosk.domain.service;
 
 import com.devcoop.kiosk.domain.entity.UserEntity;
 import com.devcoop.kiosk.domain.presentation.dto.UserPointRequestDto;
-import com.devcoop.kiosk.domain.repository.ReceiptRepository;
 import com.devcoop.kiosk.domain.repository.UserRepository;
 import com.devcoop.kiosk.global.exception.enums.ErrorCode;
 import org.springframework.beans.factory.annotation.Autowired;
