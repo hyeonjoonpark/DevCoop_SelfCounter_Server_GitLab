@@ -6,6 +6,7 @@ import com.devcoop.kiosk.domain.presentation.dto.PayLogRequestDto;
 import com.devcoop.kiosk.domain.repository.PayLogRepository;
 import com.devcoop.kiosk.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,18 +28,23 @@ public class LogServiceImpl implements LogService {
     }
 
     @Override
-    public void savePayLog(PayLogRequestDto payLogRequestDto) {
-        payLogEntity.setCodeNumber(payLogRequestDto.getCodeNumber());
-        payLogEntity.setDate(LocalDate.now());
-        payLogEntity.setInnerPoint(payLogRequestDto.getInnerPoint());
+    public ResponseEntity<Object> savePayLog(PayLogRequestDto payLogRequestDto) {
+        try {
+            payLogEntity.setCodeNumber(payLogRequestDto.getCodeNumber());
+            payLogEntity.setDate(LocalDate.now());
+            payLogEntity.setInnerPoint(payLogRequestDto.getInnerPoint());
 
-        UserEntity user = userRepository.findPointByCodeNumber(payLogRequestDto.getCodeNumber());
-        payLogEntity.setPoint(user.getPoint() - payLogRequestDto.getInnerPoint());
+            UserEntity user = userRepository.findPointByCodeNumber(payLogRequestDto.getCodeNumber());
+            payLogEntity.setPoint(user.getPoint() - payLogRequestDto.getInnerPoint());
 
-        payLogEntity.setChargerId(payLogRequestDto.getChargerId());
-        payLogEntity.setVerifyKey("test");
-        payLogEntity.setStudentName(payLogRequestDto.getStudentName());
+            payLogEntity.setChargerId(payLogRequestDto.getChargerId());
+            payLogEntity.setVerifyKey("test");
+            payLogEntity.setStudentName(payLogRequestDto.getStudentName());
 
-        payLogRepository.save(payLogEntity);
+            payLogRepository.save(payLogEntity);
+            return ResponseEntity.ok().build();
+        } catch(Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
     }
 }
