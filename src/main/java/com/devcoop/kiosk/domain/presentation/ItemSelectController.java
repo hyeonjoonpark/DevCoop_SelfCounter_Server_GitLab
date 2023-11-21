@@ -26,7 +26,7 @@ public class ItemSelectController {
                 ItemEntity item = itemRepository.findByBarcode(barcode);
                 System.out.println(item);
                 if (item != null) {
-                    ItemResponseDto itemResponse = new ItemResponseDto(item.getItemName(), item.getItemPrice());
+                    ItemResponseDto itemResponse = new ItemResponseDto(item.getItemName(), item.getItemPrice(), item.getBarcode());
                     System.out.println(itemResponse);
                     itemResponseDtos.add(itemResponse);
                 }

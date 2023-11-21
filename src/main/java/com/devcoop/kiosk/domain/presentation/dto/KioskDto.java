@@ -14,10 +14,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class KioskDto {
     private int dcmSaleAmt;
-    private int itemId;
+    private String itemId;
     @Enumerated(EnumType.STRING)
     private ReceiptType saleYn;
-    private int billNum;
+    private int userId;
     private String itemName;
     private Short saleQty;
     private LocalDate date;

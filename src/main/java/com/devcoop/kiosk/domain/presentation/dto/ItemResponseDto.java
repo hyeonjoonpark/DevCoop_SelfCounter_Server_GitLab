@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class ItemResponseDto {
     private String name;
     private int price;
+    private String itemId;
 }

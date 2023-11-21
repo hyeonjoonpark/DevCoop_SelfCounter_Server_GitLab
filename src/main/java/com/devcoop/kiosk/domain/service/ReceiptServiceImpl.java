@@ -11,22 +11,23 @@ import java.time.LocalDate;
 
 @Service
 public class ReceiptServiceImpl implements ReceiptService {
-    private final KioskReceiptEntity kioskReceiptEntity;
     private final KioskReceiptRepository kioskReceiptRepository;
 
     @Autowired
-    public ReceiptServiceImpl(KioskReceiptEntity kioskReceiptEntity, KioskReceiptRepository kioskReceiptRepository) {
-        this.kioskReceiptEntity = kioskReceiptEntity;
+    public ReceiptServiceImpl(KioskReceiptRepository kioskReceiptRepository) {
         this.kioskReceiptRepository = kioskReceiptRepository;
     }
 
     @Override
     public ResponseEntity<Object> saveReceipt(KioskDto kioskDto) {
         try {
+            // 새로운 엔터티 생성
+            KioskReceiptEntity kioskReceiptEntity = new KioskReceiptEntity();
+
             kioskReceiptEntity.setDcmSaleAmt(kioskDto.getDcmSaleAmt());
             kioskReceiptEntity.setItemId(kioskDto.getItemId());
             kioskReceiptEntity.setSaleYn(kioskDto.getSaleYn());
-            kioskReceiptEntity.setBillNum(kioskDto.getBillNum());
+            kioskReceiptEntity.setUserId(kioskDto.getUserId());
             kioskReceiptEntity.setItemName(kioskDto.getItemName());
             kioskReceiptEntity.setSaleQty(kioskDto.getSaleQty());
             kioskReceiptEntity.setDate(LocalDate.now());
