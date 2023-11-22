@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 @Entity(name = "pay_log")
 @Table(name = "pay_log")
@@ -22,7 +23,7 @@ public class PayLogEntity {
     @Column(name = "code_number")
     private String codeNumber;
     @Column(name = "date")
-    private LocalDate date;
+    private ZonedDateTime date;
     @Column(name = "type")
     private Short type;
     @Column(name = "inner_point")

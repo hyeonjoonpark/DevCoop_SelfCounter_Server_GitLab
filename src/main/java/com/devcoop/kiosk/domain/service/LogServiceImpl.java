@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.ZonedDateTime;
 
 @Service
 public class LogServiceImpl implements LogService {
@@ -31,7 +32,7 @@ public class LogServiceImpl implements LogService {
     public ResponseEntity<Object> savePayLog(PayLogRequestDto payLogRequestDto) {
         try {
             payLogEntity.setCodeNumber(payLogRequestDto.getCodeNumber());
-            payLogEntity.setDate(LocalDate.now());
+            payLogEntity.setDate(ZonedDateTime.now());
             payLogEntity.setInnerPoint(payLogRequestDto.getInnerPoint());
 
             UserEntity user = userRepository.findPointByCodeNumber(payLogRequestDto.getCodeNumber());

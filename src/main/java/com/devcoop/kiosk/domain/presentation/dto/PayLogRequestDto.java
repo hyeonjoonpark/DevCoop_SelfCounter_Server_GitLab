@@ -5,13 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PayLogRequestDto {
     private String codeNumber;
-    private LocalDate date;
+    private ZonedDateTime date;
     private Short type;
     private int innerPoint;
     private String chargerId;
