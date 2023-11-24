@@ -4,16 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotEmpty;
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PaymentRequestDto {
+public class ItemDto {
 
-    private String requestTimeUtc; // 추가: 요청 시간을 UTC로 저장
-    private List<ItemDto> items; // 아이템 목록을 받을 필드
+    private String itemName; // 아이템 이름
+    private int saleQty; // 판매 수량
+    private int dcmSaleAmt; // 판매 가격
 
     // 생성자, 게터, 세터 등도 자동으로 생성됨
 }

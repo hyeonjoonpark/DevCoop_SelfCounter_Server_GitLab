@@ -30,6 +30,7 @@ public class PaymentsServiceImpl implements PaymentsService {
 
         // 예시: 토큰에서 codeNumber 추출
         System.out.println("Test Start");
+        System.out.println(requestDto);
         String codeNumber = tokenProvider.extractCodeNumberFromToken(requestDto.getToken());
         System.out.println(codeNumber);
 //        // 예시: 영수증 저장
