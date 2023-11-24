@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     boolean existsByCodeNumberAndPin(String codeNumber, String pin);
 
     UserEntity findPointByCodeNumber(String codeNumber);
+
+    String findNameByCodeNumber(String codeNumber);
 }
