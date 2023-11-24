@@ -53,7 +53,6 @@ public class AuthService {
         int exprTime = 600000; // 10 minutes
 
         LoginResponseDto loginResponseDto = new LoginResponseDto(token, exprTime, userEntity);
-        System.out.println(loginResponseDto);
         return ResponseDto.setSuccess("Login Success", loginResponseDto);
     }
 
