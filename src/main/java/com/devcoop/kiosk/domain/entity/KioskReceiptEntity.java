@@ -27,8 +27,8 @@ public class KioskReceiptEntity {
     @Column(name = "sale_yn") // 팔렸으면 Y 안 팔리면 N
     @Enumerated(EnumType.STRING)
     private ReceiptType saleYn;
-    @Column(name = "user_id") // 영수증 번호
-    private int userId;
+    @Column(name = "user_id") // 바코드 번호
+    private String userId;
     @Column(name = "item_name") // 아이템 이름
     private String itemName;
     @Column(name = "sale_qty") // 팔린 양

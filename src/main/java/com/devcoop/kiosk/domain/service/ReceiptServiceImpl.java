@@ -6,22 +6,24 @@ import com.devcoop.kiosk.domain.entity.enums.ReceiptType;
 import com.devcoop.kiosk.domain.presentation.dto.KioskDto;
 import com.devcoop.kiosk.domain.repository.ItemRepository;
 import com.devcoop.kiosk.domain.repository.KioskReceiptRepository;
+import com.devcoop.kiosk.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-
 @Service
 public class ReceiptServiceImpl implements ReceiptService {
     private final KioskReceiptRepository kioskReceiptRepository;
     private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    public ReceiptServiceImpl(KioskReceiptRepository kioskReceiptRepository, ItemRepository itemRepository) {
+    public ReceiptServiceImpl(KioskReceiptRepository kioskReceiptRepository, ItemRepository itemRepository, UserRepository userRepository) {
         this.kioskReceiptRepository = kioskReceiptRepository;
         this.itemRepository = itemRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -31,7 +33,8 @@ public class ReceiptServiceImpl implements ReceiptService {
             KioskReceiptEntity kioskReceiptEntity = new KioskReceiptEntity();
 
             kioskReceiptEntity.setDcmSaleAmt(kioskDto.getDcmSaleAmt());
-
+//            user = userRepository.findByCodeNumber(kioskDto.)
+//            kioskReceiptEntity.setUserId();
             List<ItemEntity> items = itemRepository.findItemEntitiesByItemName(kioskDto.getItemName());
             if (!items.isEmpty()) {
                 ItemEntity item = items.get(0);
@@ -42,14 +45,13 @@ public class ReceiptServiceImpl implements ReceiptService {
                 return ResponseEntity.badRequest().body("Item not found");
             }
 
-
-
-            // 수정: ReceiptType의 값을 사용하도록 수정
+            // ReceiptType의 값을 사용하도록 수정
             kioskReceiptEntity.setSaleYn(ReceiptType.Y);
 
-            // 수정: 예외 처리를 추가하여 안전하게 UserId를 파싱
+            // 예외 처리를 추가하여 안전하게 UserId를 파싱
             try {
-                kioskReceiptEntity.setUserId(Integer.parseInt(kioskDto.getUserId()));
+                int userId = Integer.parseInt(kioskDto.getUserId());
+                kioskReceiptEntity.setUserId(String.valueOf(userId));
             } catch (NumberFormatException e) {
                 return ResponseEntity.badRequest().body("Invalid userId format");
             }
@@ -58,14 +60,14 @@ public class ReceiptServiceImpl implements ReceiptService {
             kioskReceiptEntity.setSaleQty((short) kioskDto.getSaleQty());
             kioskReceiptEntity.setDate(LocalDate.now());
 
-            // 수정: 트랜잭션 내에서 수행되는지 확인
+            // 트랜잭션 내에서 수행되도록 수정
             kioskReceiptRepository.save(kioskReceiptEntity);
 
             return ResponseEntity.ok().build();
         } catch (Exception e) {
-            // 수정: 예외 로그 출력
+            // 예외 로그 출력
             e.printStackTrace();
-            // 수정: 예외 처리를 추가하여 내부 서버 오류 응답
+            // 예외 처리를 추가하여 내부 서버 오류 응답
             return ResponseEntity.internalServerError().build();
         }
     }
