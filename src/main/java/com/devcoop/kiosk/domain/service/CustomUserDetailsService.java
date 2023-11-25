@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserEntity user = userRepository.findByCodeNumber(username);
         if (user == null) {
-            throw new UsernameNotFoundException("User not found with username: " + username);
+            return null;
         }
         return new CustomUserDetails(user);
         // UserDetails로 변환하여 반환

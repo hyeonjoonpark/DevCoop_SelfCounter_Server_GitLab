@@ -14,8 +14,7 @@ public class CustomUserDetails implements UserDetails {
         this.user = user;
     }
 
-
-
+    
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.emptyList(); // 빈 권한 목록을 반환
     }
@@ -24,7 +23,9 @@ public class CustomUserDetails implements UserDetails {
         return user.getPin();
     }
 
-
+    public int getPoint(){
+        return user.getPoint();
+    }
     public String getUsername() {
         return user.getStudentName();
     }

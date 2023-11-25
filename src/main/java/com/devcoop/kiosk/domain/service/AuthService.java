@@ -1,48 +1,64 @@
 package com.devcoop.kiosk.domain.service;
 
-import com.devcoop.kiosk.domain.entity.UserEntity;
+import com.devcoop.kiosk.domain.details.CustomUserDetails;
 import com.devcoop.kiosk.domain.presentation.dto.LoginRequestDto;
 import com.devcoop.kiosk.domain.presentation.dto.LoginResponseDto;
 import com.devcoop.kiosk.domain.presentation.dto.ResponseDto;
 import com.devcoop.kiosk.domain.provider.TokenProvider;
-import com.devcoop.kiosk.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
 import java.util.Base64;
 
 @Service
 public class AuthService {
-    private final UserDetailsService userDetailsService;
+    private final CustomUserDetailsService customUserDetailsService;
     private final TokenProvider tokenProvider;
 
     @Autowired
-    public AuthService(UserDetailsService userDetailsService, TokenProvider tokenProvider) {
-        this.userDetailsService = userDetailsService;
+    public AuthService(CustomUserDetailsService customUserDetailsService, TokenProvider tokenProvider) {
+        this.customUserDetailsService = customUserDetailsService;
         this.tokenProvider = tokenProvider;
     }
 
-    public ResponseDto<LoginResponseDto> login(LoginRequestDto dto) {
+    public ResponseEntity<Object> login(LoginRequestDto dto) {
         String codeNumber = dto.getCodeNumber();
         String pin = dto.getPin();
-
+        System.out.println("Login Start");
         try {
             // UserDetailsService를 사용하여 사용자 정보를 가져옴
-            UserDetails userDetails = userDetailsService.loadUserByUsername(codeNumber);
+            CustomUserDetails customUserDetails = (CustomUserDetails) customUserDetailsService.loadUserByUsername(codeNumber);
 
-            // 비밀번호 검증 로직 필요 (BCrypt 등 사용)
-            // 비밀번호가 일치하지 않으면 예외 처리
+            if (customUserDetails == null) {
+                // 사용자가 존재하지 않는 경우
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found or Wrong Password");
+            }
+
+            int point = customUserDetails.getPoint();
+            String studentName = customUserDetails.getUsername();
+
+            // 저장된 BCrypt 해시와 입력된 비밀번호를 비교
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            boolean passwordMatches = passwordEncoder.matches(pin, customUserDetails.getPassword());
+
+            if (!passwordMatches) {
+                // 패스워드가 일치하지 않는 경우
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found or Wrong Password");
+            }
 
             // 인증 성공 시 토큰 생성
             String token = tokenProvider.createJwt(codeNumber);
 
             // 로그인 응답을 반환하고 토큰을 포함
             int exprTime = 600000; // 10 minutes
-            LoginResponseDto loginResponseDto = new LoginResponseDto(token, exprTime, userDetails);
-            return ResponseDto.setSuccess("Login Success", loginResponseDto, token);
+            LoginResponseDto loginResponseDto = new LoginResponseDto(token, exprTime, point, studentName);
+            return ResponseEntity.status(HttpStatus.OK).body(loginResponseDto);
         } catch (Exception e) {
-            return ResponseDto.setFailed("Login Error");
+            System.out.println("Error!");
+            System.out.println(e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Login Error");
         }
     }
 
