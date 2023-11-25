@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class ItemDto {
 
     private String itemName; // 아이템 이름
+    private String itemBarcode;  // 바코드
     private int saleQty; // 판매 수량
     private int dcmSaleAmt; // 판매 가격
 
