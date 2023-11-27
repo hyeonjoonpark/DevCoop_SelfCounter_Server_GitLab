@@ -41,7 +41,7 @@ public class LogServiceImpl implements LogService {
             payLogEntity.setChargerId(payLogRequestDto.getChargerId());
             payLogEntity.setVerifyKey("test");
             payLogEntity.setStudentName(payLogRequestDto.getStudentName());
-
+             
             payLogRepository.save(payLogEntity);
             return ResponseEntity.ok().build();
         } catch(Exception e) {
