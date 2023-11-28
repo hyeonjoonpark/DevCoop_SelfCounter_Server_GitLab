@@ -1,9 +1,11 @@
 package com.devcoop.kiosk.domain.service;
 
 import com.devcoop.kiosk.domain.details.CustomUserDetails;
+import com.devcoop.kiosk.domain.entity.UserEntity;
 import com.devcoop.kiosk.domain.presentation.dto.LoginRequestDto;
 import com.devcoop.kiosk.domain.presentation.dto.LoginResponseDto;
 import com.devcoop.kiosk.domain.provider.TokenProvider;
+import com.devcoop.kiosk.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -15,11 +17,14 @@ import java.util.Base64;
 public class AuthService {
     private final CustomUserDetailsService customUserDetailsService;
     private final TokenProvider tokenProvider;
+    private final UserRepository userRepository;
 
     @Autowired
-    public AuthService(CustomUserDetailsService customUserDetailsService, TokenProvider tokenProvider) {
+    public AuthService(CustomUserDetailsService customUserDetailsService, TokenProvider tokenProvider,
+                       UserRepository userRepository) {
         this.customUserDetailsService = customUserDetailsService;
         this.tokenProvider = tokenProvider;
+        this.userRepository = userRepository;
     }
 
     public ResponseEntity<Object> login(LoginRequestDto dto) {
@@ -38,6 +43,9 @@ public class AuthService {
             int point = customUserDetails.getPoint();
             String studentName = customUserDetails.getUsername();
 
+            UserEntity userEntity;
+            userEntity = userRepository.findByCodeNumber(codeNumber);
+
             // 저장된 BCrypt 해시와 입력된 비밀번호를 비교
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             boolean passwordMatches = passwordEncoder.matches(pin, customUserDetails.getPassword());
@@ -52,7 +60,8 @@ public class AuthService {
 
             // 로그인 응답을 반환하고 토큰을 포함
             int exprTime = 600000; // 10 minutes
-            LoginResponseDto loginResponseDto = new LoginResponseDto(token, exprTime, point, studentName);
+            LoginResponseDto loginResponseDto = new LoginResponseDto(token, exprTime, userEntity);
+            System.out.println(loginResponseDto);
             return ResponseEntity.status(HttpStatus.OK).body(loginResponseDto);
         } catch (Exception e) {
             System.out.println("Error!");
