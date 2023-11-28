@@ -39,10 +39,7 @@ public class AuthService {
                 // 사용자가 존재하지 않는 경우
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found or Wrong Password");
             }
-
-            int point = customUserDetails.getPoint();
-            String studentName = customUserDetails.getUsername();
-
+            
             UserEntity userEntity;
             userEntity = userRepository.findByCodeNumber(codeNumber);
 
