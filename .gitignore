@@ -8,7 +8,7 @@ caches/
 daemon/
 wrapper/
 native/
-**/*.properties
+*.properties
 
 ### STS ###
 .apt_generated
