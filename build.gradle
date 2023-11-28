@@ -26,8 +26,6 @@ dependencies {
 	implementation 'org.hibernate:hibernate-core:5.6.15.Final'
 
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation group: 'org.hibernate', name: 'hibernate', version: '3.5.4-Final'
-  implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
