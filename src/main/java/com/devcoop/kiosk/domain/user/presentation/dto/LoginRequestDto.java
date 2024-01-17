@@ -2,12 +2,10 @@ package com.devcoop.kiosk.domain.user.presentation.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
+@Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class LoginRequestDto {
     @NotBlank
     private String codeNumber;

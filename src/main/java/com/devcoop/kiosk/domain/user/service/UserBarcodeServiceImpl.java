@@ -20,6 +20,8 @@ public class UserBarcodeServiceImpl implements UserBarcodeService {
             User user = userRepository.findByCodeNumber(codeNumber);
 
             if (user != null) {
+
+
                 UserResponseDto userResponseDto = new UserResponseDto();
                 userResponseDto.setStudentName(user.getStudentName());
                 userResponseDto.setPoint(user.getPoint());

@@ -3,7 +3,7 @@ package com.devcoop.kiosk.domain.user.presentation;
 import com.devcoop.kiosk.domain.item.Item;
 import com.devcoop.kiosk.domain.item.presentation.dto.ItemResponseDto;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,8 +12,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/kiosk")
+@RequiredArgsConstructor
 public class ItemSelectController {
-    @Autowired ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
 
 
     @GetMapping("/itemSelect")

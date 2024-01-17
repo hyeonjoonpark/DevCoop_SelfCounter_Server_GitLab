@@ -4,6 +4,7 @@ import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequestDto;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.PaymentsDto;
 import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequestDto;
 import com.devcoop.kiosk.domain.paylog.service.KioskService;
+import com.devcoop.kiosk.global.exception.GlobalException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionStatus;

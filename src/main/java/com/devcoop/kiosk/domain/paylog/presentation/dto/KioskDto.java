@@ -3,14 +3,12 @@ package com.devcoop.kiosk.domain.paylog.presentation.dto;
 import com.devcoop.kiosk.domain.receipt.KioskReceipt;
 import com.devcoop.kiosk.domain.receipt.types.ReceiptType;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
 @AllArgsConstructor
-@NoArgsConstructor
 public class KioskDto {
     private int dcmSaleAmt;
     private int itemId;
@@ -23,7 +21,7 @@ public class KioskDto {
     public KioskReceipt toEntity(String itemId) {
         return KioskReceipt.builder()
                 .dcmSaleAmt(dcmSaleAmt)
-                .itemId(String.valueOf(itemId))
+                .itemId(itemId)
                 .saleYn(ReceiptType.Y)
                 .userId(Integer.parseInt(userId))
                 .itemName(itemName)
