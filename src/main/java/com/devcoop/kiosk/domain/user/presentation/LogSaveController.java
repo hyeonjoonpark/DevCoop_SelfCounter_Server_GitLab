@@ -1,6 +1,6 @@
 package com.devcoop.kiosk.domain.user.presentation;
 
-import com.devcoop.kiosk.domain.user.presentation.dto.PayLogRequestDto;
+import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequestDto;
 import com.devcoop.kiosk.domain.paylog.service.LogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

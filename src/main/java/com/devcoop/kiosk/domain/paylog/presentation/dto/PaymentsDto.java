@@ -1,5 +1,6 @@
-package com.devcoop.kiosk.domain.user.presentation.dto;
+package com.devcoop.kiosk.domain.paylog.presentation.dto;
 
+import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequestDto;
 import lombok.*;
 
 @Getter

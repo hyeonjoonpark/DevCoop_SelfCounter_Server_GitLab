@@ -1,7 +1,7 @@
 package com.devcoop.kiosk.domain.user.presentation;
 
 import com.devcoop.kiosk.domain.item.Item;
-import com.devcoop.kiosk.domain.user.presentation.dto.ItemResponseDto;
+import com.devcoop.kiosk.domain.item.presentation.dto.ItemResponseDto;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

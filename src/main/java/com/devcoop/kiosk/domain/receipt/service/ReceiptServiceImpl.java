@@ -3,7 +3,7 @@ package com.devcoop.kiosk.domain.receipt.service;
 import com.devcoop.kiosk.domain.item.Item;
 import com.devcoop.kiosk.domain.receipt.KioskReceipt;
 import com.devcoop.kiosk.domain.receipt.types.ReceiptType;
-import com.devcoop.kiosk.domain.user.presentation.dto.KioskDto;
+import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskDto;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
 import com.devcoop.kiosk.domain.receipt.repository.KioskReceiptRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.devcoop.kiosk.domain.user.presentation;
 
-import com.devcoop.kiosk.domain.user.presentation.dto.KioskDto;
+import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskDto;
 import com.devcoop.kiosk.domain.receipt.service.ReceiptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;

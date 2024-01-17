@@ -1,4 +1,4 @@
-package com.devcoop.kiosk.domain.user.presentation.dto;
+package com.devcoop.kiosk.domain.item.presentation.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
