@@ -6,6 +6,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class GlobalException {
+public class GlobalException extends Throwable {
     final ErrorCode errorCode;
 }
