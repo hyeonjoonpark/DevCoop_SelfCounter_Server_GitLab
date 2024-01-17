@@ -2,7 +2,7 @@ package com.devcoop.kiosk.domain.paylog.service;
 
 import com.devcoop.kiosk.domain.paylog.PayLog;
 import com.devcoop.kiosk.domain.user.User;
-import com.devcoop.kiosk.domain.user.presentation.dto.PayLogRequestDto;
+import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequestDto;
 import com.devcoop.kiosk.domain.paylog.repository.PayLogRepository;
 import com.devcoop.kiosk.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
