@@ -1,4 +1,4 @@
-package com.devcoop.kiosk.domain.user.presentation;
+package com.devcoop.kiosk.domain.paylog.presentation;
 
 import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequestDto;
 import com.devcoop.kiosk.domain.paylog.service.LogService;

@@ -1,4 +1,4 @@
-package com.devcoop.kiosk.domain.user.presentation;
+package com.devcoop.kiosk.domain.receipt.presentation;
 
 import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskDto;
 import com.devcoop.kiosk.domain.receipt.service.ReceiptService;

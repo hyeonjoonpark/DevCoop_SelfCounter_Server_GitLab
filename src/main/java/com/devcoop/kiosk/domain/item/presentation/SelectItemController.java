@@ -1,4 +1,4 @@
-package com.devcoop.kiosk.domain.user.presentation;
+package com.devcoop.kiosk.domain.item.presentation;
 
 import com.devcoop.kiosk.domain.item.Item;
 import com.devcoop.kiosk.domain.item.presentation.dto.ItemResponseDto;
