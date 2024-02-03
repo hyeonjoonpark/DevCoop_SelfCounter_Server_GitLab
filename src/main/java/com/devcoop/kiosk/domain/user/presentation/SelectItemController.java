@@ -11,11 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/kiosk")
+@RequestMapping
 @RequiredArgsConstructor
-public class ItemSelectController {
+public class SelectItemController {
     private final ItemRepository itemRepository;
-
 
     @GetMapping("/itemSelect")
     public ResponseEntity<List<ItemResponseDto>> getItemsByBarcodes(@RequestParam List<String> barcodes) {

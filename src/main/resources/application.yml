@@ -7,7 +7,13 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
+  main:
+    allow-bean-definition-overriding: true
+
 
 jwt:
   secret: DevCoopKioskAuthCertificateSecretKey!!
+server:
+  servlet:
+    context-path: /kiosk

@@ -1,16 +1,16 @@
 package com.devcoop.kiosk.domain.user.presentation.dto;
 
-import com.devcoop.kiosk.domain.user.User;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class LoginResponseDto {
-    @NotBlank
-    private String token;
-    @NotBlank
-    private int exprTime;
-    private User user;
+  private String token;
+  private int studentNumber;
+  private String codeNumber;
+  private String studentName;
+  private int point;
 }

@@ -20,7 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class KioskService {
+public class SelfCounterService {
 
     private final PayLogRepository payLogRepository;
     private final UserRepository userRepository;

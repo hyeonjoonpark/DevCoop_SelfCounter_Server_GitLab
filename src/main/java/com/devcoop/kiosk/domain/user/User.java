@@ -36,12 +36,9 @@ public class User {
 
     @Builder
     public User(
-            int studentNumber, String codeNumber,
-            String pin, String studentName,
-            String email, String password,
-            int point, Short isAdmin,
-            Short isCoop, String type,
-            String pointStatus, String refToken
+            int studentNumber, String codeNumber, String pin, String studentName,
+            String email, String password, int point, Short isAdmin,
+            Short isCoop, String type, String pointStatus, String refToken
     ) {
         this.studentNumber = studentNumber;
         this.codeNumber = codeNumber;
