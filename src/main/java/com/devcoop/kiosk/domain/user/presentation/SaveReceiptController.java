@@ -1,7 +1,7 @@
 package com.devcoop.kiosk.domain.user.presentation;
 
-import com.devcoop.kiosk.domain.user.presentation.dto.LoginRequestDto;
-import com.devcoop.kiosk.domain.user.service.AuthService;
+import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskDto;
+import com.devcoop.kiosk.domain.receipt.service.ReceiptService;
 import com.devcoop.kiosk.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/kiosk")
+@RequestMapping
 @RequiredArgsConstructor
-public class UserAuthController {
-    private final AuthService authService;
-    @PostMapping("/auth/signIn")
-    public String login(@RequestBody LoginRequestDto loginRequestDto) throws GlobalException {
-        String result = authService.login(loginRequestDto);
-        return result;
+public class SaveReceiptController {
+    private final ReceiptService receiptService;
+    @PostMapping("/save/receipt")
+    public void saveReceipt(@RequestBody KioskDto kioskDto) throws GlobalException {
+        receiptService.saveReceipt(kioskDto);
     }
 }

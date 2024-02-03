@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ReceiptServiceImpl implements ReceiptService {
+public class KioskReceiptServiceImpl implements ReceiptService {
     private final KioskReceiptRepository kioskReceiptRepository;
     private final ItemRepository itemRepository;
 
     @Autowired
-    public ReceiptServiceImpl(KioskReceiptRepository kioskReceiptRepository, ItemRepository itemRepository) {
+    public KioskReceiptServiceImpl(KioskReceiptRepository kioskReceiptRepository, ItemRepository itemRepository) {
         this.kioskReceiptRepository = kioskReceiptRepository;
         this.itemRepository = itemRepository;
     }

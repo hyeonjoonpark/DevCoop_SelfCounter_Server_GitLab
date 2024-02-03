@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
-public class UserPointServiceImpl implements UserPointService {
+public class PointServiceImpl implements UserPointService {
 
     private final UserRepository userRepository;
     public Object deductPoints(UserPointRequestDto userPointRequestDto) {

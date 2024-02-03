@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/kiosk")
+@RequestMapping
 @RequiredArgsConstructor
-public class LogSaveController {
+public class SaveLogController {
 
     private final LogService logService;
 

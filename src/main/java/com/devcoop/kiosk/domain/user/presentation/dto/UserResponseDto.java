@@ -10,4 +10,16 @@ import lombok.NoArgsConstructor;
 public class UserResponseDto {
     private String studentName;
     private int point;
+
+    public UserResponseDto() {
+
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
 }

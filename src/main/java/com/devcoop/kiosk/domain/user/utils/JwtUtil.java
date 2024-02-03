@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class TokenProvider {
+public class JwtUtil {
     public static String createJwt(String codeNumber, String secretKey, Long exprTime) {
         Claims claims = Jwts.claims();
 
