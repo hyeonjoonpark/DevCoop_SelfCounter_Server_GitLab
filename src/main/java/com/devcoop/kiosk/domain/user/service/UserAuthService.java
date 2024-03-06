@@ -39,6 +39,10 @@ public class UserAuthService {
 
     boolean isPinMatched = bCryptPasswordEncoder.matches(pin, dbPin);
 
+    if(!isPinMatched) {
+      throw new GlobalException(ErrorCode.BARCODE_NOT_VALID);
+    }
+
     String token = JwtUtil.createJwt(codeNumber, secretKey, exprTime);
 
     User user = userRepository.findByCodeNumber(codeNumber);
