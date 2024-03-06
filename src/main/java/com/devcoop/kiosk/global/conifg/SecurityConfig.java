@@ -27,8 +27,7 @@ public class SecurityConfig {
       .httpBasic(AbstractHttpConfigurer::disable)
       .authorizeHttpRequests(
         request -> request
-          .requestMatchers(HttpMethod.POST, "/kiosk/**").permitAll()
-          .requestMatchers(HttpMethod.GET, "/kiosk/**").permitAll()
+          .requestMatchers("/kiosk/**").permitAll()
           .anyRequest().permitAll()
       );
 

@@ -8,19 +8,17 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-    User findByCodeNumber(String codeNumber);
+  User findByCodeNumber(String codeNumber);
 
-    boolean existsByCodeNumberAndPin(String codeNumber, String pin);
+  @Query("select u.pin " +
+    "from User u " +
+    "where u.codeNumber = :codeNumber and u.pin = :pin")
+  String findPinByCodeNumberAndPin(@Param("codeNumber") String codenumber, @Param("pin") String pin);
 
-    User findPointByCodeNumber(String codeNumber);
-
-    @Query("select u.pin " +
-      "from User u " +
-      "where u.codeNumber = :codeNumber and u.pin = :pin")
-    String findPinByCodeNumberAndPin(@Param("codeNumber") String codenumber, @Param("pin") String pin);
-
-    @Query("select u.studentNumber, u.codeNumber, u.studentName, u.point " +
-      "from User u " +
-      "where u.codeNumber = :codeNumber and u.pin = :pin")
+  @Query("select u.studentNumber, u.codeNumber, u.studentName, u.point " +
+    "from User u " +
+    "where u.codeNumber = :codeNumber and u.pin = :pin")
   User findUserDetailByCodeNumberAndPin(@Param("codeNumber") String codenumber, @Param("pin") String pin);
+
+  boolean existsByCodeNumber(String codeNumber);
 }

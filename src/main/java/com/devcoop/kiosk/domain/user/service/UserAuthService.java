@@ -27,34 +27,30 @@ public class UserAuthService {
   @Transactional
   public LoginResponseDto login(LoginRequestDto dto) throws GlobalException {
     String codeNumber = dto.getCodeNumber();
-    System.out.println("codeNumber = " + codeNumber);
     String pin = dto.getPin();
-    System.out.println("pin = " + pin);
 
-    try {
-      boolean isUserExisted = userRepository.existsByCodeNumberAndPin(codeNumber, pin);
-      System.out.println("isUserExisted = " + isUserExisted);
-      
-      if (!isUserExisted) {
-        throw new GlobalException(ErrorCode.USER_NOT_FOUND);
-      }
+    boolean isUserExisted = userRepository.existsByCodeNumber(codeNumber);
 
-      String dbPin = userRepository.findPinByCodeNumberAndPin(codeNumber, pin);
-      System.out.println("dbPin = " + dbPin);
-      
-      boolean isPinMatched = bCryptPasswordEncoder.matches(pin, dbPin);
-      System.out.println("isPinMatched = " + isPinMatched);
-
-      String token = JwtUtil.createJwt(codeNumber, secretKey, exprTime);
-      System.out.println("token = " + token);
-
-      User user = userRepository.findUserDetailByCodeNumberAndPin(codeNumber, pin);
-      System.out.println("user = " + user);
-
-      return new LoginResponseDto(token, user.getStudentNumber(), user.getCodeNumber(), user.getStudentName(), user.getPoint());
-
-    } catch (GlobalException e) {
-      throw new GlobalException(ErrorCode.INTERNAL_SERVER_ERROR);
+    if (!isUserExisted) {
+      throw new GlobalException(ErrorCode.USER_NOT_FOUND);
     }
+
+    String dbPin = userRepository.findPinByCodeNumberAndPin(codeNumber, pin);
+
+    boolean isPinMatched = bCryptPasswordEncoder.matches(pin, dbPin);
+
+    String token = JwtUtil.createJwt(codeNumber, secretKey, exprTime);
+
+    User user = userRepository.findByCodeNumber(codeNumber);
+
+    LoginResponseDto loginResponseDto = LoginResponseDto.builder()
+      .token(token)
+      .studentNumber(user.getStudentNumber())
+      .codeNumber(user.getCodeNumber())
+      .point(user.getPoint())
+      .build();
+
+    return loginResponseDto;
+
   }
 }
