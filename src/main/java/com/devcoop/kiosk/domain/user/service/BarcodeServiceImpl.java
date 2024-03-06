@@ -8,6 +8,7 @@ import com.devcoop.kiosk.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -15,6 +16,7 @@ public class BarcodeServiceImpl implements UserBarcodeService {
 
     private final UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     public ResponseEntity<Object> getUserInfoByCodeNumber(String codeNumber) throws GlobalException {
         try {
             User user = userRepository.findByCodeNumber(codeNumber);

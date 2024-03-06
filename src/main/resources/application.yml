@@ -4,16 +4,14 @@ spring:
     url: jdbc:mysql://10.129.57.5:6006/AriPay?serverTimezone=UTC&characterEncoding=UTF-8
     password: Devcoop1Qw@
     username: devcoop
-
   jpa:
     hibernate:
       ddl-auto: update
   main:
     allow-bean-definition-overriding: true
 
-
 jwt:
-  secret: DevCoopKioskAuthCertificateSecretKey!!
+  secret: DevCoopKioskAuthCertificateJsonWebTokenSecretKey!!
 server:
   servlet:
     context-path: /kiosk

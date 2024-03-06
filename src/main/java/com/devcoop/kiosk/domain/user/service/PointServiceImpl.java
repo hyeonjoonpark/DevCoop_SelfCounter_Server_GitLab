@@ -6,11 +6,14 @@ import com.devcoop.kiosk.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class PointServiceImpl implements UserPointService {
 
     private final UserRepository userRepository;
+    @Transactional
     public Object deductPoints(UserPointRequestDto userPointRequestDto) {
         System.out.println("deductPoint 실행");
         User user = userRepository.findByCodeNumber(userPointRequestDto.getCodeNumber());

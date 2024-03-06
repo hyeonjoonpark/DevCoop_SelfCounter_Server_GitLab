@@ -11,43 +11,50 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserAuthService {
-    private final JwtUtil jwtUtil;
-    private final UserRepository userRepository;
-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+  private final UserRepository userRepository;
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @Value("${jwt.secret}")
-    private String secretKey;
+  @Value("${jwt.secret}")
+  private String secretKey;
 
-    private Long exprTime = 1000 * 60 * 60L;
+  private Long exprTime = 1000 * 60 * 60L;
 
-    public LoginResponseDto login(LoginRequestDto dto) throws GlobalException {
-        String codeNumber = dto.getCodeNumber();
-        String pin = dto.getPin();
+  @Transactional
+  public LoginResponseDto login(LoginRequestDto dto) throws GlobalException {
+    String codeNumber = dto.getCodeNumber();
+    System.out.println("codeNumber = " + codeNumber);
+    String pin = dto.getPin();
+    System.out.println("pin = " + pin);
 
-        try {
-          boolean isUserExisted = userRepository.existsByCodeNumberAndPin(codeNumber, pin);
+    try {
+      boolean isUserExisted = userRepository.existsByCodeNumberAndPin(codeNumber, pin);
+      System.out.println("isUserExisted = " + isUserExisted);
+      
+      if (!isUserExisted) {
+        throw new GlobalException(ErrorCode.USER_NOT_FOUND);
+      }
 
-          if(!isUserExisted) {
-              throw new GlobalException(ErrorCode.USER_NOT_FOUND);
-          }
+      String dbPin = userRepository.findPinByCodeNumberAndPin(codeNumber, pin);
+      System.out.println("dbPin = " + dbPin);
+      
+      boolean isPinMatched = bCryptPasswordEncoder.matches(pin, dbPin);
+      System.out.println("isPinMatched = " + isPinMatched);
 
-          String dbPin = userRepository.findPinByCodeNumberAndPin(codeNumber, pin);
+      String token = JwtUtil.createJwt(codeNumber, secretKey, exprTime);
+      System.out.println("token = " + token);
 
-          boolean isPinMatched = bCryptPasswordEncoder.matches(pin, dbPin);
-          System.out.println("isPinMatched = " + isPinMatched);
+      User user = userRepository.findUserDetailByCodeNumberAndPin(codeNumber, pin);
+      System.out.println("user = " + user);
 
-          String token = jwtUtil.createJwt(codeNumber, secretKey, exprTime);
+      return new LoginResponseDto(token, user.getStudentNumber(), user.getCodeNumber(), user.getStudentName(), user.getPoint());
 
-          User user = userRepository.findUserDetailByCodeNumberAndPin(codeNumber, pin);
-
-          return new LoginResponseDto(token, user.getStudentNumber(), user.getCodeNumber(), user.getStudentName(), user.getPoint());
-
-        } catch (GlobalException e) {
-            throw new GlobalException(ErrorCode.INTERNAL_SERVER_ERROR);
-        }
+    } catch (GlobalException e) {
+      throw new GlobalException(ErrorCode.INTERNAL_SERVER_ERROR);
     }
+  }
 }
