@@ -35,11 +35,11 @@ public class UserAuthService {
       throw new GlobalException(ErrorCode.USER_NOT_FOUND);
     }
 
-    String dbPin = userRepository.findPinByCodeNumberAndPin(codeNumber, pin);
-
-    if (dbPin == null) {
-      throw new GlobalException(ErrorCode.USER_NOT_FOUND);
-    }
+//    String dbPin = userRepository.findPinByCodeNumberAndPin(codeNumber, pin);
+//
+//    if (dbPin == null) {
+//      throw new GlobalException(ErrorCode.USER_NOT_FOUND);
+//    }
 
     /**
      * ISSUE: isPinMatched 에서 NPE 발생
