@@ -14,28 +14,29 @@ import java.util.List;
 @RequestMapping
 @RequiredArgsConstructor
 public class SelectItemController {
-    private final ItemRepository itemRepository;
+  private final ItemRepository itemRepository;
 
-    @GetMapping("/itemSelect")
-    public ResponseEntity<List<ItemResponseDto>> getItemsByBarcodes(@RequestParam List<String> barcodes) {
-        List<ItemResponseDto> itemResponseDtos = new ArrayList<>();
-        System.out.println("요청 성공");
+  @GetMapping("/itemSelect")
+  public ResponseEntity<List<ItemResponseDto>> getItemsByBarcodes(@RequestParam List<String> barcodes) {
+    List<ItemResponseDto> itemResponseDtos = new ArrayList<>();
+    System.out.println("요청 성공");
 
-        try {
-            for (String barcode : barcodes) {
-                Item item = itemRepository.findByBarcode(barcode);
-                System.out.println(item);
-                if (item != null) {
-                    ItemResponseDto itemResponse = new ItemResponseDto(item.getItemName(), item.getItemPrice(), item.getBarcode());
-                    System.out.println(itemResponse);
-                    itemResponseDtos.add(itemResponse);
-                }
-            }
-
-            return ResponseEntity.ok(itemResponseDtos);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.internalServerError().build();
+    try {
+      for (String barcode : barcodes) {
+        System.out.println("barcode = " + barcode);
+        Item item = itemRepository.findByBarcode(barcode);
+        System.out.println(item);
+        if (item != null) {
+          ItemResponseDto itemResponse = new ItemResponseDto(item.getItemName(), item.getItemPrice(), item.getBarcode());
+          System.out.println(itemResponse);
+          itemResponseDtos.add(itemResponse);
         }
+      }
+
+      return ResponseEntity.ok(itemResponseDtos);
+    } catch (Exception e) {
+      e.printStackTrace();
+      return ResponseEntity.internalServerError().build();
     }
+  }
 }

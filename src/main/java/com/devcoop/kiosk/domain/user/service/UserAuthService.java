@@ -45,7 +45,7 @@ public class UserAuthService {
      * ISSUE: isPinMatched 에서 NPE 발생
      */
 //    boolean isPinMatched = bCryptPasswordEncoder.matches(pin, dbPin);
-
+//
 //    if(!isPinMatched) {
 //      throw new GlobalException(ErrorCode.BARCODE_NOT_VALID);
 //    }
@@ -53,11 +53,14 @@ public class UserAuthService {
     String token = JwtUtil.createJwt(codeNumber, secretKey, exprTime);
 
     User user = userRepository.findByCodeNumber(codeNumber);
+    System.out.println("user = " + user);
+    System.out.println("user.getStudentName() = " + user.getStudentName());
 
     LoginResponseDto loginResponseDto = LoginResponseDto.builder()
       .token(token)
       .studentNumber(user.getStudentNumber())
       .codeNumber(user.getCodeNumber())
+      .studentName(user.getStudentName())
       .point(user.getPoint())
       .build();
 
