@@ -8,5 +8,4 @@ import lombok.Getter;
 public class ItemResponseDto {
     private String name;
     private int price;
-    private String itemId;
 }
