@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping
 @RequiredArgsConstructor
 public class SaveLogController {
-
-    private final LogService logService;
-
-    @PostMapping("/save/paylog")
-    public void savePayLog(@RequestBody PayLogRequestDto payLogRequestDto) {
-        logService.savePayLog(payLogRequestDto);
-    }
+  private final LogService logService;
+  @PostMapping("/save/paylog")
+  public void savePayLog(@RequestBody PayLogRequestDto payLogRequestDto) {
+    logService.savePayLog(payLogRequestDto);
+  }
 }

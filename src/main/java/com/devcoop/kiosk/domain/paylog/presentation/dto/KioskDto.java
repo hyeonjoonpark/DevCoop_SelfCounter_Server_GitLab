@@ -10,23 +10,23 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 public class KioskDto {
-    private int dcmSaleAmt;
-    private int itemId;
-    private ReceiptType saleYn;
-    private String userId;
-    private String itemName;
-    private short saleQty;
-    private LocalDate date;
+  private int dcmSaleAmt;
+  private int itemId;
+  private ReceiptType saleYn;
+  private String userId;
+  private String itemName;
+  private short saleQty;
+  private LocalDate date;
 
-    public KioskReceipt toEntity(String itemId) {
-        return KioskReceipt.builder()
-                .dcmSaleAmt(dcmSaleAmt)
-                .itemId(itemId)
-                .saleYn(ReceiptType.Y)
-                .userId(Integer.parseInt(userId))
-                .itemName(itemName)
-                .saleQty(saleQty)
-                .date(LocalDate.now())
-                .build();
-    }
+  public KioskReceipt toEntity(String itemId) {
+    return KioskReceipt.builder()
+      .dcmSaleAmt(dcmSaleAmt)
+      .itemId(itemId)
+      .saleYn(ReceiptType.Y)
+      .userId(Integer.parseInt(userId))
+      .itemName(itemName)
+      .saleQty(saleQty)
+      .date(LocalDate.now())
+      .build();
+  }
 }

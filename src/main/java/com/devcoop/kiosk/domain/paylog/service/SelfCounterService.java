@@ -22,48 +22,48 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SelfCounterService {
 
-    private final PayLogRepository payLogRepository;
-    private final UserRepository userRepository;
-    private final KioskReceiptRepository kioskReceiptRepository;
-    private final ItemRepository itemRepository;
+  private final PayLogRepository payLogRepository;
+  private final UserRepository userRepository;
+  private final KioskReceiptRepository kioskReceiptRepository;
+  private final ItemRepository itemRepository;
 
-    @Transactional
-    public Object deductPoints(UserPointRequestDto userPointRequestDto) {
-        User user = userRepository.findByCodeNumber(userPointRequestDto.getCodeNumber());
+  @Transactional
+  public Object deductPoints(UserPointRequestDto userPointRequestDto) {
+    User user = userRepository.findByCodeNumber(userPointRequestDto.getCodeNumber());
 
-        try {
-            if (user != null && user.getPoint() >= userPointRequestDto.getTotalPrice()) {
-                int newPoint = user.getPoint() - userPointRequestDto.getTotalPrice();
-                user.setPoint(newPoint);
-                userRepository.save(user);
+    try {
+      if (user != null && user.getPoint() >= userPointRequestDto.getTotalPrice()) {
+        int newPoint = user.getPoint() - userPointRequestDto.getTotalPrice();
+        user.setPoint(newPoint);
+        userRepository.save(user);
 
-                return newPoint;
-            }
+        return newPoint;
+      }
 
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError().build();
-        }
+      return ResponseEntity.ok().build();
+    } catch (Exception e) {
+      return ResponseEntity.internalServerError().build();
+    }
+  }
+
+  @Transactional
+  public ResponseEntity<Object> savePayLog(PayLogRequestDto payLogRequestDto) {
+    PayLog payLog = payLogRequestDto.toEntity();
+    payLogRepository.save(payLog);
+    return ResponseEntity.ok().build();
+  }
+
+  @Transactional
+  public ResponseEntity<Object> saveReceipt(KioskDto kioskDto) {
+
+    List<Item> items = itemRepository.findItemEntitiesByItemName(kioskDto.getItemName());
+    if (!items.isEmpty()) {
+      Item item = items.get(0);
+      String itemId = String.valueOf(item.getItemId());
+      KioskReceipt kiosk = kioskDto.toEntity(itemId);
+      kioskReceiptRepository.save(kiosk);
     }
 
-    @Transactional
-    public ResponseEntity<Object> savePayLog(PayLogRequestDto payLogRequestDto) {
-        PayLog payLog = payLogRequestDto.toEntity();
-        payLogRepository.save(payLog);
-        return ResponseEntity.ok().build();
-    }
-
-    @Transactional
-    public ResponseEntity<Object> saveReceipt(KioskDto kioskDto) {
-
-        List<Item> items = itemRepository.findItemEntitiesByItemName(kioskDto.getItemName());
-        if (!items.isEmpty()) {
-            Item item = items.get(0);
-            String itemId = String.valueOf(item.getItemId());
-            KioskReceipt kiosk = kioskDto.toEntity(itemId);
-            kioskReceiptRepository.save(kiosk);
-        }
-
-        return ResponseEntity.ok().build();
-    }
+    return ResponseEntity.ok().build();
+  }
 }

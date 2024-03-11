@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserPointRequestDto {
     private String codeNumber;
     private int totalPrice;

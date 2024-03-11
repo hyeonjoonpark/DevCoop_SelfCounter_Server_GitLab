@@ -5,9 +5,10 @@ import lombok.*;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class PaymentsDto {
-    private UserPointRequestDto userPointRequestDto;
-    private PayLogRequestDto payLogRequestDto;
-    private KioskDto kioskDto;
+  private UserPointRequestDto userPointRequestDto;
+  private PayLogRequestDto payLogRequestDto;
+  private KioskDto kioskDto;
 }
