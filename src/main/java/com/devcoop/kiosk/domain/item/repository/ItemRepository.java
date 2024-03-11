@@ -8,11 +8,12 @@ import java.util.List;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Integer> {
-    Item findByBarcode(String barcode);
 
     Item findItemIdByItemName(String itemName);
 
     List<String> findItemIdsByItemName(String itemName);
 
     List<Item> findItemEntitiesByItemName(String itemName);
+
+  Item getByBarcode(String barcode);
 }
