@@ -5,6 +5,7 @@ import com.devcoop.kiosk.domain.paylog.presentation.dto.PaymentsDto;
 import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequestDto;
 import com.devcoop.kiosk.domain.paylog.service.SelfCounterService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
@@ -48,7 +49,7 @@ public class SelfCounterController {
                 } catch (Exception e) {
                     // 트랜잭션 롤백
                     transactionStatus.setRollbackOnly();
-                    return ResponseEntity.internalServerError().build();
+                    return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
                 }
             }
         });
