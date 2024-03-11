@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+// TODO : FIX Payments API
+
 @Service
 @RequiredArgsConstructor
 public class PointServiceImpl implements UserPointService {
