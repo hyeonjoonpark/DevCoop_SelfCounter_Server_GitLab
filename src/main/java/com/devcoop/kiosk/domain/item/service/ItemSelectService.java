@@ -26,7 +26,7 @@ public class ItemSelectService {
 
     for (String barcode : barcodes) {
       log.info("service에서 barcode = {}", barcode);
-      Item item = itemRepository.getByBarcode(barcode);
+      Item item = itemRepository.findByBarcode(barcode);
       log.info("item = {}", item);
 
       if (item == null) {

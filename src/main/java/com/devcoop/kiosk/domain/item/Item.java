@@ -11,7 +11,7 @@ public class Item {
     @Id
     @Column(name = "item_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int itemId;
+    private Integer itemId;
     @Column(name = "barcode")
     private String barcode;
     @Column(name = "item_name")
