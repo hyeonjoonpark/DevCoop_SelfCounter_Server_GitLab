@@ -12,6 +12,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +25,7 @@ public class SelfCounterController {
   private final TransactionTemplate transactionTemplate;
 
   @PostMapping("/executePayments")
-  public ResponseEntity<Object> executeTransactions(PaymentsDto paymentsDto) {
+  public ResponseEntity<Object> executeTransactions(@RequestBody PaymentsDto paymentsDto) {
     log.info("paymentsDto = {}", paymentsDto);
     return transactionTemplate.execute(new TransactionCallback<ResponseEntity<Object>>() {
       @Override
@@ -32,6 +33,7 @@ public class SelfCounterController {
         System.out.println("check");
         try {
           UserPointRequestDto userPointRequestDto = paymentsDto.getUserPointRequestDto();
+
           log.info("userPointRequestDto = {}", userPointRequestDto);
           Object result = selfCounterService.deductPoints(userPointRequestDto);
           log.info("result = {}", result);

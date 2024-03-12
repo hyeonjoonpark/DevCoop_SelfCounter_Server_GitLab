@@ -11,15 +11,22 @@ import com.devcoop.kiosk.domain.item.repository.ItemRepository;
 import com.devcoop.kiosk.domain.receipt.repository.KioskReceiptRepository;
 import com.devcoop.kiosk.domain.paylog.repository.PayLogRepository;
 import com.devcoop.kiosk.domain.user.repository.UserRepository;
+import com.devcoop.kiosk.global.exception.GlobalException;
+import com.devcoop.kiosk.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SelfCounterService {
 
   private final PayLogRepository payLogRepository;
@@ -29,20 +36,31 @@ public class SelfCounterService {
 
   @Transactional
   public Object deductPoints(UserPointRequestDto userPointRequestDto) {
-    User user = userRepository.findByCodeNumber(userPointRequestDto.getCodeNumber());
+    System.out.println("userPointRequestDto = " + userPointRequestDto);
+    String codeNumber = userPointRequestDto.getCodeNumber();
+    User user = userRepository.findByCodeNumber(codeNumber);
+    log.info("user = {}", user);
 
     try {
-      if (user != null && user.getPoint() >= userPointRequestDto.getTotalPrice()) {
+      if(user == null) {
+        throw new GlobalException(ErrorCode.USER_NOT_FOUND);
+      }
+
+      if (user.getPoint() >= userPointRequestDto.getTotalPrice()) {
         int newPoint = user.getPoint() - userPointRequestDto.getTotalPrice();
+        log.info("newPoint = {}", newPoint);
         user.setPoint(newPoint);
         userRepository.save(user);
 
         return newPoint;
       }
 
-      return ResponseEntity.ok().build();
+      return new RuntimeException("결제하는 것에 실패했습니다");
+
     } catch (Exception e) {
-      return ResponseEntity.internalServerError().build();
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value());
+    } catch (GlobalException e) {
+        throw new RuntimeException(e);
     }
   }
 
