@@ -1,7 +1,6 @@
 package com.devcoop.kiosk.domain.paylog.presentation.dto;
 
 import com.devcoop.kiosk.domain.paylog.PayLog;
-import com.devcoop.kiosk.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

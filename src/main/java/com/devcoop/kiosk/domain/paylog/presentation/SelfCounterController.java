@@ -29,6 +29,7 @@ public class SelfCounterController {
     return transactionTemplate.execute(new TransactionCallback<ResponseEntity<Object>>() {
       @Override
       public ResponseEntity<Object> doInTransaction(TransactionStatus transactionStatus) {
+        System.out.println("check");
         try {
           UserPointRequestDto userPointRequestDto = paymentsDto.getUserPointRequestDto();
           log.info("userPointRequestDto = {}", userPointRequestDto);
