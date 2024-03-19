@@ -1,6 +1,6 @@
 package com.devcoop.kiosk.domain.user.presentation;
 
-import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequestDto;
+import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequest;
 import com.devcoop.kiosk.domain.user.service.UserPointService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,7 +15,7 @@ public class PointController {
 
     private final UserPointService userPointService;
     @PutMapping("/pay")
-    public Object deductPoints(@RequestBody UserPointRequestDto requestDto) {
+    public Object deductPoints(@RequestBody UserPointRequest requestDto) {
         Object deductedUserPoint = userPointService.deductPoints(requestDto);
         return deductedUserPoint;
     }

@@ -7,7 +7,6 @@ import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequest;
 import com.devcoop.kiosk.domain.receipt.KioskReceipt;
 import com.devcoop.kiosk.domain.user.User;
 import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequest;
-import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequestDto;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
 import com.devcoop.kiosk.domain.receipt.repository.KioskReceiptRepository;
 import com.devcoop.kiosk.domain.paylog.repository.PayLogRepository;

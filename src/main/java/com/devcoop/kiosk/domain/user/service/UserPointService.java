@@ -1,7 +1,7 @@
 package com.devcoop.kiosk.domain.user.service;
 
-import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequestDto;
+import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequest;
 
 public interface UserPointService {
-    Object deductPoints(UserPointRequestDto requestDto);
+    Object deductPoints(UserPointRequest requestDto);
 }
