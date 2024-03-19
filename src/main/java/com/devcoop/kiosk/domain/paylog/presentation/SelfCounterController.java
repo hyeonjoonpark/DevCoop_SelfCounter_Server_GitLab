@@ -1,7 +1,7 @@
 package com.devcoop.kiosk.domain.paylog.presentation;
 
 import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequest;
-import com.devcoop.kiosk.domain.paylog.presentation.dto.PaymentsDto;
+import com.devcoop.kiosk.domain.paylog.presentation.dto.Payments;
 import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequest;
 import com.devcoop.kiosk.domain.paylog.service.SelfCounterService;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +25,14 @@ public class SelfCounterController {
   private final TransactionTemplate transactionTemplate;
 
   @PostMapping("/executePayments")
-  public ResponseEntity<Object> executeTransactions(@RequestBody PaymentsDto paymentsDto) {
-    log.info("paymentsDto = {}", paymentsDto);
+  public ResponseEntity<Object> executeTransactions(@RequestBody Payments payments) {
+    log.info("paymentsDto = {}", payments);
     return transactionTemplate.execute(new TransactionCallback<ResponseEntity<Object>>() {
       @Override
       public ResponseEntity<Object> doInTransaction(TransactionStatus transactionStatus) {
         System.out.println("check");
         try {
-          UserPointRequest userPointRequestDto = paymentsDto.getUserPointRequest();
+          UserPointRequest userPointRequestDto = payments.userPointRequest();
 
           log.info("userPointRequestDto = {}", userPointRequestDto);
           Object result = selfCounterService.deductPoints(userPointRequestDto);
@@ -41,7 +41,7 @@ public class SelfCounterController {
             throw new RuntimeException("결제를 하는 동안 에러가 발생하였습니다");
           }
 
-          PayLogRequest payLogRequestDto = paymentsDto.getPayLogRequest();
+          PayLogRequest payLogRequestDto = payments.payLogRequest();
           log.info("payLogRequestDto = {}", payLogRequestDto);
           ResponseEntity<Object> responseEntity = selfCounterService.savePayLog(payLogRequestDto);
           log.info("responseEntity = {}", responseEntity);
@@ -50,7 +50,7 @@ public class SelfCounterController {
           }
 
           System.out.println("save kiosk check");
-          ResponseEntity<Object> saveReceiptResponseEntity = selfCounterService.saveReceipt(paymentsDto.getKioskRequest());
+          ResponseEntity<Object> saveReceiptResponseEntity = selfCounterService.saveReceipt(payments.kioskRequest());
           log.info("saveReceiptResponseEntity = {}", saveReceiptResponseEntity);
           if (saveReceiptResponseEntity.getStatusCode().isError()) {
             throw new RuntimeException("영수증을 출력하는 동안 에러가 발생하였습니다");
