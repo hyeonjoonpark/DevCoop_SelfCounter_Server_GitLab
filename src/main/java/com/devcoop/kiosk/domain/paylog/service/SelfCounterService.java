@@ -2,11 +2,11 @@ package com.devcoop.kiosk.domain.paylog.service;
 
 import com.devcoop.kiosk.domain.item.Item;
 import com.devcoop.kiosk.domain.paylog.PayLog;
+import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskRequest;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequest;
 import com.devcoop.kiosk.domain.receipt.KioskReceipt;
 import com.devcoop.kiosk.domain.user.User;
-import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskDto;
-import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequestDto;
+import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequest;
 import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequestDto;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
 import com.devcoop.kiosk.domain.receipt.repository.KioskReceiptRepository;
@@ -21,9 +21,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,9 +34,9 @@ public class SelfCounterService {
   private final ItemRepository itemRepository;
 
   @Transactional
-  public Object deductPoints(UserPointRequestDto userPointRequestDto) {
-    System.out.println("userPointRequestDto = " + userPointRequestDto);
-    String codeNumber = userPointRequestDto.getCodeNumber();
+  public Object deductPoints(UserPointRequest userPointRequest) {
+    System.out.println("userPointRequestDto = " + userPointRequest);
+    String codeNumber = userPointRequest.codeNumber();
     User user = userRepository.findByCodeNumber(codeNumber);
     log.info("user = {}", user);
 
@@ -47,8 +45,8 @@ public class SelfCounterService {
         throw new GlobalException(ErrorCode.USER_NOT_FOUND);
       }
 
-      if (user.getPoint() >= userPointRequestDto.getTotalPrice()) {
-        int newPoint = user.getPoint() - userPointRequestDto.getTotalPrice();
+      if (user.getPoint() >= userPointRequest.totalPrice()) {
+        int newPoint = user.getPoint() - userPointRequest.totalPrice();
         log.info("newPoint = {}", newPoint);
         user.setPoint(newPoint);
         userRepository.save(user);
@@ -73,13 +71,14 @@ public class SelfCounterService {
   }
 
   @Transactional
-  public ResponseEntity<Object> saveReceipt(KioskDto kioskDto) {
+  public ResponseEntity<Object> saveReceipt(KioskRequest kioskRequest) {
 
-    List<Item> items = itemRepository.findItemEntitiesByItemName(kioskDto.getItemName());
+    List<Item> items = itemRepository.findItemEntitiesByItemName(kioskRequest.itemName());
+    System.out.println("items = " + items);
     if (!items.isEmpty()) {
       Item item = items.get(0);
       String itemId = String.valueOf(item.getItemId());
-      KioskReceipt kiosk = kioskDto.toEntity(itemId);
+      KioskReceipt kiosk = kioskRequest.toEntity(itemId);
       kioskReceiptRepository.save(kiosk);
     }
 

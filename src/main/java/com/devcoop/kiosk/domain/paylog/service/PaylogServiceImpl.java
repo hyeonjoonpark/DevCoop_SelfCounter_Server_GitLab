@@ -2,7 +2,6 @@ package com.devcoop.kiosk.domain.paylog.service;
 
 import com.devcoop.kiosk.domain.paylog.PayLog;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequest;
-import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequestDto;
 import com.devcoop.kiosk.domain.paylog.repository.PayLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

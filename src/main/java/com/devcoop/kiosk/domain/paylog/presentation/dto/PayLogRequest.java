@@ -3,6 +3,7 @@ package com.devcoop.kiosk.domain.paylog.presentation.dto;
 import com.devcoop.kiosk.domain.paylog.PayLog;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public record PayLogRequest(
   String studentName
 ) {
 
+  @Builder
   public PayLogRequest(String codeNumber, LocalDate date, Short type, int innerPoint, int chargerId, String verifyKey, String studentName) {
     this.codeNumber = codeNumber;
     this.date = date;
