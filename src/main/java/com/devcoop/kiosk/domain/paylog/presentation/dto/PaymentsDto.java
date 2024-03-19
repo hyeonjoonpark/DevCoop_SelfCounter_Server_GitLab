@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class PaymentsDto {
   private UserPointRequestDto userPointRequestDto;
-  private PayLogRequestDto payLogRequestDto;
+//  private PayLogRequestDto payLogRequestDto;
+  private PayLogRequest payLogRequest;
   private KioskDto kioskDto;
 }

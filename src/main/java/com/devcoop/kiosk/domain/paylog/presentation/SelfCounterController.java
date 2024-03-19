@@ -1,5 +1,6 @@
 package com.devcoop.kiosk.domain.paylog.presentation;
 
+import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequest;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequestDto;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.PaymentsDto;
 import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequestDto;
@@ -41,7 +42,7 @@ public class SelfCounterController {
             throw new RuntimeException("결제를 하는 동안 에러가 발생하였습니다");
           }
 
-          PayLogRequestDto payLogRequestDto = paymentsDto.getPayLogRequestDto();
+          PayLogRequest payLogRequestDto = paymentsDto.getPayLogRequest();
           log.info("payLogRequestDto = {}", payLogRequestDto);
           ResponseEntity<Object> responseEntity = selfCounterService.savePayLog(payLogRequestDto);
           log.info("responseEntity = {}", responseEntity);

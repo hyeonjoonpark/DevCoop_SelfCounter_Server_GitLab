@@ -2,6 +2,7 @@ package com.devcoop.kiosk.domain.paylog.service;
 
 import com.devcoop.kiosk.domain.item.Item;
 import com.devcoop.kiosk.domain.paylog.PayLog;
+import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequest;
 import com.devcoop.kiosk.domain.receipt.KioskReceipt;
 import com.devcoop.kiosk.domain.user.User;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskDto;
@@ -65,8 +66,8 @@ public class SelfCounterService {
   }
 
   @Transactional
-  public ResponseEntity<Object> savePayLog(PayLogRequestDto payLogRequestDto) {
-    PayLog payLog = payLogRequestDto.toEntity();
+  public ResponseEntity<Object> savePayLog(PayLogRequest payLogRequest) {
+    PayLog payLog = payLogRequest.toEntity();
     payLogRepository.save(payLog);
     return ResponseEntity.ok().build();
   }
