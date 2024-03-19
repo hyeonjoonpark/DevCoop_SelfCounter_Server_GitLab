@@ -2,16 +2,14 @@ package com.devcoop.kiosk.domain.user.presentation.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserResponse {
     private String studentName;
     private int point;
-
-    public UserResponse() {
-
-    }
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
