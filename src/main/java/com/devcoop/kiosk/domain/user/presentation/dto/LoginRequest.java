@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequestDto {
+public class LoginRequest {
     private String codeNumber;
     private String pin;
 }

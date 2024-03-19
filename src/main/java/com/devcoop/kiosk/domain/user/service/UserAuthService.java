@@ -1,8 +1,8 @@
 package com.devcoop.kiosk.domain.user.service;
 
 import com.devcoop.kiosk.domain.user.User;
-import com.devcoop.kiosk.domain.user.presentation.dto.LoginRequestDto;
-import com.devcoop.kiosk.domain.user.presentation.dto.LoginResponseDto;
+import com.devcoop.kiosk.domain.user.presentation.dto.LoginRequest;
+import com.devcoop.kiosk.domain.user.presentation.dto.LoginResponse;
 import com.devcoop.kiosk.domain.user.utils.JwtUtil;
 import com.devcoop.kiosk.domain.user.repository.UserRepository;
 import com.devcoop.kiosk.global.exception.GlobalException;
@@ -25,7 +25,7 @@ public class UserAuthService {
   private Long exprTime = 1000 * 60 * 60L;
 
   @Transactional
-  public LoginResponseDto login(LoginRequestDto dto) throws GlobalException {
+  public LoginResponse login(LoginRequest dto) throws GlobalException {
     String codeNumber = dto.getCodeNumber();
     String pin = dto.getPin();
 
@@ -56,7 +56,7 @@ public class UserAuthService {
     System.out.println("user = " + user);
     System.out.println("user.getStudentName() = " + user.getStudentName());
 
-    LoginResponseDto loginResponseDto = LoginResponseDto.builder()
+    LoginResponse loginResponse = LoginResponse.builder()
       .token(token)
       .studentNumber(user.getStudentNumber())
       .codeNumber(user.getCodeNumber())
@@ -64,7 +64,7 @@ public class UserAuthService {
       .point(user.getPoint())
       .build();
 
-    return loginResponseDto;
+    return loginResponse;
 
   }
 }

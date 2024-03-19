@@ -1,7 +1,7 @@
 package com.devcoop.kiosk.domain.user.service;
 
 import com.devcoop.kiosk.domain.user.User;
-import com.devcoop.kiosk.domain.user.presentation.dto.UserResponseDto;
+import com.devcoop.kiosk.domain.user.presentation.dto.UserResponse;
 import com.devcoop.kiosk.domain.user.repository.UserRepository;
 import com.devcoop.kiosk.global.exception.GlobalException;
 import com.devcoop.kiosk.global.exception.enums.ErrorCode;
@@ -22,9 +22,9 @@ public class BarcodeServiceImpl implements UserBarcodeService {
             User user = userRepository.findByCodeNumber(codeNumber);
 
             if (user != null) {
-                UserResponseDto userResponseDto = new UserResponseDto();
-                userResponseDto.setStudentName(user.getStudentName());
-                userResponseDto.setPoint(user.getPoint());
+                UserResponse userResponse = new UserResponse();
+                userResponse.setStudentName(user.getStudentName());
+                userResponse.setPoint(user.getPoint());
 
                 return (ResponseEntity<Object>) ResponseEntity.ok();
             } else {

@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ItemResponseDto {
+public class ItemResponse {
     private String name;
     private int price;
 }

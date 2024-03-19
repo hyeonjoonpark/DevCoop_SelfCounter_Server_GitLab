@@ -1,8 +1,8 @@
 package com.devcoop.kiosk.domain.paylog.presentation;
 
-import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequestDto;
-import com.devcoop.kiosk.domain.paylog.presentation.dto.PaymentsDto;
-import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequestDto;
+import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequest;
+import com.devcoop.kiosk.domain.paylog.presentation.dto.Payments;
+import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequest;
 import com.devcoop.kiosk.domain.paylog.service.SelfCounterService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,14 +25,14 @@ public class SelfCounterController {
   private final TransactionTemplate transactionTemplate;
 
   @PostMapping("/executePayments")
-  public ResponseEntity<Object> executeTransactions(@RequestBody PaymentsDto paymentsDto) {
-    log.info("paymentsDto = {}", paymentsDto);
+  public ResponseEntity<Object> executeTransactions(@RequestBody Payments payments) {
+    log.info("paymentsDto = {}", payments);
     return transactionTemplate.execute(new TransactionCallback<ResponseEntity<Object>>() {
       @Override
       public ResponseEntity<Object> doInTransaction(TransactionStatus transactionStatus) {
         System.out.println("check");
         try {
-          UserPointRequestDto userPointRequestDto = paymentsDto.getUserPointRequestDto();
+          UserPointRequest userPointRequestDto = payments.userPointRequest();
 
           log.info("userPointRequestDto = {}", userPointRequestDto);
           Object result = selfCounterService.deductPoints(userPointRequestDto);
@@ -41,7 +41,7 @@ public class SelfCounterController {
             throw new RuntimeException("결제를 하는 동안 에러가 발생하였습니다");
           }
 
-          PayLogRequestDto payLogRequestDto = paymentsDto.getPayLogRequestDto();
+          PayLogRequest payLogRequestDto = payments.payLogRequest();
           log.info("payLogRequestDto = {}", payLogRequestDto);
           ResponseEntity<Object> responseEntity = selfCounterService.savePayLog(payLogRequestDto);
           log.info("responseEntity = {}", responseEntity);
@@ -49,7 +49,8 @@ public class SelfCounterController {
             throw new RuntimeException("결제 정보를 저장하는 동안 에러가 발생하였습니다");
           }
 
-          ResponseEntity<Object> saveReceiptResponseEntity = selfCounterService.saveReceipt(paymentsDto.getKioskDto());
+          System.out.println("save kiosk check");
+          ResponseEntity<Object> saveReceiptResponseEntity = selfCounterService.saveReceipt(payments.kioskRequest());
           log.info("saveReceiptResponseEntity = {}", saveReceiptResponseEntity);
           if (saveReceiptResponseEntity.getStatusCode().isError()) {
             throw new RuntimeException("영수증을 출력하는 동안 에러가 발생하였습니다");
