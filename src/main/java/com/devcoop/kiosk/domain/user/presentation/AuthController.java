@@ -14,10 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
-    private final UserAuthService userAuthService;
-    @PostMapping("/signIn")
-    public LoginResponse login(@RequestBody LoginRequest loginRequest) throws GlobalException {
-        LoginResponse result = userAuthService.login(loginRequest);
-        return result;
-    }
+  private final UserAuthService userAuthService;
+
+  @PostMapping("/signIn")
+  public LoginResponse login(@RequestBody LoginRequest loginRequest) throws GlobalException {
+    LoginResponse result = userAuthService.login(loginRequest);
+    return result;
+  }
 }
