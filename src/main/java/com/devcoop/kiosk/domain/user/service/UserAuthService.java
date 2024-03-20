@@ -44,7 +44,7 @@ public class UserAuthService {
     String token = JwtUtil.createJwt(codeNumber, secretKey, exprTime);
 
     System.out.println("user = " + user);
-    System.out.println("user.getStudentName() = " + user.getStudentName());
+    System.out.println("user.getStudentName = " + user.getStudentName());
 
     LoginResponse loginResponse = LoginResponse.builder()
       .token(token)
