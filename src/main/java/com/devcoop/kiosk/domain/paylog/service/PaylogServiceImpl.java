@@ -1,7 +1,7 @@
 package com.devcoop.kiosk.domain.paylog.service;
 
 import com.devcoop.kiosk.domain.paylog.PayLog;
-import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequestDto;
+import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequest;
 import com.devcoop.kiosk.domain.paylog.repository.PayLogRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,10 +12,11 @@ import org.springframework.stereotype.Service;
 public class PaylogServiceImpl implements LogService {
 
   private final PayLogRepository payLogRepository;
+
   @Override
-  public ResponseEntity<Object> savePayLog(PayLogRequestDto payLogRequestDto) {
+  public ResponseEntity<Object> savePayLog(PayLogRequest payLogRequest) {
     try {
-      PayLog payLog = payLogRequestDto.toEntity();
+      PayLog payLog = payLogRequest.toEntity();
 
       payLogRepository.save(payLog);
       return ResponseEntity.ok().build();

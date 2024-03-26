@@ -1,7 +1,7 @@
 package com.devcoop.kiosk.domain.item.service;
 
 import com.devcoop.kiosk.domain.item.Item;
-import com.devcoop.kiosk.domain.item.presentation.dto.ItemResponseDto;
+import com.devcoop.kiosk.domain.item.presentation.dto.ItemResponse;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
 import com.devcoop.kiosk.global.exception.GlobalException;
 import com.devcoop.kiosk.global.exception.enums.ErrorCode;
@@ -21,8 +21,8 @@ public class ItemSelectService {
   private final ItemRepository itemRepository;
 
   @Transactional(readOnly = true)
-  public List<ItemResponseDto> get(List<String> barcodes) throws GlobalException {
-    List<ItemResponseDto> itemResponseDtos = new ArrayList<>();
+  public List<ItemResponse> get(List<String> barcodes) throws GlobalException {
+    List<ItemResponse> itemResponses = new ArrayList<>();
 
     for (String barcode : barcodes) {
       log.info("service에서 barcode = {}", barcode);
@@ -33,14 +33,14 @@ public class ItemSelectService {
         throw new GlobalException(ErrorCode.BARCODE_NOT_VALID);
       }
 
-      ItemResponseDto itemResponseDto = new ItemResponseDto(
+      ItemResponse itemResponse = new ItemResponse(
         item.getItemName(),
         item.getItemPrice()
       );
 
-      itemResponseDtos.add(itemResponseDto);
+      itemResponses.add(itemResponse);
     }
 
-    return itemResponseDtos;
+    return itemResponses;
   }
 }

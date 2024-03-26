@@ -1,14 +1,17 @@
 package com.devcoop.kiosk.domain.user.service;
 
 import com.devcoop.kiosk.domain.user.User;
-import com.devcoop.kiosk.domain.user.presentation.dto.LoginRequestDto;
-import com.devcoop.kiosk.domain.user.presentation.dto.LoginResponseDto;
+import com.devcoop.kiosk.domain.user.presentation.dto.LoginRequest;
+import com.devcoop.kiosk.domain.user.presentation.dto.LoginResponse;
 import com.devcoop.kiosk.domain.user.utils.JwtUtil;
 import com.devcoop.kiosk.domain.user.repository.UserRepository;
 import com.devcoop.kiosk.global.exception.GlobalException;
 import com.devcoop.kiosk.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,38 +28,25 @@ public class UserAuthService {
   private Long exprTime = 1000 * 60 * 60L;
 
   @Transactional
-  public LoginResponseDto login(LoginRequestDto dto) throws GlobalException {
+  public LoginResponse login(LoginRequest dto) throws GlobalException {
     String codeNumber = dto.getCodeNumber();
     String pin = dto.getPin();
 
-    boolean isUserExisted = userRepository.existsByCodeNumber(codeNumber);
+    User user = userRepository.findByCodeNumber(codeNumber);
 
-    if (!isUserExisted) {
+    if (user == null) {
       throw new GlobalException(ErrorCode.USER_NOT_FOUND);
     }
 
-//    String dbPin = userRepository.findPinByCodeNumberAndPin(codeNumber, pin);
-//
-//    if (dbPin == null) {
-//      throw new GlobalException(ErrorCode.USER_NOT_FOUND);
-//    }
-
-    /**
-     * ISSUE: isPinMatched 에서 NPE 발생
-     */
-//    boolean isPinMatched = bCryptPasswordEncoder.matches(pin, dbPin);
-//
-//    if(!isPinMatched) {
-//      throw new GlobalException(ErrorCode.BARCODE_NOT_VALID);
-//    }
+    // 패스워드 비교해서 에러 핸들링 해주는 로직만 추가하면 에러가 발생함
+    // TODO : 나중에 리팩토링
 
     String token = JwtUtil.createJwt(codeNumber, secretKey, exprTime);
 
-    User user = userRepository.findByCodeNumber(codeNumber);
     System.out.println("user = " + user);
-    System.out.println("user.getStudentName() = " + user.getStudentName());
+    System.out.println("user.getStudentName = " + user.getStudentName());
 
-    LoginResponseDto loginResponseDto = LoginResponseDto.builder()
+    LoginResponse loginResponse = LoginResponse.builder()
       .token(token)
       .studentNumber(user.getStudentNumber())
       .codeNumber(user.getCodeNumber())
@@ -64,7 +54,7 @@ public class UserAuthService {
       .point(user.getPoint())
       .build();
 
-    return loginResponseDto;
+    return loginResponse;
 
   }
 }

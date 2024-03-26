@@ -1,7 +1,7 @@
 package com.devcoop.kiosk.domain.user.service;
 
 import com.devcoop.kiosk.domain.user.User;
-import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequestDto;
+import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequest;
 import com.devcoop.kiosk.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,16 +16,16 @@ public class PointServiceImpl implements UserPointService {
 
     private final UserRepository userRepository;
     @Transactional
-    public Object deductPoints(UserPointRequestDto userPointRequestDto) {
+    public Object deductPoints(UserPointRequest userPointRequestDto) {
         System.out.println("deductPoint 실행");
-        User user = userRepository.findByCodeNumber(userPointRequestDto.getCodeNumber());
+        User user = userRepository.findByCodeNumber(userPointRequestDto.codeNumber());
 
         System.out.println(user);
 
         try {
-            if (user != null && user.getPoint() >= userPointRequestDto.getTotalPrice()) {
+            if (user != null && user.getPoint() >= userPointRequestDto.totalPrice()) {
                 System.out.println("if 문 통과");
-                int newPoint = user.getPoint() - userPointRequestDto.getTotalPrice();
+                int newPoint = user.getPoint() - userPointRequestDto.totalPrice();
                 System.out.println(newPoint);
                 user.setPoint(newPoint);
                 userRepository.save(user);
