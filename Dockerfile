@@ -1,4 +1,4 @@
-FROM openjdk
+FROM openjdk:17
 VOLUME /tmp
-COPY /build/libs/kiosk-0.0.1-SNAPSHOT.jar .jar
-ENTRYPOINT ["java","-jar","/build/libs/kiosk-0.0.1-SNAPSHOT.jar"]
+COPY /build/libs/kiosk-0.0.1-SNAPSHOT.jar kiosk.jar
+ENTRYPOINT ["java","-jar","kiosk.jar"]
