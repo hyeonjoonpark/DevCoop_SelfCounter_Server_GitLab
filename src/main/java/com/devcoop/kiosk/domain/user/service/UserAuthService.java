@@ -39,7 +39,9 @@ public class UserAuthService {
     }
 
     // 패스워드 비교해서 에러 핸들링 해주는 로직만 추가하면 에러가 발생함
-    // TODO : 나중에 리팩토링
+    if(!bCryptPasswordEncoder.matches(pin, user.getPin())) {
+      throw new RuntimeException("핀 번호가 옳지 않습니다");
+    }
 
     String token = JwtUtil.createJwt(codeNumber, secretKey, exprTime);
 
