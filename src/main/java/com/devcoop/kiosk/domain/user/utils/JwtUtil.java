@@ -9,16 +9,34 @@ import java.util.Date;
 
 @Component
 public class JwtUtil {
-    public static String createJwt(String codeNumber, String secretKey, Long exprTime) {
-        Claims claims = Jwts.claims();
+  // isExpired 메서드 구현
+  public static boolean isExpired(String token, String secretKey) {
+    return Jwts.parser()
+      .setSigningKey(secretKey)
+      .parseClaimsJws(token)
+      .getBody()
+      .getExpiration()
+      .before(new Date());
+  }
 
-        claims.put("codeNumber", codeNumber);
+  public static String getCodeNumber(String token, String secretKey) {
+    return Jwts.parser()
+      .setSigningKey(secretKey)
+      .parseClaimsJws(token)
+      .getBody()
+      .get("codeNumber", String.class);
+  }
 
-        return Jwts.builder()
-                .setClaims(claims)
-                .signWith(SignatureAlgorithm.HS256, secretKey)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + exprTime))
-                .compact();
-    }
+  public static String createJwt(String codeNumber, String secretKey, Long exprTime) {
+    Claims claims = Jwts.claims();
+
+    claims.put("codeNumber", codeNumber);
+
+    return Jwts.builder()
+      .setClaims(claims)
+      .signWith(SignatureAlgorithm.HS256, secretKey)
+      .setIssuedAt(new Date(System.currentTimeMillis()))
+      .setExpiration(new Date(System.currentTimeMillis() + exprTime))
+      .compact();
+  }
 }
