@@ -43,7 +43,6 @@ dependencies {
 
   // doc
   implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
-  runtimeOnly 'org.springframework.boot:spring-boot-docker-compose'
 }
 
 tasks.named('test') {
