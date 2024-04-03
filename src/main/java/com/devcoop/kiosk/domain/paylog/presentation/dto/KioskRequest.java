@@ -34,7 +34,7 @@ public record KioskRequest(
       .dcmSaleAmt(dcmSaleAmt)
       .itemId(itemId)
       .saleYn(ReceiptType.Y)
-      .userId(Integer.parseInt(userId))
+      .userId(userId)
       .itemName(itemName)
       .saleQty(saleQty)
       .date(LocalDate.now())
