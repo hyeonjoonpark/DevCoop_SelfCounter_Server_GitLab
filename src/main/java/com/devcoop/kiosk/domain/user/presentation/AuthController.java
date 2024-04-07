@@ -7,10 +7,7 @@ import com.devcoop.kiosk.global.exception.GlobalException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -24,5 +21,11 @@ public class AuthController {
   public LoginResponse login(@RequestBody LoginRequest loginRequest) throws GlobalException {
     LoginResponse result = userAuthService.login(loginRequest);
     return result;
+  }
+
+  @PutMapping("/pwChange")
+  @Operation(summary = "change password", description = "비밀번호 변경")
+  public void changePassword(@RequestBody LoginRequest loginRequest) throws GlobalException {
+    userAuthService.changePassword(loginRequest);
   }
 }

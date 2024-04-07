@@ -58,4 +58,21 @@ public class UserAuthService {
     return loginResponse;
 
   }
+
+  @Transactional
+  public void changePassword(LoginRequest dto) throws GlobalException {
+    String codeNumber = dto.getCodeNumber();
+    String pin = dto.getPin();
+
+    User user = userRepository.findByCodeNumber(codeNumber);
+
+    if (user == null) {
+      throw new GlobalException(ErrorCode.USER_NOT_FOUND);
+    }
+
+    String encodedPin = bCryptPasswordEncoder.encode(pin);
+
+    user.update(encodedPin);
+    userRepository.save(user);
+  }
 }

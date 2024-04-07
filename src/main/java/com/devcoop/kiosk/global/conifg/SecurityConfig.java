@@ -46,6 +46,7 @@ public class SecurityConfig {
       .authorizeHttpRequests(
         request -> request
           .requestMatchers(HttpMethod.POST, "/kiosk/auth/signIn").permitAll()
+          .requestMatchers("/kiosk/auth/pwChange").permitAll()
           .requestMatchers("/kiosk/save/paylog").authenticated()
           .requestMatchers("/kiosk/save/receipt").authenticated()
           .requestMatchers("/kiosk/executePayments").authenticated()
