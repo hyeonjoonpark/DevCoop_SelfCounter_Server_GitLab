@@ -7,6 +7,7 @@ import com.devcoop.kiosk.domain.item.repository.ItemRepository;
 import com.devcoop.kiosk.domain.receipt.repository.KioskReceiptRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -25,14 +26,15 @@ public class KioskReceiptServiceImpl implements ReceiptService {
 
     log.info("items = {}", items);
 
-    if (!items.isEmpty()) {
-      Item item = items.get(0);
-      String itemId = String.valueOf(item.getItemId());
-
-      KioskReceipt kioskReceipt = kioskRequest.toEntity(itemId);
-      System.out.println("kioskReceipt = " + kioskReceipt);
-      kioskReceiptRepository.save(kioskReceipt);
+    if (items.isEmpty()) {
+      throw new RuntimeException("아이템이 존재하지 않습니다");
     }
-    return ResponseEntity.ok().build();
+    Item item = items.get(0);
+    String itemId = String.valueOf(item.getItemId());
+
+    KioskReceipt kioskReceipt = kioskRequest.toEntity(item);
+    System.out.println("kioskReceipt = " + kioskReceipt);
+    item.addReceipt(kioskReceipt);
+    return ResponseEntity.status(HttpStatus.OK).body("영수증 저장에 성공했습니다");
   }
 }

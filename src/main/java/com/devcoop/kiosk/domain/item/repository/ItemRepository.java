@@ -11,4 +11,6 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
   List<Item> findItemEntitiesByItemName(String itemName);
 
   Item findByBarcode(String barcode);
+
+  List<Item> findByItemName(String itemName);
 }

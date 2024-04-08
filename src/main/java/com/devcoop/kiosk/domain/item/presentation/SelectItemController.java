@@ -1,6 +1,7 @@
 package com.devcoop.kiosk.domain.item.presentation;
 
 import com.devcoop.kiosk.domain.item.presentation.dto.ItemResponse;
+import com.devcoop.kiosk.domain.item.presentation.dto.RecommandResponse;
 import com.devcoop.kiosk.domain.item.service.ItemSelectService;
 import com.devcoop.kiosk.global.exception.GlobalException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,5 +24,12 @@ public class SelectItemController {
     log.info("barcodes = {}", barcodes.toString());
     List<ItemResponse> itemResponses = itemSelectService.get(barcodes);
     return itemResponses;
+  }
+
+  // 상품추천 API
+  @GetMapping("/itemRecommend")
+  @Operation(summary = "get item info", description = "추천상품")
+  public List<RecommandResponse> getItemRecommend() throws GlobalException {
+    return itemSelectService.getList();
   }
 }

@@ -1,5 +1,6 @@
 package com.devcoop.kiosk.domain.paylog.presentation.dto;
 
+import com.devcoop.kiosk.domain.item.Item;
 import com.devcoop.kiosk.domain.receipt.KioskReceipt;
 import com.devcoop.kiosk.domain.receipt.types.ReceiptType;
 import jakarta.validation.constraints.NotBlank;
@@ -29,10 +30,10 @@ public record KioskRequest(
     this.date = date;
   }
 
-  public KioskReceipt toEntity(String itemId) {
+  public KioskReceipt toEntity(Item item) {
     return KioskReceipt.builder()
       .dcmSaleAmt(dcmSaleAmt)
-      .itemId(itemId)
+      .item(item)
       .saleYn(ReceiptType.Y)
       .userId(userId)
       .itemName(itemName)

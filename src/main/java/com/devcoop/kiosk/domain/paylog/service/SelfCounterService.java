@@ -77,7 +77,7 @@ public class SelfCounterService {
     if (!items.isEmpty()) {
       Item item = items.get(0);
       String itemId = String.valueOf(item.getItemId());
-      KioskReceipt kiosk = kioskRequest.toEntity(itemId);
+      KioskReceipt kiosk = kioskRequest.toEntity(item);
       kioskReceiptRepository.save(kiosk);
     }
 
