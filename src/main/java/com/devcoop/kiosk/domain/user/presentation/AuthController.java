@@ -2,6 +2,7 @@ package com.devcoop.kiosk.domain.user.presentation;
 
 import com.devcoop.kiosk.domain.user.presentation.dto.LoginRequest;
 import com.devcoop.kiosk.domain.user.presentation.dto.LoginResponse;
+import com.devcoop.kiosk.domain.user.presentation.dto.PinChangeRequest;
 import com.devcoop.kiosk.domain.user.service.UserAuthService;
 import com.devcoop.kiosk.global.exception.GlobalException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,7 +26,7 @@ public class AuthController {
 
   @PutMapping("/pwChange")
   @Operation(summary = "change password", description = "비밀번호 변경")
-  public void changePassword(@RequestBody LoginRequest loginRequest) throws GlobalException {
-    userAuthService.changePassword(loginRequest);
+  public void changePassword(@RequestBody PinChangeRequest pinChangeRequest) throws GlobalException {
+    userAuthService.changePassword(pinChangeRequest);
   }
 }
