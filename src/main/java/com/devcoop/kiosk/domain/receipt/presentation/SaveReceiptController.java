@@ -16,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Tag(name = "Kiosk_Receipt_Save", description = "Receipt Save API")
 public class SaveReceiptController {
-    private final ReceiptService receiptService;
-    @PostMapping("/save/receipt")
-    @Operation(summary = "save receipt", description = "키오스크에서 발행된 영수증 저장")
-    public void saveReceipt(@RequestBody KioskRequest kioskRequest) throws GlobalException {
-        receiptService.saveReceipt(kioskRequest);
-    }
+  private final ReceiptService receiptService;
+
+  @PostMapping("/save/receipt")
+  @Operation(summary = "save receipt", description = "키오스크에서 발행된 영수증 저장")
+  public void saveReceipt(@RequestBody KioskRequest kioskRequest) throws GlobalException {
+    System.out.println("영수증 발행");
+    receiptService.saveReceipt(kioskRequest);
+  }
 }

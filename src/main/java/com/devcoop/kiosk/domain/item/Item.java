@@ -5,7 +5,7 @@ import lombok.*;
 
 @Entity
 @Getter @ToString
-@Table
+@Table(name = "items")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Item {
     @Id

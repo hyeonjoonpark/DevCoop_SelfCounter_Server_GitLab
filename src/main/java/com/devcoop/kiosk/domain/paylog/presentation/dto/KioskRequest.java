@@ -30,10 +30,10 @@ public record KioskRequest(
     this.date = date;
   }
 
-  public KioskReceipt toEntity(Item item) {
+  public KioskReceipt toEntity(String itemId) {
     return KioskReceipt.builder()
       .dcmSaleAmt(dcmSaleAmt)
-      .itemName(item.getItemName())
+      .itemName(itemId)
       .saleYn(ReceiptType.Y)
       .userId(userId)
       .itemName(itemName)
