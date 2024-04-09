@@ -33,7 +33,7 @@ public record KioskRequest(
   public KioskReceipt toEntity(Item item) {
     return KioskReceipt.builder()
       .dcmSaleAmt(dcmSaleAmt)
-      .item(item)
+      .itemName(item.getItemName())
       .saleYn(ReceiptType.Y)
       .userId(userId)
       .itemName(itemName)
