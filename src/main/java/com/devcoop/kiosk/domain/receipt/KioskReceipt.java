@@ -4,7 +4,7 @@ import com.devcoop.kiosk.domain.receipt.types.ReceiptType;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "kiosk_receipts")
@@ -29,10 +29,10 @@ public class KioskReceipt {
     @Column(name = "sale_qty") // 팔린 양
     private Short saleQty;
     @Column(name = "date") // 팔린 날짜
-    private LocalDate date;
+    private LocalDateTime date;
 
     @Builder
-    public KioskReceipt(int number, int dcmSaleAmt, String itemId, ReceiptType saleYn, String userId, String itemName, Short saleQty, LocalDate date) {
+    public KioskReceipt(int number, int dcmSaleAmt, String itemId, ReceiptType saleYn, String userId, String itemName, Short saleQty, LocalDateTime date) {
         this.number = number;
         this.dcmSaleAmt = dcmSaleAmt;
         this.itemId = itemId;
