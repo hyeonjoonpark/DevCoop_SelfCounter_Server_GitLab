@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Builder;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record KioskRequest(
   int dcmSaleAmt,
@@ -16,11 +17,11 @@ public record KioskRequest(
   String userId,
   String itemName,
   short saleQty,
-  LocalDate date
+  LocalDateTime date
 ) {
 
   @Builder
-  public KioskRequest(int dcmSaleAmt, int itemId, ReceiptType saleYn, String userId, String itemName, short saleQty, LocalDate date) {
+  public KioskRequest(int dcmSaleAmt, int itemId, ReceiptType saleYn, String userId, String itemName, short saleQty, LocalDateTime date) {
     this.dcmSaleAmt = dcmSaleAmt;
     this.itemId = itemId;
     this.saleYn = saleYn;
@@ -38,7 +39,7 @@ public record KioskRequest(
       .userId(userId)
       .itemName(itemName)
       .saleQty(saleQty)
-      .date(LocalDate.now())
+      .date(LocalDateTime.now())
       .build();
   }
 }
