@@ -47,12 +47,11 @@ public class SecurityConfig {
         request -> request
           .requestMatchers(HttpMethod.POST, "/kiosk/auth/signIn").permitAll()
           .requestMatchers("/kiosk/auth/pwChange").permitAll()
-          .requestMatchers("/itemRecommend").permitAll()
-          .requestMatchers("/kiosk/save/paylog").permitAll()
-          .requestMatchers("/kiosk/save/receipt").permitAll()
-          .requestMatchers("/kiosk/executePayments").permitAll()
-          .requestMatchers("/itemSelect").permitAll()
-          .requestMatchers("/kiosk/pay").permitAll()
+          .requestMatchers("/kiosk/save/paylog").authenticated()
+          .requestMatchers("/kiosk/save/receipt").authenticated()
+          .requestMatchers("/kiosk/executePayments").authenticated()
+          .requestMatchers("/itemSelect").authenticated()
+          .requestMatchers("/kiosk/pay").authenticated()
           .anyRequest().permitAll()
       )
       .sessionManagement(
