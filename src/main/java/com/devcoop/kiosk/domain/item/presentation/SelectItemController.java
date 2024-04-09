@@ -25,11 +25,4 @@ public class SelectItemController {
     List<ItemResponse> itemResponses = itemSelectService.get(barcodes);
     return itemResponses;
   }
-
-  // 상품추천 API
-  @GetMapping("/itemRecommend")
-  @Operation(summary = "get item info", description = "추천상품")
-  public List<RecommandResponse> getItemRecommend() throws GlobalException {
-    return itemSelectService.getList();
-  }
 }

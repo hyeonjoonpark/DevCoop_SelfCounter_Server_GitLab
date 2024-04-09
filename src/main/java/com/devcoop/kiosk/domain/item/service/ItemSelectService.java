@@ -9,8 +9,6 @@ import com.devcoop.kiosk.global.exception.GlobalException;
 import com.devcoop.kiosk.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,21 +45,5 @@ public class ItemSelectService {
     }
 
     return itemResponses;
-  }
-
-  @Transactional(readOnly = true)
-  public List<RecommandResponse> getList() {
-    Pageable topFive = PageRequest.of(0, 5);
-    List<RecommandResponse> items = kioskReceiptRepository.findTop5(topFive);
-    List<RecommandResponse> recommandResponses = new ArrayList<>();
-    for (RecommandResponse item : items) {
-      RecommandResponse recommandResponse = RecommandResponse.builder()
-        .itemName(item.getName())
-        .itemPrice(item.getPrice())
-        .studentsCount(item.getStudentsCount())
-        .build();
-      recommandResponses.add(recommandResponse);
-    }
-    return recommandResponses;
   }
 }
