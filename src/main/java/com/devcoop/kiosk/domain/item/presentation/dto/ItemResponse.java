@@ -1,11 +1,11 @@
 package com.devcoop.kiosk.domain.item.presentation.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Builder;
 
-@Getter
-@AllArgsConstructor
-public class ItemResponse {
-    private String name;
-    private int price;
+@Builder
+public record ItemResponse(
+  String name,
+  int price
+) {
+
 }

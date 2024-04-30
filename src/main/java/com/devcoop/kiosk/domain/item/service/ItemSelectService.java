@@ -2,7 +2,6 @@ package com.devcoop.kiosk.domain.item.service;
 
 import com.devcoop.kiosk.domain.item.Item;
 import com.devcoop.kiosk.domain.item.presentation.dto.ItemResponse;
-import com.devcoop.kiosk.domain.item.presentation.dto.RecommandResponse;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
 import com.devcoop.kiosk.domain.receipt.repository.KioskReceiptRepository;
 import com.devcoop.kiosk.global.exception.GlobalException;
@@ -36,10 +35,10 @@ public class ItemSelectService {
         throw new GlobalException(ErrorCode.BARCODE_NOT_VALID);
       }
 
-      ItemResponse itemResponse = new ItemResponse(
-        item.getItemName(),
-        item.getItemPrice()
-      );
+      ItemResponse itemResponse = ItemResponse.builder()
+        .name(item.getItemName())
+        .price(item.getItemPrice())
+        .build();
 
       itemResponses.add(itemResponse);
     }
