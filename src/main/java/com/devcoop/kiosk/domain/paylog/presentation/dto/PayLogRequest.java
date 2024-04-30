@@ -8,6 +8,7 @@ import lombok.Builder;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+@Builder
 public record PayLogRequest(
   @NotBlank(message = "바코드는 필수 입력사항 입니다")
   String codeNumber,
@@ -19,17 +20,6 @@ public record PayLogRequest(
   String verifyKey,
   String studentName
 ) {
-
-  @Builder
-  public PayLogRequest(String codeNumber, LocalDate date, Short type, int innerPoint, int chargerId, String verifyKey, String studentName) {
-    this.codeNumber = codeNumber;
-    this.date = date;
-    this.type = type;
-    this.innerPoint = innerPoint;
-    this.chargerId = chargerId;
-    this.verifyKey = verifyKey;
-    this.studentName = studentName;
-  }
 
   public PayLog toEntity() {
     return PayLog.builder()
