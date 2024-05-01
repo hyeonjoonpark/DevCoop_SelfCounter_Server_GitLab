@@ -24,7 +24,6 @@ public record PayLogRequest(
   public PayLog toEntity() {
     return PayLog.builder()
       .codeNumber(codeNumber)
-      .date(LocalDateTime.now())
       .innerPoint(innerPoint)
       .chargerId("kiosk")
       .verifyKey("test")

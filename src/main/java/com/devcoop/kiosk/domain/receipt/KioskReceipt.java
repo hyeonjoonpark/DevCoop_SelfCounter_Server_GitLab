@@ -3,6 +3,7 @@ package com.devcoop.kiosk.domain.receipt;
 import com.devcoop.kiosk.domain.receipt.types.ReceiptType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -29,7 +30,8 @@ public class KioskReceipt {
     @Column(name = "sale_qty") // 팔린 양
     private Short saleQty;
     @Column(name = "date") // 팔린 날짜
-    private LocalDateTime date;
+    @CreationTimestamp
+    private LocalDateTime date = LocalDateTime.now();
 
     @Builder
     public KioskReceipt(int number, int dcmSaleAmt, String itemId, ReceiptType saleYn, String userId, String itemName, Short saleQty, LocalDateTime date) {

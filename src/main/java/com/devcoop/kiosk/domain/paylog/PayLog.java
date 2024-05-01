@@ -2,6 +2,7 @@ package com.devcoop.kiosk.domain.paylog;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +18,8 @@ public class PayLog {
     @Column(name = "code_number")
     private String codeNumber;
     @Column(name = "date")
-    private LocalDateTime date;
+    @CreationTimestamp
+    private LocalDateTime date = LocalDateTime.now();
     @Column(name = "type")
     private Short type;
     @Column(name = "inner_point")

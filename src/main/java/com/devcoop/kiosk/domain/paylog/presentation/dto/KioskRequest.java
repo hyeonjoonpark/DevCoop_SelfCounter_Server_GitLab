@@ -28,7 +28,6 @@ public record KioskRequest(
       .userId(userId)
       .itemName(itemName)
       .saleQty(saleQty)
-      .date(LocalDateTime.now())
       .build();
   }
 }
