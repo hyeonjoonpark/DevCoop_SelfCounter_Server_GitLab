@@ -12,12 +12,7 @@ import java.time.LocalDateTime;
 public record PayLogRequest(
   @NotBlank(message = "바코드는 필수 입력사항 입니다")
   String codeNumber,
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-  LocalDate date,
-  Short type,
   int innerPoint,
-  int chargerId,
-  String verifyKey,
   String studentName
 ) {
 

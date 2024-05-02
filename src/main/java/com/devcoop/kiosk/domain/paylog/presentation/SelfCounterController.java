@@ -65,7 +65,7 @@ public class SelfCounterController {
         } catch (Exception e) {
           // 트랜잭션 롤백
           transactionStatus.setRollbackOnly();
-          return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+          return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
       }
     });
