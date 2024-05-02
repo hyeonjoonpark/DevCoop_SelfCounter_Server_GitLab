@@ -12,25 +12,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PayLog {
     @Id
-    @Column(name = "pay_num")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int payNum;
-    @Column(name = "code_number")
     private String codeNumber;
-    @Column(name = "date")
     @CreationTimestamp
     private LocalDateTime date = LocalDateTime.now();
-    @Column(name = "type")
     private Short type;
-    @Column(name = "inner_point")
     private int innerPoint;
-    @Column(name = "point")
     private int point;
-    @Column(name = "charger_id")
     private String chargerId;
-    @Column(name = "verify_key")
     private String verifyKey;
-    @Column(name = "student_name")
     private String studentName;
 
     @Builder
