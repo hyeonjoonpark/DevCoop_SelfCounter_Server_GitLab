@@ -71,16 +71,24 @@ public class SelfCounterService {
 
   @Transactional
   public ResponseEntity<Object> saveReceipt(KioskRequest kioskRequest) {
+    // KioskRequest로부터 KioskReceipt 리스트를 생성
+    List<KioskReceipt> kioskReceipts = kioskRequest.toEntity();
 
-    List<Item> items = itemRepository.findItemEntitiesByItemName(kioskRequest.itemName());
-    System.out.println("items = " + items);
-    if (!items.isEmpty()) {
-      Item item = items.get(0);
-      String itemId = String.valueOf(item.getItemId());
-      KioskReceipt kiosk = kioskRequest.toEntity(itemId);
-      kioskReceiptRepository.save(kiosk);
+    for (KioskReceipt kioskReceipt : kioskReceipts) {
+      // 아이템 이름으로 Item 객체를 조회
+      List<Item> items = itemRepository.findItemEntitiesByItemName(kioskReceipt.getItemName());
+      if (!items.isEmpty()) {
+        Item item = items.get(0);
+        // 아이템 ID를 KioskReceipt에 설정하는 로직 추가
+        // 이 부분은 KioskReceipt 객체에 itemId를 설정할 수 있는 방법이 필요합니다.
+        // 예를 들어, KioskReceipt 클래스에 setItemId 메소드를 추가한다고 가정할 때:
+        kioskReceipt.setItemId(String.valueOf(item.getItemId()));
+        // KioskReceipt 객체 저장
+        kioskReceiptRepository.save(kioskReceipt);
+      }
     }
 
     return ResponseEntity.ok().build();
   }
+
 }

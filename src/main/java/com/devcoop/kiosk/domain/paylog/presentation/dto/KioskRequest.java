@@ -7,27 +7,26 @@ import lombok.Builder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
 public record KioskRequest(
-  int dcmSaleAmt,
-  int itemId,
-  ReceiptType saleYn,
+  List<KioskItemInfo> items,
   @NotBlank(message = "사용자 아이디는 필수 입력사항입니다")
-  String userId,
-  String itemName,
-  short saleQty,
-  LocalDateTime date
+  String userId
 ) {
 
-  public KioskReceipt toEntity(String itemId) {
-    return KioskReceipt.builder()
-      .dcmSaleAmt(dcmSaleAmt)
-      .itemName(itemId)
-      .saleYn(ReceiptType.Y)
-      .userId(userId)
-      .itemName(itemName)
-      .saleQty(saleQty)
-      .build();
+  public List<KioskReceipt> toEntity() {
+    return items.stream()
+      .map(
+        item -> KioskReceipt.builder()
+          .dcmSaleAmt(item.dcmSaleAmt())
+          .itemName(item.itemName())
+          .saleYn(ReceiptType.Y)
+          .userId(userId)
+          .saleQty((short) item.saleQty())
+          .build()
+      ).collect(Collectors.toList());
   }
 }

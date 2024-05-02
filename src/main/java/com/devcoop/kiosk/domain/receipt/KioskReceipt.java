@@ -17,7 +17,12 @@ public class KioskReceipt {
     private int number;
     private int dcmSaleAmt;// 팔린 금액
     private String itemId;// 아이템 Id
-    @Enumerated(EnumType.STRING)
+
+  public void setItemId(String itemId) {
+    this.itemId = itemId;
+  }
+
+  @Enumerated(EnumType.STRING)
     private ReceiptType saleYn;// 팔렸으면 Y 안 팔리면 N
     private String userId;// 영수증 번호
     private String itemName; // 아이템 이름
