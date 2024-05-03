@@ -9,36 +9,34 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "kiosk_receipts")
-@Getter @ToString
+@Getter
+@ToString
 @NoArgsConstructor
 public class KioskReceipt {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int number;
-    private int dcmSaleAmt;// 팔린 금액
-    private String itemId;// 아이템 Id
-
-  public void setItemId(String itemId) {
-    this.itemId = itemId;
-  }
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int number;
+  private int dcmSaleAmt;// 팔린 금액
+  @Setter
+  private String itemId;// 아이템 Id
 
   @Enumerated(EnumType.STRING)
-    private ReceiptType saleYn;// 팔렸으면 Y 안 팔리면 N
-    private String userId;// 영수증 번호
-    private String itemName; // 아이템 이름
-    private Short saleQty; // 팔린 양
-    @CreationTimestamp
-    private LocalDateTime date = LocalDateTime.now(); // 팔린 날짜
+  private ReceiptType saleYn;// 팔렸으면 Y 안 팔리면 N
+  private String userId;// 영수증 번호
+  private String itemName; // 아이템 이름
+  private Short saleQty; // 팔린 양
+  @CreationTimestamp
+  private LocalDateTime date = LocalDateTime.now(); // 팔린 날짜
 
-    @Builder
-    public KioskReceipt(int number, int dcmSaleAmt, String itemId, ReceiptType saleYn, String userId, String itemName, Short saleQty, LocalDateTime date) {
-        this.number = number;
-        this.dcmSaleAmt = dcmSaleAmt;
-        this.itemId = itemId;
-        this.saleYn = saleYn;
-        this.userId = userId;
-        this.itemName = itemName;
-        this.saleQty = saleQty;
-        this.date = date;
-    }
+  @Builder
+  public KioskReceipt(int number, int dcmSaleAmt, String itemId, ReceiptType saleYn, String userId, String itemName, Short saleQty, LocalDateTime date) {
+    this.number = number;
+    this.dcmSaleAmt = dcmSaleAmt;
+    this.itemId = itemId;
+    this.saleYn = saleYn;
+    this.userId = userId;
+    this.itemName = itemName;
+    this.saleQty = saleQty;
+    this.date = date;
+  }
 }

@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -70,25 +71,36 @@ public class SelfCounterService {
   }
 
   @Transactional
-  public ResponseEntity<Object> saveReceipt(KioskRequest kioskRequest) {
+  public ResponseEntity<String> saveReceipt(KioskRequest kioskRequest) {
     // KioskRequest로부터 KioskReceipt 리스트를 생성
     List<KioskReceipt> kioskReceipts = kioskRequest.toEntity();
+    List<KioskReceipt> receiptsToSave = new ArrayList<>();
 
     for (KioskReceipt kioskReceipt : kioskReceipts) {
-      // 아이템 이름으로 Item 객체를 조회
+      log.info("kioskReceipt = {}", kioskReceipt);
+      // 아이템 이름으로 Item 객체들을 조회
       List<Item> items = itemRepository.findItemEntitiesByItemName(kioskReceipt.getItemName());
+      log.info("items = {}", items);
       if (!items.isEmpty()) {
-        Item item = items.get(0);
-        // 아이템 ID를 KioskReceipt에 설정하는 로직 추가
-        // 이 부분은 KioskReceipt 객체에 itemId를 설정할 수 있는 방법이 필요합니다.
-        // 예를 들어, KioskReceipt 클래스에 setItemId 메소드를 추가한다고 가정할 때:
-        kioskReceipt.setItemId(String.valueOf(item.getItemId()));
-        // KioskReceipt 객체 저장
-        kioskReceiptRepository.save(kioskReceipt);
+        for (Item item : items) {
+          log.info("item = {}", item);
+          // 각 Item에 대해 새로운 KioskReceipt 객체를 생성 (또는 복제)하고, itemId 설정
+          KioskReceipt newReceipt = new KioskReceipt();
+          log.info("newReceipt = {}", newReceipt);
+          newReceipt.setItemId(String.valueOf(item.getItemId()));
+
+          // 생성된 KioskReceipt를 저장할 리스트에 추가
+          receiptsToSave.add(newReceipt);
+          log.info("receiptsToSave = {}", receiptsToSave);
+        }
       }
     }
 
-    return ResponseEntity.ok().build();
+    // 모든 KioskReceipt 객체를 한 번에 저장
+    kioskReceiptRepository.saveAll(receiptsToSave);
+
+    return ResponseEntity.status(HttpStatus.OK).body("성공적으로 저장하였습니다");
   }
+
 
 }

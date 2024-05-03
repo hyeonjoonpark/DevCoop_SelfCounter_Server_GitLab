@@ -4,7 +4,6 @@ import com.devcoop.kiosk.domain.item.service.ItemSelectService;
 import com.devcoop.kiosk.domain.paylog.service.LogService;
 import com.devcoop.kiosk.domain.paylog.service.SelfCounterService;
 import com.devcoop.kiosk.domain.receipt.service.ReceiptService;
-import com.devcoop.kiosk.domain.user.utils.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
