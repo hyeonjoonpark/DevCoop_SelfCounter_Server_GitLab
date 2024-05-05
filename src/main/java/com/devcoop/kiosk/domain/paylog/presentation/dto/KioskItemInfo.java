@@ -4,8 +4,8 @@ import lombok.Builder;
 
 @Builder
 public record KioskItemInfo(
-  int dcmSaleAmt,
   String itemName,
+  int dcmSaleAmt,
   int saleQty
 ) {
 
