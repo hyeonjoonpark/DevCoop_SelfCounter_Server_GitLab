@@ -1,8 +1,12 @@
 package com.devcoop.kiosk.domain.paylog.service;
 
+import com.devcoop.kiosk.domain.item.Item;
 import com.devcoop.kiosk.domain.paylog.PayLog;
+import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskItemInfo;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskRequest;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequest;
+import com.devcoop.kiosk.domain.receipt.KioskReceipt;
+import com.devcoop.kiosk.domain.receipt.types.ReceiptType;
 import com.devcoop.kiosk.domain.user.User;
 import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequest;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
@@ -17,6 +21,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.webjars.NotFoundException;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -67,6 +74,30 @@ public class SelfCounterService {
 
   @Transactional
   public ResponseEntity<String> saveReceipt(KioskRequest kioskRequest) {
-    return null;
+    List<KioskItemInfo> requestItems = kioskRequest.getItems();
+    System.out.println("requestItemList = " + requestItems);
+    for(KioskItemInfo itemInfo : requestItems) {
+      System.out.println("itemInfo = " + itemInfo);
+      Item item = itemRepository.findByItemName(itemInfo.itemName());
+      System.out.println("item = " + item);
+
+      if(item == null) {
+        throw new NotFoundException("없는 상품입니다");
+      }
+
+      KioskReceipt kioskReceipt = KioskReceipt.builder()
+        .dcmSaleAmt(itemInfo.dcmSaleAmt())
+        .itemName(item.getItemName())
+        .saleQty((short) itemInfo.saleQty())
+        .userId(kioskRequest.getUserId())
+        .itemId(String.valueOf(item.getItemId()))
+        .saleYn(ReceiptType.Y)
+        .build();
+      System.out.println("kioskReceipt = " + kioskReceipt);
+
+      kioskReceiptRepository.save(kioskReceipt);
+    }
+
+    return ResponseEntity.ok().build();
   }
 }
