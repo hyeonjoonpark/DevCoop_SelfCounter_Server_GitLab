@@ -46,19 +46,20 @@ public class SecurityConfig {
       .authorizeHttpRequests(
         request -> request
           .requestMatchers(HttpMethod.POST, "/kiosk/auth/signIn").permitAll()
-          .requestMatchers("/kiosk/auth/pwChange").permitAll()
-          .requestMatchers("/kiosk/save/paylog").authenticated()
-          .requestMatchers("/kiosk/save/receipt").authenticated()
-          .requestMatchers("/kiosk/executePayments").authenticated()
-          .requestMatchers("/itemSelect").authenticated()
-          .requestMatchers("/kiosk/pay").authenticated()
+          .requestMatchers(HttpMethod.POST, "/kiosk/save/receipt").permitAll()
+//          .requestMatchers("/kiosk/auth/pwChange").permitAll()
+//          .requestMatchers("/kiosk/save/paylog").authenticated()
+//          .requestMatchers("/kiosk/save/receipt").authenticated()
+//          .requestMatchers("/kiosk/executePayments").authenticated()
+//          .requestMatchers("/itemSelect").authenticated()
+//          .requestMatchers("/kiosk/pay").authenticated()
           .anyRequest().permitAll()
       )
       .sessionManagement(
         session -> session
           .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      )
-      .addFilterBefore(new JwtFilter(secretKey, selfCounterService, logService, receiptService, itemSelectService), UsernamePasswordAuthenticationFilter.class);
+      );
+//      .addFilterBefore(new JwtFilter(secretKey, selfCounterService, logService, receiptService, itemSelectService), UsernamePasswordAuthenticationFilter.class);
 
 
     return http.build();

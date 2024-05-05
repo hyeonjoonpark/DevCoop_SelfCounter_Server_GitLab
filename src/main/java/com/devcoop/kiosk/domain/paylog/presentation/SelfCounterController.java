@@ -54,7 +54,7 @@ public class SelfCounterController {
           }
 
           System.out.println("save kiosk check");
-          ResponseEntity<Object> saveReceiptResponseEntity = selfCounterService.saveReceipt(payments.kioskRequest());
+          ResponseEntity<String> saveReceiptResponseEntity = selfCounterService.saveReceipt(payments.kioskRequest());
           log.info("saveReceiptResponseEntity = {}", saveReceiptResponseEntity);
           if (saveReceiptResponseEntity.getStatusCode().isError()) {
             throw new RuntimeException("영수증을 출력하는 동안 에러가 발생하였습니다");

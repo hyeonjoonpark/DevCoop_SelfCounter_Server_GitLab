@@ -1,4 +1,4 @@
-package com.devcoop.kiosk.domain.user.utils;
+package com.devcoop.kiosk.global.utils.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

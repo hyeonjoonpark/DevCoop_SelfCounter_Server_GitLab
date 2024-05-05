@@ -1,10 +1,8 @@
 package com.devcoop.kiosk.domain.paylog.service;
 
-import com.devcoop.kiosk.domain.item.Item;
 import com.devcoop.kiosk.domain.paylog.PayLog;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskRequest;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequest;
-import com.devcoop.kiosk.domain.receipt.KioskReceipt;
 import com.devcoop.kiosk.domain.user.User;
 import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequest;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
@@ -19,8 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -70,17 +66,7 @@ public class SelfCounterService {
   }
 
   @Transactional
-  public ResponseEntity<Object> saveReceipt(KioskRequest kioskRequest) {
-
-    List<Item> items = itemRepository.findItemEntitiesByItemName(kioskRequest.itemName());
-    System.out.println("items = " + items);
-    if (!items.isEmpty()) {
-      Item item = items.get(0);
-      String itemId = String.valueOf(item.getItemId());
-      KioskReceipt kiosk = kioskRequest.toEntity(itemId);
-      kioskReceiptRepository.save(kiosk);
-    }
-
-    return ResponseEntity.ok().build();
+  public ResponseEntity<String> saveReceipt(KioskRequest kioskRequest) {
+    return null;
   }
 }
