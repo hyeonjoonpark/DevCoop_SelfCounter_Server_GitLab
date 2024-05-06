@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://10.0.5.4:6006/AriPay?serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://10.129.57.5:6006/AriPay?serverTimezone=UTC&characterEncoding=UTF-8
     password: Devcoop1Qw@
     username: devcoop
   jpa:
