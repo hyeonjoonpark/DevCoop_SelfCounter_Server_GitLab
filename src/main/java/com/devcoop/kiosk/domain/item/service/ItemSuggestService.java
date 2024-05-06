@@ -6,13 +6,15 @@ import java.util.Random;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
-public class AISuggestService {
+public class ItemSuggestService {
   private final ItemRepository itemRepository;
   private final Random random = new Random(); // Random 객체를 필드로 선언
 
+  @Transactional(readOnly = true)
   public String read() {
     List<String> items = itemRepository.findNameAll(); // 모든 아이템을 가져옴
 
