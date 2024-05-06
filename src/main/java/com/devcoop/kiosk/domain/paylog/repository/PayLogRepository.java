@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface PayLogRepository extends JpaRepository<PayLog, Integer> {
 
-  @Query("select i.itemName " +
+  @Query("select i.itemName, count(i.itemName) " +
     "from Item i, KioskReceipt kr " +
     "where i.itemName = kr.itemName " +
     "group by i.itemName " +
