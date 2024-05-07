@@ -12,10 +12,11 @@ public record PayLogRequest(
   String studentName
 ) {
 
-  public PayLog toEntity() {
+  public PayLog toEntity(int point) {
     return PayLog.builder()
       .codeNumber(codeNumber)
       .innerPoint(innerPoint)
+      .point(point)
       .chargerId("kiosk")
       .verifyKey("test")
       .studentName(studentName)

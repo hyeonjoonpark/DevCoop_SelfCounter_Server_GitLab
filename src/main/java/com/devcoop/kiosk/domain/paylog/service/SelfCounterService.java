@@ -67,7 +67,8 @@ public class SelfCounterService {
 
   @Transactional
   public ResponseEntity<Object> savePayLog(PayLogRequest payLogRequest) {
-    PayLog payLog = payLogRequest.toEntity();
+    User user = userRepository.findByStudentName(payLogRequest.studentName());
+    PayLog payLog = payLogRequest.toEntity(user.getPoint());
     System.out.println("payLog = " + payLog);
     payLogRepository.save(payLog);
     return ResponseEntity.status(HttpStatus.OK).body("정상적으로 결제기록이 저장되었습니다");
