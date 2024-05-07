@@ -21,4 +21,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
   User findUserDetailByCodeNumberAndPin(@Param("codeNumber") String codenumber, @Param("pin") String pin);
 
   boolean existsByCodeNumber(String codeNumber);
+
+    User findByStudentName(String studentName);
 }
