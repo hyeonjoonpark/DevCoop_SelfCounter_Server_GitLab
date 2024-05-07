@@ -16,7 +16,7 @@ public record PayLogRequest(
     return PayLog.builder()
       .codeNumber(codeNumber)
       .innerPoint(innerPoint)
-      .point(point)
+      .point(point+innerPoint)
       .chargerId("kiosk")
       .verifyKey("test")
       .studentName(studentName)
