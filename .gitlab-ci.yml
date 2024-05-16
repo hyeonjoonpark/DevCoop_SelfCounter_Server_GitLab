@@ -1,0 +1,12 @@
+stages:
+  - pull
+
+pull_repository:
+  stage: pull
+  script:
+    - cd /server/kiosk/devcoop_self_counter_server_v1
+    - git pull origin main
+  only:
+    - main
+  tags:
+    - your-runner-tag
