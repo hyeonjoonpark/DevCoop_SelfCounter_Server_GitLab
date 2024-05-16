@@ -5,6 +5,6 @@ pull_repository:
   stage: pull
   script:
     - cd /server/kiosk/devcoop_self_counter_server_v1
-    - git pull origin main
+    - git clone git@gitlab.bsm-aripay.kr:DevCoop/devcoop_self_counter_server_v1.git
   only:
     - main
