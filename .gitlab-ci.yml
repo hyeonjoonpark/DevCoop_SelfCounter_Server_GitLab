@@ -8,5 +8,3 @@ pull_repository:
     - git pull origin main
   only:
     - main
-  tags:
-    - your-runner-tag
