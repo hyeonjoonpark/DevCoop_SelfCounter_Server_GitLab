@@ -1,10 +1,27 @@
 stages:
-  - pull
+  - build
+  - deploy
 
-pull_repository:
-  stage: pull
+variables:
+  DOCKER_DRIVER: overlay2
+
+before_script:
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+
+build_image:
+  stage: build
   script:
-    - cd /server/kiosk/devcoop_self_counter_server_v1
-    - git clone git@gitlab.bsm-aripay.kr:DevCoop/devcoop_self_counter_server_v1.git
+    - docker build -t your-kiosk-image:latest .
+    - docker tag your-kiosk-image:latest $CI_REGISTRY_IMAGE:latest
+    - docker push $CI_REGISTRY_IMAGE:latest
+
+deploy_kiosk:
+  stage: deploy
+  script:
+    - docker-compose down
+    - docker-compose up -d
   only:
-    - main
+    - master
+
+services:
+  - docker:dind
