@@ -1,19 +1,23 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+variables:
+  DOCKER_HOST: tcp://docker:2375/
+  DOCKER_DRIVER: overlay2
+  COMPOSE_HTTP_TIMEOUT: 200
+
 stages:
   - build
   - test
   - deploy
 
-variables:
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_DRIVER: overlay2
-
-services:
-  - docker:19.03.12
-
 before_script:
+  - apk update && apk add git
+  - git config --global user.email "devcoop@bssm.hs.kr"
+  - git config --global user.name "Devcoop"
   - docker info
-  - git config --global user.email "you@example.com"
-  - git config --global user.name "Your Name"
 
 # 빌드 단계
 build_kiosk:
