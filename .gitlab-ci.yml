@@ -1,50 +1,24 @@
-image: docker:latest
-
-services:
-  - docker:dind
-
-variables:
-  DOCKER_HOST: tcp://docker:2375/
-  DOCKER_DRIVER: overlay2
-  COMPOSE_HTTP_TIMEOUT: 200
-
 stages:
   - build
-  - test
   - deploy
 
 before_script:
-  - apk update && apk add git
-  - git config --global user.email "devcoop@bssm.hs.kr"
-  - git config --global user.name "Devcoop"
+  - echo "Starting the build and deploy process..."
   - docker info
+  - docker-compose --version
 
-# 빌드 단계
-build_kiosk:
+build:
   stage: build
   script:
-    - git clone https://<your-repository-url>.git /app/kiosk
-    - cd /app/kiosk
-    - docker-compose -f docker-compose.yml build kiosk
+    - echo "Building the kiosk service..."
+    - docker-compose build kiosk
 
-# 테스트 단계 (예시로 Gradle 테스트를 추가)
-test_kiosk:
-  stage: test
-  script:
-    - cd /app/kiosk
-    - docker-compose -f docker-compose.yml run --rm kiosk ./gradlew test
-
-# 배포 단계
-deploy_kiosk:
+deploy:
   stage: deploy
   script:
-    - cd /app/kiosk
-    - docker-compose -f docker-compose.yml up -d kiosk
-
-# 정리 단계 (옵션)
-cleanup:
-  stage: deploy
-  script:
-    - cd /app/kiosk
-    - docker-compose -f docker-compose.yml down --volumes
-  when: manual
+    - echo "Pulling latest changes from GitLab..."
+    - git pull origin main
+    - echo "Deploying the kiosk service..."
+    - docker-compose up -d kiosk
+  only:
+    - main
