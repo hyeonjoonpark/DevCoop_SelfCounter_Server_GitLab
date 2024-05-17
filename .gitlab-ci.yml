@@ -18,6 +18,7 @@ deploy:
   stage: deploy
   script:
     - echo "Pulling latest changes from GitLab..."
+    - cd /server/kiosk/devcoop_self_counter_server_v1
     - git pull origin main
     - echo "Deploying the kiosk service..."
     - docker-compose up -d kiosk
