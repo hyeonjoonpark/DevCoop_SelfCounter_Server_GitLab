@@ -11,6 +11,7 @@ build:
   stage: build
   script:
     - echo "Building the kiosk service..."
+    - cd /server
     - docker-compose build kiosk
 
 deploy:
