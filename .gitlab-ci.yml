@@ -5,11 +5,13 @@ stages:
 build:
   stage: build
   script:
+    - cd /server
     - docker-compose build kiosk
 
 deploy:
   stage: deploy
   script:
+    - cd /server
     - docker-compose up -d kiosk
   only:
     - main
