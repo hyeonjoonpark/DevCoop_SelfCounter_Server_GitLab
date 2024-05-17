@@ -1,27 +1,39 @@
 stages:
   - build
+  - test
   - deploy
 
 variables:
+  DOCKER_HOST: tcp://docker:2375
   DOCKER_DRIVER: overlay2
 
-before_script:
-  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+services:
+  - docker:19.03.12
 
-build_image:
+before_script:
+  - docker info
+
+# 빌드 단계
+build_kiosk:
   stage: build
   script:
-    - docker build -t your-kiosk-image:latest .
-    - docker tag your-kiosk-image:latest $CI_REGISTRY_IMAGE:latest
-    - docker push $CI_REGISTRY_IMAGE:latest
+    - docker-compose -f docker-compose.yml build kiosk
 
+# 테스트 단계 (예시로 Gradle 테스트를 추가)
+test_kiosk:
+  stage: test
+  script:
+    - docker-compose -f docker-compose.yml run --rm kiosk ./gradlew test
+
+# 배포 단계
 deploy_kiosk:
   stage: deploy
   script:
-    - docker-compose down
-    - docker-compose up -d
-  only:
-    - master
+    - docker-compose -f docker-compose.yml up -d kiosk
 
-services:
-  - docker:dind
+# 정리 단계 (옵션)
+cleanup:
+  stage: deploy
+  script:
+    - docker-compose -f docker-compose.yml down --volumes
+  when: manual
