@@ -1,5 +1,5 @@
 stages:
-  - build
+#  - build
   - deploy
 
 before_script:
@@ -7,12 +7,12 @@ before_script:
   - docker info
   - docker-compose --version
 
-build:
-  stage: build
-  script:
-    - echo "Building the kiosk service..."
-    - cd /server
-    - docker-compose build kiosk
+# build:
+#   stage: build
+#   script:
+#     - echo "Building the kiosk service..."
+#     - cd /server
+#     - docker-compose build kiosk
 
 deploy:
   stage: deploy
