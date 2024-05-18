@@ -1,6 +1,6 @@
 variables:
-  PROJECT_PATH: "/server/kiosk/devcoop_self_counter_server_v1"
-  DOCKER_COMPOSE_PATH: "/server"
+  PROJECT_PATH: "/root/server/kiosk/devcoop_self_counter_server_v1"
+  DOCKER_COMPOSE_PATH: "/root/server"
 
 stages:
   - pull
