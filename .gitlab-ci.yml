@@ -6,7 +6,7 @@ stages:
 pull:
   stage: pull
   script:
-    - cd /server/kiosk
+    - cd /server/kiosk/devcoop_self_counter_server_v1
     - git pull
 
 build:
