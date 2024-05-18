@@ -1,24 +1,30 @@
+variables:
+  PROJECT_PATH: "/server/kiosk/devcoop_self_counter_server_v1"
+  DOCKER_COMPOSE_PATH: "/server"
+
 stages:
   - pull
   - build
   - deploy
 
+before_script:
+  - cd $PROJECT_PATH
+
 pull:
   stage: pull
   script:
-    - cd /server/kiosk/devcoop_self_counter_server_v1
     - git pull
 
 build:
   stage: build
   script:
-    - cd /server
+    - cd $DOCKER_COMPOSE_PATH
     - docker-compose build kiosk
 
 deploy:
   stage: deploy
   script:
-    - cd /server
+    - cd $DOCKER_COMPOSE_PATH
     - docker-compose up -d kiosk
   only:
     - main
