@@ -1,6 +1,13 @@
 stages:
+  - pull
   - build
   - deploy
+
+pull:
+  stage: pull
+  script:
+    - cd /server/kiosk
+    - git pull
 
 build:
   stage: build
