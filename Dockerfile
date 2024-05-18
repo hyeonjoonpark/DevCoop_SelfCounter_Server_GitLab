@@ -1,7 +1,16 @@
+FROM gradle:7.5.0-jdk17-alpine AS build
+
+WORKDIR /home/gradle/project
+
+COPY . .
+
+# Build the application, excluding tests
+RUN gradle build --no-daemon -x test
+
 FROM openjdk:17-alpine
 
-ARG JAR_PATH=./build/libs
+WORKDIR /app
 
-COPY ${JAR_PATH}/kiosk-0.0.1-SNAPSHOT.jar ${JAR_PATH}/kiosk.jar
+COPY --from=build /home/gradle/project/build/libs/kiosk-0.0.1-SNAPSHOT.jar /app/kiosk.jar
 
-CMD ["java","-jar","./build/libs/kiosk.jar"]
+CMD ["java", "-jar", "/app/kiosk.jar"]
