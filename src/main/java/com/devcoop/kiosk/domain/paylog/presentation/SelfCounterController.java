@@ -4,6 +4,7 @@ import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequest;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.Payments;
 import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequest;
 import com.devcoop.kiosk.domain.paylog.service.SelfCounterService;
+import com.devcoop.kiosk.global.exception.GlobalException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -47,23 +48,14 @@ public class SelfCounterController {
 
           PayLogRequest payLogRequestDto = payments.payLogRequest();
           log.info("payLogRequestDto = {}", payLogRequestDto);
-          ResponseEntity<Object> responseEntity = selfCounterService.savePayLog(payLogRequestDto);
-          log.info("responseEntity = {}", responseEntity);
-          if (responseEntity.getStatusCode().isError()) {
-            throw new RuntimeException("결제 정보를 저장하는 동안 에러가 발생하였습니다");
-          }
+          selfCounterService.savePayLog(payLogRequestDto);
 
           System.out.println("save kiosk check");
-          ResponseEntity<String> saveReceiptResponseEntity = selfCounterService.saveReceipt(payments.kioskRequest());
-          log.info("saveReceiptResponseEntity = {}", saveReceiptResponseEntity);
-          if (saveReceiptResponseEntity.getStatusCode().isError()) {
-            throw new RuntimeException("영수증을 출력하는 동안 에러가 발생하였습니다");
-          }
+          selfCounterService.saveReceipt(payments.kioskRequest());
 
           // 모든 트랜잭션 성공 시 200 OK 응답 반환
           return ResponseEntity.ok().build();
-        } catch (Exception e) {
-          log.info("rollback", e);
+        } catch (GlobalException | Exception e) {
           // 트랜잭션 롤백
           transactionStatus.setRollbackOnly();
           return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

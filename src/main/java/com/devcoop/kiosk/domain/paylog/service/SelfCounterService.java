@@ -61,29 +61,28 @@ public class SelfCounterService {
     } catch (Exception e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value());
     } catch (GlobalException e) {
-        throw new RuntimeException(e);
+      throw new RuntimeException(e);
     }
   }
 
   @Transactional
-  public ResponseEntity<Object> savePayLog(PayLogRequest payLogRequest) {
+  public void savePayLog(PayLogRequest payLogRequest) throws RuntimeException {
     User user = userRepository.findByStudentName(payLogRequest.studentName());
     PayLog payLog = payLogRequest.toEntity(user.getPoint());
     System.out.println("payLog = " + payLog);
     payLogRepository.save(payLog);
-    return ResponseEntity.status(HttpStatus.OK).body("정상적으로 결제기록이 저장되었습니다");
   }
 
   @Transactional
-  public ResponseEntity<String> saveReceipt(KioskRequest kioskRequest) {
+  public void saveReceipt(KioskRequest kioskRequest) throws GlobalException {
     List<KioskItemInfo> requestItems = kioskRequest.getItems();
     System.out.println("requestItemList = " + requestItems);
-    for(KioskItemInfo itemInfo : requestItems) {
+    for (KioskItemInfo itemInfo : requestItems) {
       System.out.println("itemInfo = " + itemInfo);
       Item item = itemRepository.findByItemName(itemInfo.itemName());
       System.out.println("item = " + item);
 
-      if(item == null) {
+      if (item == null) {
         throw new NotFoundException("없는 상품입니다");
       }
 
@@ -99,7 +98,5 @@ public class SelfCounterService {
 
       kioskReceiptRepository.save(kioskReceipt);
     }
-
-    return ResponseEntity.ok().build();
   }
 }
