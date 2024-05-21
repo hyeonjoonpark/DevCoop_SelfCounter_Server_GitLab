@@ -63,6 +63,7 @@ public class SelfCounterController {
           // 모든 트랜잭션 성공 시 200 OK 응답 반환
           return ResponseEntity.ok().build();
         } catch (Exception e) {
+          log.info("rollback", e);
           // 트랜잭션 롤백
           transactionStatus.setRollbackOnly();
           return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
