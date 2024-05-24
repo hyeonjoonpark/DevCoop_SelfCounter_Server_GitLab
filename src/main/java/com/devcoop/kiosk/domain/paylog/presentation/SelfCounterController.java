@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.TransactionStatus;
@@ -42,7 +43,7 @@ public class SelfCounterController {
                   ResponseEntity<Object> result = selfCounterService.deductPoints(userPointRequestDto);
                   log.info("deductPoints result = {}", result);
                   if (result.getStatusCode().isError()) {
-                      throw new RuntimeException((String) result.getBody());
+                      return createUtf8Response(result);
                   }
 
                   // 결제 로그 저장
@@ -51,26 +52,34 @@ public class SelfCounterController {
                   ResponseEntity<Object> responseEntity = selfCounterService.savePayLog(payLogRequestDto);
                   log.info("savePayLog responseEntity = {}", responseEntity);
                   if (responseEntity.getStatusCode().isError()) {
-                      throw new RuntimeException((String) responseEntity.getBody());
+                      return createUtf8Response(responseEntity);
                   }
 
                   // 영수증 저장
                   ResponseEntity<String> saveReceiptResponseEntity = selfCounterService.saveReceipt(payments.kioskRequest());
                   log.info("saveReceiptResponseEntity = {}", saveReceiptResponseEntity);
                   if (saveReceiptResponseEntity.getStatusCode().isError()) {
-                      throw new RuntimeException((String) saveReceiptResponseEntity.getBody());
+                      return createUtf8Response(saveReceiptResponseEntity);
                   }
 
                   // 모든 트랜잭션 성공
                   log.info("모든 트랜잭션 성공");
-                  return ResponseEntity.ok("결제가 성공적으로 완료되었습니다.");
+                  return createUtf8Response(ResponseEntity.ok("결제가 성공적으로 완료되었습니다."));
               } catch (Exception e) {
                   log.error("트랜잭션 실패 및 롤백", e);
                   // 트랜잭션 롤백
                   transactionStatus.setRollbackOnly();
-                  return new ResponseEntity<>("오류가 발생하였습니다: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+                  return createUtf8Response(new ResponseEntity<>("오류가 발생하였습니다: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR));
               }
           }
       });
+
+      
   }
+  private ResponseEntity<Object> createUtf8Response(ResponseEntity<?> responseEntity) {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(new org.springframework.http.MediaType("application", "json", java.nio.charset.StandardCharsets.UTF_8));
+    return new ResponseEntity<>(responseEntity.getBody(), headers, responseEntity.getStatusCode());
+}
+  
 }
