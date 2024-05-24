@@ -1,117 +1,123 @@
 package com.devcoop.kiosk.domain.paylog.service;
 
-import com.devcoop.kiosk.domain.item.Item;
-import com.devcoop.kiosk.domain.paylog.PayLog;
-import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskItemInfo;
-import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskRequest;
-import com.devcoop.kiosk.domain.paylog.presentation.dto.PayLogRequest;
-import com.devcoop.kiosk.domain.receipt.KioskReceipt;
-import com.devcoop.kiosk.domain.receipt.types.ReceiptType;
-import com.devcoop.kiosk.domain.user.User;
-import com.devcoop.kiosk.domain.user.presentation.dto.UserPointRequest;
-import com.devcoop.kiosk.domain.item.repository.ItemRepository;
-import com.devcoop.kiosk.domain.receipt.repository.KioskReceiptRepository;
-import com.devcoop.kiosk.domain.paylog.repository.PayLogRepository;
-import com.devcoop.kiosk.domain.user.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import com.devcoop.kiosk.domain.paylog.repository.PayLogRepository;
+import com.devcoop.kiosk.domain.paylog.repository.UserRepository;
+import com.devcoop.kiosk.domain.paylog.repository.KioskReceiptRepository;
+import com.devcoop.kiosk.domain.paylog.repository.ItemRepository;
+import com.devcoop.kiosk.domain.paylog.entity.User;
+import com.devcoop.kiosk.domain.paylog.entity.PayLog;
+import com.devcoop.kiosk.domain.paylog.entity.KioskReceipt;
+import com.devcoop.kiosk.domain.paylog.entity.Item;
+import com.devcoop.kiosk.domain.paylog.dto.UserPointRequest;
+import com.devcoop.kiosk.domain.paylog.dto.PayLogRequest;
+import com.devcoop.kiosk.domain.paylog.dto.KioskRequest;
+import com.devcoop.kiosk.domain.paylog.dto.KioskItemInfo;
+import com.devcoop.kiosk.domain.paylog.dto.Payments;
+import com.devcoop.kiosk.domain.paylog.enums.ReceiptType;
 
 @Service
-@RequiredArgsConstructor
-@Slf4j
 public class SelfCounterService {
 
-  private final PayLogRepository payLogRepository;
-  private final UserRepository userRepository;
-  private final KioskReceiptRepository kioskReceiptRepository;
-  private final ItemRepository itemRepository;
+    private final PayLogRepository payLogRepository;
+    private final UserRepository userRepository;
+    private final KioskReceiptRepository kioskReceiptRepository;
+    private final ItemRepository itemRepository;
 
-  public int deductPoints(UserPointRequest userPointRequest) {
-    System.out.println("userPointRequestDto = " + userPointRequest);
-    String codeNumber = userPointRequest.codeNumber();
-    User user = userRepository.findByCodeNumber(codeNumber);
-
-    if (user == null) {
-      throw new RuntimeException("사용자를 찾을 수 없습니다.");
+    @Autowired
+    public SelfCounterService(PayLogRepository payLogRepository, UserRepository userRepository,
+                              KioskReceiptRepository kioskReceiptRepository, ItemRepository itemRepository) {
+        this.payLogRepository = payLogRepository;
+        this.userRepository = userRepository;
+        this.kioskReceiptRepository = kioskReceiptRepository;
+        this.itemRepository = itemRepository;
     }
 
-    if (user.getPoint() >= userPointRequest.totalPrice()) {
-      int newPoint = user.getPoint() - userPointRequest.totalPrice();
-      user.setPoint(newPoint);
-      userRepository.save(user);
-      return newPoint; // 새로운 포인트 반환
-    } else {
-      throw new RuntimeException("결제하는 것에 실패했습니다.");
-    }
-  }
+    @Transactional(rollbackFor = Exception.class)
+    public Map<String, Object> executeAllTransactions(Payments payments) {
+        Map<String, Object> response = new HashMap<>();
 
-  public void savePayLog(PayLogRequest payLogRequest) {
-    try {
-      User user = userRepository.findByStudentName(payLogRequest.studentName());
-      PayLog payLog = payLogRequest.toEntity(user.getPoint());
-      payLogRepository.save(payLog);
-    } catch (Exception e) {
-      throw new RuntimeException("결제 로그 저장 중 오류가 발생하였습니다.");
-    }
-  }
+        try {
+            // 포인트 차감
+            UserPointRequest userPointRequestDto = payments.userPointRequest();
+            int remainingPoints = deductPoints(userPointRequestDto);
+            response.put("remainingPoints", remainingPoints); // 새로운 포인트 반환
 
-  public void saveReceipt(KioskRequest kioskRequest) {
-    try {
-      List<KioskItemInfo> requestItems = kioskRequest.getItems();
-      System.out.println("requestItemList = " + requestItems);
-      for (KioskItemInfo itemInfo : requestItems) {
-        Item item = itemRepository.findByItemName(itemInfo.itemName());
+            // 결제 로그 저장
+            savePayLog(payments.payLogRequest());
 
-        if (item == null) {
-          throw new RuntimeException("없는 상품입니다.");
+            // 영수증 저장
+            saveReceipt(payments.kioskRequest());
+
+            response.put("status", "success");
+            response.put("message", "결제가 성공적으로 완료되었습니다.");
+        } catch (Exception e) {
+            // 트랜잭션 롤백을 위해 예외를 다시 던집니다.
+            throw new RuntimeException("트랜잭션 실패 및 롤백: " + e.getMessage(), e);
         }
 
-        KioskReceipt kioskReceipt = KioskReceipt.builder()
-          .dcmSaleAmt(itemInfo.dcmSaleAmt())
-          .itemName(item.getItemName())
-          .saleQty((short) itemInfo.saleQty())
-          .userId(kioskRequest.getUserId())
-          .itemId(String.valueOf(item.getItemId()))
-          .saleYn(ReceiptType.Y)
-          .build();
-
-        kioskReceiptRepository.save(kioskReceipt);
-      }
-    } catch (Exception e) {
-      throw new RuntimeException("영수증 저장 중 오류가 발생하였습니다.");
+        return response;
     }
-  }
 
+    private int deductPoints(UserPointRequest userPointRequest) {
+        System.out.println("userPointRequestDto = " + userPointRequest);
+        String codeNumber = userPointRequest.codeNumber();
+        User user = userRepository.findByCodeNumber(codeNumber);
 
-  @Transactional(rollbackFor = Exception.class)
-  public Map<String, Object> executeAllTransactions(Payments payments) {
-      Map<String, Object> response = new HashMap<>();
+        if (user == null) {
+            throw new RuntimeException("사용자를 찾을 수 없습니다.");
+        }
 
-      try {
-          // 포인트 차감
-          UserPointRequest userPointRequestDto = payments.userPointRequest();
-          int remainingPoints = deductPoints(userPointRequestDto);
-          response.put("remainingPoints", remainingPoints); // 새로운 포인트 반환
+        if (user.getPoint() >= userPointRequest.totalPrice()) {
+            int newPoint = user.getPoint() - userPointRequest.totalPrice();
+            user.setPoint(newPoint);
+            userRepository.save(user);
+            return newPoint; // 새로운 포인트 반환
+        } else {
+            throw new RuntimeException("결제하는 것에 실패했습니다.");
+        }
+    }
 
-          // 결제 로그 저장
-          savePayLog(payments.payLogRequest());
+    private void savePayLog(PayLogRequest payLogRequest) {
+        try {
+            User user = userRepository.findByStudentName(payLogRequest.studentName());
+            PayLog payLog = payLogRequest.toEntity(user.getPoint());
+            payLogRepository.save(payLog);
+        } catch (Exception e) {
+            throw new RuntimeException("결제 로그 저장 중 오류가 발생하였습니다.", e);
+        }
+    }
 
-          // 영수증 저장
-          saveReceipt(payments.kioskRequest());
+    private void saveReceipt(KioskRequest kioskRequest) {
+        try {
+            List<KioskItemInfo> requestItems = kioskRequest.getItems();
+            System.out.println("requestItemList = " + requestItems);
+            for (KioskItemInfo itemInfo : requestItems) {
+                Item item = itemRepository.findByItemName(itemInfo.itemName());
 
-          response.put("status", "success");
-          response.put("message", "결제의 모든 과정이 성공적으로 완료되었습니다.");
-      } catch (Exception e) {
-          // 트랜잭션 롤백을 위해 예외를 다시 던집니다.
-          throw new RuntimeException("트랜잭션 실패 및 롤백: " + e.getMessage(), e);
-      }
+                if (item == null) {
+                    throw new RuntimeException("없는 상품입니다.");
+                }
 
-      return response;
-  }
+                KioskReceipt kioskReceipt = KioskReceipt.builder()
+                    .dcmSaleAmt(itemInfo.dcmSaleAmt())
+                    .itemName(item.getItemName())
+                    .saleQty((short) itemInfo.saleQty())
+                    .userId(kioskRequest.getUserId())
+                    .itemId(String.valueOf(item.getItemId()))
+                    .saleYn(ReceiptType.Y)
+                    .build();
+
+                kioskReceiptRepository.save(kioskReceipt);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("영수증 저장 중 오류가 발생하였습니다.", e);
+        }
+    }
 }
