@@ -109,7 +109,7 @@ public class SelfCounterService {
             response.put("message", "결제가 성공적으로 완료되었습니다.");
         } catch (Exception e) {
             // 트랜잭션 롤백을 위해 예외를 다시 던집니다.
-            throw new RuntimeException("트랜잭션 실패 및 롤백: " + e.getMessage(), e);
+            throw new RuntimeException(e.getMessage(), e);
         }
 
         return response;
