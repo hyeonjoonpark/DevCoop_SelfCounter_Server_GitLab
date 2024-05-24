@@ -30,34 +30,21 @@ public class SelfCounterController {
   @PostMapping(value = "/executePayments")
   @Operation(summary = "kiosk service", description = "키오스크 전반적인 API")
   @Transactional
-  public ResponseEntity<?> executeTransactions(@RequestBody Payments payments) {
+  public ResponseEntity<Map<String, Object>> executeTransactions(@RequestBody Payments payments) {
       log.info("paymentsDto = {}", payments);
       try {
           // 포인트 차감
           UserPointRequest userPointRequestDto = payments.userPointRequest();
           log.info("userPointRequestDto = {}", userPointRequestDto);
-          ResponseEntity<Object> result = selfCounterService.deductPoints(userPointRequestDto);
-          log.info("deductPoints result = {}", result);
-          if (result.getStatusCode().isError()) {
-              return result;
-          }
-          int remainingPoints = (int) result.getBody();
-
+          int remainingPoints = selfCounterService.deductPoints(userPointRequestDto);
+          
           // 결제 로그 저장
           PayLogRequest payLogRequestDto = payments.payLogRequest();
           log.info("payLogRequestDto = {}", payLogRequestDto);
-          ResponseEntity<Object> responseEntity = selfCounterService.savePayLog(payLogRequestDto);
-          log.info("savePayLog responseEntity = {}", responseEntity);
-          if (responseEntity.getStatusCode().isError()) {
-              return responseEntity;
-          }
+          selfCounterService.savePayLog(payLogRequestDto);
 
           // 영수증 저장
-          ResponseEntity<String> saveReceiptResponseEntity = selfCounterService.saveReceipt(payments.kioskRequest());
-          log.info("saveReceiptResponseEntity = {}", saveReceiptResponseEntity);
-          if (saveReceiptResponseEntity.getStatusCode().isError()) {
-              return saveReceiptResponseEntity;
-          }
+          selfCounterService.saveReceipt(payments.kioskRequest());
 
           // 모든 트랜잭션 성공
           log.info("모든 트랜잭션 성공");
