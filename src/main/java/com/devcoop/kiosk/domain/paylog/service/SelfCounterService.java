@@ -35,14 +35,13 @@ public class SelfCounterService {
   private final KioskReceiptRepository kioskReceiptRepository;
   private final ItemRepository itemRepository;
 
-  // ResponseEntity<Object> 대신 int 또는 다른 적절한 타입을 반환하도록 변경
-  public int deductPoints(UserPointRequest userPointRequest) throws RuntimeException {
+  public ResponseEntity<Object> deductPoints(UserPointRequest userPointRequest) {
     System.out.println("userPointRequestDto = " + userPointRequest);
     String codeNumber = userPointRequest.codeNumber();
     User user = userRepository.findByCodeNumber(codeNumber);
 
     if(user == null) {
-      throw new NotFoundException("사용자를 찾을 수 없습니다."); // 예외 던지기
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
     }
 
     if (user.getPoint() >= userPointRequest.totalPrice()) {
@@ -50,39 +49,48 @@ public class SelfCounterService {
       user.setPoint(newPoint);
       userRepository.save(user);
 
-      return newPoint; // 새로운 포인트 반환
+      return ResponseEntity.ok(newPoint); // 새로운 포인트 반환
     } else {
-      throw new RuntimeException("결제하는 것에 실패했습니다"); // 예외 던지기
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("결제하는 것에 실패했습니다");
     }
   }
 
-
-  public void savePayLog(PayLogRequest payLogRequest) throws RuntimeException {
-    User user = userRepository.findByStudentName(payLogRequest.studentName());
-    PayLog payLog = payLogRequest.toEntity(user.getPoint());
-    payLogRepository.save(payLog);
+  public ResponseEntity<Object> savePayLog(PayLogRequest payLogRequest) {
+    try {
+      User user = userRepository.findByStudentName(payLogRequest.studentName());
+      PayLog payLog = payLogRequest.toEntity(user.getPoint());
+      payLogRepository.save(payLog);
+      return ResponseEntity.ok().build();
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("결제 로그 저장 중 오류가 발생하였습니다.");
+    }
   }
 
-  public void saveReceipt(KioskRequest kioskRequest) throws GlobalException {
-    List<KioskItemInfo> requestItems = kioskRequest.getItems();
-    System.out.println("requestItemList = " + requestItems);
-    for (KioskItemInfo itemInfo : requestItems) {
-      Item item = itemRepository.findByItemName(itemInfo.itemName());
+  public ResponseEntity<String> saveReceipt(KioskRequest kioskRequest) {
+    try {
+      List<KioskItemInfo> requestItems = kioskRequest.getItems();
+      System.out.println("requestItemList = " + requestItems);
+      for (KioskItemInfo itemInfo : requestItems) {
+        Item item = itemRepository.findByItemName(itemInfo.itemName());
 
-      if (item == null) {
-        throw new NotFoundException("없는 상품입니다");
+        if (item == null) {
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).body("없는 상품입니다");
+        }
+
+        KioskReceipt kioskReceipt = KioskReceipt.builder()
+          .dcmSaleAmt(itemInfo.dcmSaleAmt())
+          .itemName(item.getItemName())
+          .saleQty((short) itemInfo.saleQty())
+          .userId(kioskRequest.getUserId())
+          .itemId(String.valueOf(item.getItemId()))
+          .saleYn(ReceiptType.Y)
+          .build();
+
+        kioskReceiptRepository.save(kioskReceipt);
       }
-
-      KioskReceipt kioskReceipt = KioskReceipt.builder()
-        .dcmSaleAmt(itemInfo.dcmSaleAmt())
-        .itemName(item.getItemName())
-        .saleQty((short) itemInfo.saleQty())
-        .userId(kioskRequest.getUserId())
-        .itemId(String.valueOf(item.getItemId()))
-        .saleYn(ReceiptType.Y)
-        .build();
-
-      kioskReceiptRepository.save(kioskReceipt);
+      return ResponseEntity.ok("영수증이 성공적으로 저장되었습니다.");
+    } catch (Exception e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("영수증 저장 중 오류가 발생하였습니다.");
     }
   }
 }

@@ -42,9 +42,7 @@ public class SelfCounterController {
                   ResponseEntity<Object> result = selfCounterService.deductPoints(userPointRequestDto);
                   log.info("deductPoints result = {}", result);
                   if (result.getStatusCode().isError()) {
-                      String errorMsg = "포인트 차감 중 오류가 발생하였습니다";
-                      log.error(errorMsg);
-                      throw new RuntimeException(errorMsg);
+                      throw new RuntimeException((String) result.getBody());
                   }
 
                   // 결제 로그 저장
@@ -53,18 +51,14 @@ public class SelfCounterController {
                   ResponseEntity<Object> responseEntity = selfCounterService.savePayLog(payLogRequestDto);
                   log.info("savePayLog responseEntity = {}", responseEntity);
                   if (responseEntity.getStatusCode().isError()) {
-                      String errorMsg = "결제 로그 저장 중 오류가 발생하였습니다";
-                      log.error(errorMsg);
-                      throw new RuntimeException(errorMsg);
+                      throw new RuntimeException((String) responseEntity.getBody());
                   }
 
                   // 영수증 저장
                   ResponseEntity<String> saveReceiptResponseEntity = selfCounterService.saveReceipt(payments.kioskRequest());
                   log.info("saveReceiptResponseEntity = {}", saveReceiptResponseEntity);
                   if (saveReceiptResponseEntity.getStatusCode().isError()) {
-                      String errorMsg = "영수증 저장 중 오류가 발생하였습니다";
-                      log.error(errorMsg);
-                      throw new RuntimeException(errorMsg);
+                      throw new RuntimeException((String) saveReceiptResponseEntity.getBody());
                   }
 
                   // 모든 트랜잭션 성공
