@@ -29,7 +29,7 @@ public class SelfCounterController {
 
   @PostMapping(value = "/executePayments")
   @Operation(summary = "kiosk service", description = "키오스크 전반적인 API")
-  @Transactional
+  @Transactional(rollbackFor = Exception.class)
   public ResponseEntity<Map<String, Object>> executeTransactions(@RequestBody Payments payments) {
       log.info("paymentsDto = {}", payments);
       try {
@@ -47,7 +47,7 @@ public class SelfCounterController {
           selfCounterService.saveReceipt(payments.kioskRequest());
 
           // 모든 트랜잭션 성공
-          log.info("모든 트랜잭션 성공");
+          log.info("모든 과정 성공");
           Map<String, Object> response = new HashMap<>();
           response.put("status", "success");
           response.put("message", "결제가 성공적으로 완료되었습니다.");
@@ -57,7 +57,7 @@ public class SelfCounterController {
           log.error("트랜잭션 실패 및 롤백", e);
           Map<String, Object> errorResponse = new HashMap<>();
           errorResponse.put("status", "error");
-          errorResponse.put("message", "오류가 발생하였습니다: " + e.getMessage());
+          errorResponse.put("message", "오류가 발생하였습니다\n" + e.getMessage());
           return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
       }
   }
