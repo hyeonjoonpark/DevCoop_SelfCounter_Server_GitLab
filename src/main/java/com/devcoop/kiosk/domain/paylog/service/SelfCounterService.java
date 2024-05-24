@@ -14,7 +14,6 @@ import com.devcoop.kiosk.domain.receipt.repository.KioskReceiptRepository;
 import com.devcoop.kiosk.domain.paylog.repository.PayLogRepository;
 import com.devcoop.kiosk.domain.user.repository.UserRepository;
 import com.devcoop.kiosk.global.exception.GlobalException;
-import com.devcoop.kiosk.global.exception.enums.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -28,6 +27,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class SelfCounterService {
 
   private final PayLogRepository payLogRepository;
@@ -35,52 +35,39 @@ public class SelfCounterService {
   private final KioskReceiptRepository kioskReceiptRepository;
   private final ItemRepository itemRepository;
 
-  @Transactional
-  public Object deductPoints(UserPointRequest userPointRequest) {
+  // ResponseEntity<Object> 대신 int 또는 다른 적절한 타입을 반환하도록 변경
+  public int deductPoints(UserPointRequest userPointRequest) throws RuntimeException {
     System.out.println("userPointRequestDto = " + userPointRequest);
     String codeNumber = userPointRequest.codeNumber();
     User user = userRepository.findByCodeNumber(codeNumber);
-    log.info("user = {}", user);
 
-    try {
-      if(user == null) {
-        throw new GlobalException(ErrorCode.USER_NOT_FOUND);
-      }
+    if(user == null) {
+      throw new NotFoundException("사용자를 찾을 수 없습니다."); // 예외 던지기
+    }
 
-      if (user.getPoint() >= userPointRequest.totalPrice()) {
-        int newPoint = user.getPoint() - userPointRequest.totalPrice();
-        log.info("newPoint = {}", newPoint);
-        user.setPoint(newPoint);
-        userRepository.save(user);
+    if (user.getPoint() >= userPointRequest.totalPrice()) {
+      int newPoint = user.getPoint() - userPointRequest.totalPrice();
+      user.setPoint(newPoint);
+      userRepository.save(user);
 
-        return newPoint;
-      }
-
-      return new RuntimeException("결제하는 것에 실패했습니다");
-
-    } catch (Exception e) {
-      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value());
-    } catch (GlobalException e) {
-      throw new RuntimeException(e);
+      return newPoint; // 새로운 포인트 반환
+    } else {
+      throw new RuntimeException("결제하는 것에 실패했습니다"); // 예외 던지기
     }
   }
 
-  @Transactional
+
   public void savePayLog(PayLogRequest payLogRequest) throws RuntimeException {
     User user = userRepository.findByStudentName(payLogRequest.studentName());
     PayLog payLog = payLogRequest.toEntity(user.getPoint());
-    System.out.println("payLog = " + payLog);
     payLogRepository.save(payLog);
   }
 
-  @Transactional
   public void saveReceipt(KioskRequest kioskRequest) throws GlobalException {
     List<KioskItemInfo> requestItems = kioskRequest.getItems();
     System.out.println("requestItemList = " + requestItems);
     for (KioskItemInfo itemInfo : requestItems) {
-      System.out.println("itemInfo = " + itemInfo);
       Item item = itemRepository.findByItemName(itemInfo.itemName());
-      System.out.println("item = " + item);
 
       if (item == null) {
         throw new NotFoundException("없는 상품입니다");
@@ -94,7 +81,6 @@ public class SelfCounterService {
         .itemId(String.valueOf(item.getItemId()))
         .saleYn(ReceiptType.Y)
         .build();
-      System.out.println("kioskReceipt = " + kioskReceipt);
 
       kioskReceiptRepository.save(kioskReceipt);
     }
