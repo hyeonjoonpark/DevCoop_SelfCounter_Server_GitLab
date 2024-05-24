@@ -87,4 +87,31 @@ public class SelfCounterService {
       throw new RuntimeException("영수증 저장 중 오류가 발생하였습니다.");
     }
   }
+
+
+  @Transactional(rollbackFor = Exception.class)
+  public Map<String, Object> executeAllTransactions(Payments payments) {
+      Map<String, Object> response = new HashMap<>();
+
+      try {
+          // 포인트 차감
+          UserPointRequest userPointRequestDto = payments.userPointRequest();
+          int remainingPoints = deductPoints(userPointRequestDto);
+          response.put("remainingPoints", remainingPoints); // 새로운 포인트 반환
+
+          // 결제 로그 저장
+          savePayLog(payments.payLogRequest());
+
+          // 영수증 저장
+          saveReceipt(payments.kioskRequest());
+
+          response.put("status", "success");
+          response.put("message", "결제의 모든 과정이 성공적으로 완료되었습니다.");
+      } catch (Exception e) {
+          // 트랜잭션 롤백을 위해 예외를 다시 던집니다.
+          throw new RuntimeException("트랜잭션 실패 및 롤백: " + e.getMessage(), e);
+      }
+
+      return response;
+  }
 }
