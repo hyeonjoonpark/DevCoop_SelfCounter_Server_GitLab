@@ -8,9 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,10 +27,10 @@ import java.util.Map;
 public class SelfCounterController {
   private final SelfCounterService selfCounterService;
 
-  @PostMapping(value = "/executePayments", produces = MediaType.APPLICATION_JSON_VALUE)
+  @PostMapping(value = "/executePayments")
   @Operation(summary = "kiosk service", description = "키오스크 전반적인 API")
   @Transactional
-  public ResponseEntity<Map<String, Object>> executeTransactions(@RequestBody Payments payments) {
+  public ResponseEntity<?> executeTransactions(@RequestBody Payments payments) {
       log.info("paymentsDto = {}", payments);
       try {
           // 포인트 차감
@@ -42,7 +39,7 @@ public class SelfCounterController {
           ResponseEntity<Object> result = selfCounterService.deductPoints(userPointRequestDto);
           log.info("deductPoints result = {}", result);
           if (result.getStatusCode().isError()) {
-              throw new RuntimeException((String) result.getBody());
+              return result;
           }
           int remainingPoints = (int) result.getBody();
 
@@ -52,14 +49,14 @@ public class SelfCounterController {
           ResponseEntity<Object> responseEntity = selfCounterService.savePayLog(payLogRequestDto);
           log.info("savePayLog responseEntity = {}", responseEntity);
           if (responseEntity.getStatusCode().isError()) {
-              throw new RuntimeException((String) responseEntity.getBody());
+              return responseEntity;
           }
 
           // 영수증 저장
           ResponseEntity<String> saveReceiptResponseEntity = selfCounterService.saveReceipt(payments.kioskRequest());
           log.info("saveReceiptResponseEntity = {}", saveReceiptResponseEntity);
           if (saveReceiptResponseEntity.getStatusCode().isError()) {
-              throw new RuntimeException((String) saveReceiptResponseEntity.getBody());
+              return saveReceiptResponseEntity;
           }
 
           // 모든 트랜잭션 성공
@@ -71,17 +68,10 @@ public class SelfCounterController {
           return ResponseEntity.ok(response);
       } catch (Exception e) {
           log.error("트랜잭션 실패 및 롤백", e);
-          throw new RuntimeException("오류가 발생하였습니다: " + e.getMessage());
+          Map<String, Object> errorResponse = new HashMap<>();
+          errorResponse.put("status", "error");
+          errorResponse.put("message", "오류가 발생하였습니다: " + e.getMessage());
+          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
       }
-  }
-
-  private ResponseEntity<Map<String, Object>> createErrorResponse(String code, String message) {
-      Map<String, Object> errorResponse = new HashMap<>();
-      errorResponse.put("status", "error");
-      errorResponse.put("code", code);
-      errorResponse.put("message", message);
-      HttpHeaders headers = new HttpHeaders();
-      headers.setContentType(new MediaType("application", "json", StandardCharsets.UTF_8));
-      return new ResponseEntity<>(errorResponse, headers, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 }

@@ -13,14 +13,12 @@ import com.devcoop.kiosk.domain.item.repository.ItemRepository;
 import com.devcoop.kiosk.domain.receipt.repository.KioskReceiptRepository;
 import com.devcoop.kiosk.domain.paylog.repository.PayLogRepository;
 import com.devcoop.kiosk.domain.user.repository.UserRepository;
-import com.devcoop.kiosk.global.exception.GlobalException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.webjars.NotFoundException;
 
 import java.util.List;
 
@@ -40,7 +38,7 @@ public class SelfCounterService {
     String codeNumber = userPointRequest.codeNumber();
     User user = userRepository.findByCodeNumber(codeNumber);
 
-    if(user == null) {
+    if (user == null) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자를 찾을 수 없습니다.");
     }
 
@@ -51,7 +49,7 @@ public class SelfCounterService {
 
       return ResponseEntity.ok(newPoint); // 새로운 포인트 반환
     } else {
-      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("결제하는 것에 실패했습니다");
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("결제하는 것에 실패했습니다.");
     }
   }
 
@@ -74,7 +72,7 @@ public class SelfCounterService {
         Item item = itemRepository.findByItemName(itemInfo.itemName());
 
         if (item == null) {
-          return ResponseEntity.status(HttpStatus.NOT_FOUND).body("없는 상품입니다");
+          return ResponseEntity.status(HttpStatus.NOT_FOUND).body("없는 상품입니다.");
         }
 
         KioskReceipt kioskReceipt = KioskReceipt.builder()
