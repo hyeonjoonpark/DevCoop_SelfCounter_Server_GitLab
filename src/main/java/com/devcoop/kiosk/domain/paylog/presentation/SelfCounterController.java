@@ -54,7 +54,7 @@ public class SelfCounterController {
           response.put("remainingPoints", remainingPoints);
           return ResponseEntity.ok(response);
       } catch (Exception e) {
-          log.error("트랜잭션 실패 및 롤백", e);
+          throw new RuntimeException("트랜잭션 실패 및 롤백: " + e.getMessage(), e);
           Map<String, Object> errorResponse = new HashMap<>();
           errorResponse.put("status", "error");
           errorResponse.put("message", "오류가 발생하였습니다\n" + e.getMessage());
