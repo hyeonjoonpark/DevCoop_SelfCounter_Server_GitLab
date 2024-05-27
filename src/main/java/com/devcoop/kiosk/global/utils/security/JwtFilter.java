@@ -24,18 +24,6 @@ import java.util.List;
 @Slf4j
 public class JwtFilter extends OncePerRequestFilter {
   private final String secretKey;
-  private final SelfCounterService selfCounterService;
-  private final LogService logService;
-  private final ReceiptService receiptService;
-  private final ItemSelectService itemSelectService;
-
-  public JwtFilter(LogService logService, String secretKey, SelfCounterService selfCounterService, ReceiptService receiptService, ItemSelectService itemSelectService) {
-      this.secretKey = secretKey;
-      this.selfCounterService = selfCounterService;
-      this.logService = logService;
-      this.receiptService = receiptService;
-      this.itemSelectService = itemSelectService;
-  }
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

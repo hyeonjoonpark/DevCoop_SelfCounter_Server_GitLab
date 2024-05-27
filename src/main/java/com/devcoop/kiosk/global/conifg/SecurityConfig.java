@@ -5,6 +5,8 @@ import com.devcoop.kiosk.domain.paylog.service.LogService;
 import com.devcoop.kiosk.domain.paylog.service.SelfCounterService;
 import com.devcoop.kiosk.domain.receipt.service.ReceiptService;
 import com.devcoop.kiosk.global.utils.security.JwtFilter;
+import com.devcoop.kiosk.global.utils.security.JwtUtil;
+import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,13 +25,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-  private final SelfCounterService selfCounterService;
-  private final ItemSelectService itemSelectService;
-  private final LogService logService;
-  private final ReceiptService receiptService;
 
   @Value("${jwt.secret}")
   private String secretKey;
+
+  @Bean
+  public JwtFilter jwtFilter() {
+    return new JwtFilter(secretKey);
+  }
 
   @Bean
   public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -61,7 +64,7 @@ public class SecurityConfig {
         session -> session
           .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
       )
-      .addFilterBefore(new JwtFilter(secretKey, selfCounterService, logService, receiptService, itemSelectService), UsernamePasswordAuthenticationFilter.class);
+      .addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
 
     return http.build();
