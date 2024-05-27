@@ -29,10 +29,10 @@ public class JwtFilter extends OncePerRequestFilter {
   private final ReceiptService receiptService;
   private final ItemSelectService itemSelectService;
 
-  public JwtFilter(LogService logService, String secretKey, String secretKey1, SelfCounterService selfCounterService, LogService logService1, ReceiptService receiptService, ItemSelectService itemSelectService) {
-      this.secretKey = secretKey1;
+  public JwtFilter(LogService logService, String secretKey, SelfCounterService selfCounterService, ReceiptService receiptService, ItemSelectService itemSelectService) {
+      this.secretKey = secretKey;
       this.selfCounterService = selfCounterService;
-      this.logService = logService1;
+      this.logService = logService;
       this.receiptService = receiptService;
       this.itemSelectService = itemSelectService;
   }
