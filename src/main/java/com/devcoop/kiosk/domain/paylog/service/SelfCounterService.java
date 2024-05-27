@@ -54,6 +54,7 @@ public class SelfCounterService {
 
     public void savePayLog(PayLogRequest payLogRequest) {
         try {
+          // findByStudentName이 이름중복인 사람이 있으면 에러 발생시킴
             User user = userRepository.findByStudentName(payLogRequest.studentName());
             PayLog payLog = payLogRequest.toEntity(user.getPoint());
             payLogRepository.save(payLog);
