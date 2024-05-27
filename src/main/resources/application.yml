@@ -10,11 +10,6 @@ spring:
     generate-ddl: true
   main:
     allow-bean-definition-overriding: true
-  http:
-    encoding:
-      charset: UTF-8
-      enabled: true
-      force: true
 
 jwt:
   secret: DevCoopKioskAuthCertificateJsonWebTokenSecretKey
@@ -22,3 +17,7 @@ jwt:
 server:
   servlet:
     context-path: /kiosk
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true

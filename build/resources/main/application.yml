@@ -17,3 +17,7 @@ jwt:
 server:
   servlet:
     context-path: /kiosk
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
