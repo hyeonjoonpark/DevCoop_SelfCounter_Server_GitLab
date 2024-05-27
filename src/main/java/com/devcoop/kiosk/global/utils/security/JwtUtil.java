@@ -17,7 +17,7 @@ public class JwtUtil {
     byte[] decodedKey = Base64.getDecoder().decode(secretKey);
     SecretKey originalKey = Keys.hmacShaKeyFor(decodedKey);
     return Jwts.parserBuilder()
-      .setSigningKey(decodedKey)
+      .setSigningKey(originalKey)
       .build()
       .parseClaimsJws(token)
       .getBody()
