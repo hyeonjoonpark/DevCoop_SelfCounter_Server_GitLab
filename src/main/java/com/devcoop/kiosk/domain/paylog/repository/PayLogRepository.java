@@ -15,6 +15,6 @@ public interface PayLogRepository extends JpaRepository<PayLog, Integer> {
     "where i.itemName = kr.itemName " +
     "group by i.itemName " +
     "order by count(i.itemName) " +
-    "desc limit 10")
+    "desc limit 5")
   List<String> findTop5ItemName();
 }
