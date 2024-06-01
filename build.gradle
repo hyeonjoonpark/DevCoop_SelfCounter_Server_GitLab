@@ -46,7 +46,9 @@ dependencies {
   // DOCUMENTATION
   implementation 'org.springdoc:springdoc-openapi-ui:1.6.15'
 
-  // EMAIL
+  // QueryDSL 추가
+  implementation "com.querydsl:querydsl-jpa:5.0.0"
+  implementation "com.querydsl:querydsl-apt:5.0.0"
 }
 
 tasks.named('test') {
