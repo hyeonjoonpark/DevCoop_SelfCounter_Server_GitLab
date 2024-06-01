@@ -15,4 +15,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer> {
 
   @Query("select i.itemName from Item i")
   List<String> findNameAll();
+
+  @Query("SELECT i FROM Item i WHERE i.event <> 'NONE'")
+  List<Item> findAllByEvent();
 }

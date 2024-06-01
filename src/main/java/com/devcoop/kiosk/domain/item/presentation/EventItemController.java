@@ -1,6 +1,7 @@
 package com.devcoop.kiosk.domain.item.presentation;
 
-import com.devcoop.kiosk.domain.item.Item;
+import com.devcoop.kiosk.domain.item.presentation.dto.EventItemResponse;
+import com.devcoop.kiosk.domain.item.service.EventItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +13,10 @@ import java.util.List;
 @RequestMapping("/event-item")
 @RequiredArgsConstructor
 public class EventItemController {
+  private final EventItemService eventItemService;
   @GetMapping("/get-item")
-  public List<Item> getItems() {
-
-    return null;
+  public List<EventItemResponse> getItems() {
+    List<EventItemResponse> result = eventItemService.read();
+    return result;
   }
 }
