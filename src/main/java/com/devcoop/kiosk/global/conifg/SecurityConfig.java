@@ -49,7 +49,7 @@ public class SecurityConfig {
       .authorizeHttpRequests(
         request -> request
           .requestMatchers(HttpMethod.POST, "/kiosk/auth/signIn").permitAll() // 로그인 API
-          .requestMatchers(HttpMethod.POST, "/kiosk/save/receipt").permitAll() // 영수증 저장 API
+          .requestMatchers(HttpMethod.POST, "/kiosk/save/receipt").authenticated() // 영수증 저장 API
           .requestMatchers(HttpMethod.GET, "/kiosk/item/ai/suggest").permitAll() // 상품추천 API
           .requestMatchers(HttpMethod.GET, "/kiosk/event-item/get-item").permitAll() // 행사상품 조회 API
           .requestMatchers(HttpMethod.GET, "/kiosk/item/top/list").permitAll() // 인기상품 조회 API

@@ -1,5 +1,6 @@
 package com.devcoop.kiosk.domain.user;
 
+import com.devcoop.kiosk.domain.user.types.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,11 +23,13 @@ public class User {
     private String pointStatus;
     private String refToken;
 
+    private Role role;
+
     @Builder
     public User(
             int studentNumber, String codeNumber, String pin, String studentName,
             String email, String password, int point, Short isAdmin,
-            Short isCoop, String type, String pointStatus, String refToken
+            Short isCoop, String type, String pointStatus, String refToken, Role role
     ) {
         this.studentNumber = studentNumber;
         this.codeNumber = codeNumber;
@@ -40,6 +43,7 @@ public class User {
         this.type = type;
         this.pointStatus = pointStatus;
         this.refToken = refToken;
+        this.role = role;
     }
 
     public void setPoint(int point) {
