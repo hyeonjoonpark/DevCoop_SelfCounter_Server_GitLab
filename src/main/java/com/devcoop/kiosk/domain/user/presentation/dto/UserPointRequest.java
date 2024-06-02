@@ -7,4 +7,5 @@ public record UserPointRequest(
   @NotBlank(message = "바코드 번호는 필수값입니다") String codeNumber,
   int totalPrice
 ) {
+
 }

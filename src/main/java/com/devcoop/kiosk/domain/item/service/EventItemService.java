@@ -18,13 +18,16 @@ public class EventItemService {
   @Transactional(readOnly = true)
   public List<EventItemResponse> read() {
     List<Item> items = itemRepository.findAllByEvent();
-    return items.stream().map(item -> EventItemResponse.builder()
-        .itemName(item.getItemName())
-        .itemPrice(item.getItemPrice())
-        .event(item.getEvent())
-        .eventStartDate(item.getEventStartDate())
-        .eventEndDate(item.getEventEndDate())
-        .build())
-      .collect(Collectors.toList());
+    return items.stream()
+      .map(
+        item -> EventItemResponse.builder()
+          .itemName(item.getItemName())
+          .itemPrice(item.getItemPrice())
+          .event(item.getEvent())
+          .eventStartDate(item.getEventStartDate())
+          .eventEndDate(item.getEventEndDate())
+          .build())
+        .collect(Collectors.toList()
+      );
   }
 }
