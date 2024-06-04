@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 @Builder
 public record EventItemResponse(
+  String barcode,
   String itemName,
   int itemPrice,
   EventType event,

@@ -21,6 +21,7 @@ public class EventItemService {
     return items.stream()
       .map(
         item -> EventItemResponse.builder()
+          .barcode(item.getBarcode())
           .itemName(item.getItemName())
           .itemPrice(item.getItemPrice())
           .event(item.getEvent())
