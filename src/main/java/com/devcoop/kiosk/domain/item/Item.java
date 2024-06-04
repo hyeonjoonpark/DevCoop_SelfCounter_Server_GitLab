@@ -25,8 +25,11 @@ public class Item {
   private LocalDate eventStartDate;
   private LocalDate eventEndDate;
 
+  // 상품 이미지
+  private String itemImage;
+
   @Builder
-  public Item(Integer itemId, String barcode, String itemName, int itemPrice, EventType event, LocalDate eventStartDate, LocalDate eventEndDate) {
+  public Item(Integer itemId, String barcode, String itemName, int itemPrice, EventType event, LocalDate eventStartDate, LocalDate eventEndDate, String itemImage) {
     this.itemId = itemId;
     this.barcode = barcode;
     this.itemName = itemName;
@@ -34,5 +37,6 @@ public class Item {
     this.event = event;
     this.eventStartDate = eventStartDate;
     this.eventEndDate = eventEndDate;
+    this.itemImage = itemImage;
   }
 }
