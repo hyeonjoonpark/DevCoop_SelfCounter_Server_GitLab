@@ -10,12 +10,22 @@ pull:
   stage: pull
   script:
     - git pull
+  only:
+    - main
+  tags:
+    - docker
+
+    
 
 build:
   stage: build
   script:
     - cd $DOCKER_COMPOSE_PATH
     - docker-compose build kiosk
+  only:
+    - main
+  tags:
+    - docker
 
 deploy:
   stage: deploy
@@ -24,3 +34,5 @@ deploy:
     - docker-compose up -d kiosk
   only:
     - main
+  tags:
+    - docker
