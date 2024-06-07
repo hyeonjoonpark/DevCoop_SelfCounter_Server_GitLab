@@ -18,7 +18,7 @@ public class AuthController {
   private final UserAuthService userAuthService;
 
   @PostMapping("/signIn")
-  @Operation(summary = "sign in", description = "로그인")
+  @Operation(summary = "login", description = "로그인")
   public LoginResponse login(@RequestBody LoginRequest loginRequest) throws GlobalException {
     LoginResponse result = userAuthService.login(loginRequest);
     return result;
