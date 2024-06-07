@@ -25,7 +25,7 @@ public class AuthController {
   }
 
   @PutMapping("/pwChange")
-  @Operation(summary = "change password", description = "비밀번호 변경")
+  @Operation(summary = "update password", description = "비밀번호 변경")
   public void changePassword(@RequestBody PinChangeRequest pinChangeRequest) throws GlobalException {
     userAuthService.changePassword(pinChangeRequest);
   }
