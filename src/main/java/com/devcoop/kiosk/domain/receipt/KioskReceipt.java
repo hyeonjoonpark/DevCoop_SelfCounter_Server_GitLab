@@ -1,5 +1,6 @@
 package com.devcoop.kiosk.domain.receipt;
 
+import com.devcoop.kiosk.domain.item.types.EventType;
 import com.devcoop.kiosk.domain.receipt.types.ReceiptType;
 import jakarta.persistence.*;
 import lombok.*;
@@ -27,9 +28,10 @@ public class KioskReceipt {
   private Short saleQty; // 팔린 양
   @CreationTimestamp
   private LocalDateTime date = LocalDateTime.now(); // 팔린 날짜
+  private EventType eventType;
 
   @Builder
-  public KioskReceipt(int number, int dcmSaleAmt, String itemId, ReceiptType saleYn, String userId, String itemName, Short saleQty, LocalDateTime date) {
+  public KioskReceipt(int number, int dcmSaleAmt, String itemId, ReceiptType saleYn, String userId, String itemName, Short saleQty, LocalDateTime date, EventType eventType) {
     this.number = number;
     this.dcmSaleAmt = dcmSaleAmt;
     this.itemId = itemId;
@@ -38,5 +40,6 @@ public class KioskReceipt {
     this.itemName = itemName;
     this.saleQty = saleQty;
     this.date = date;
+    this.eventType = eventType;
   }
 }

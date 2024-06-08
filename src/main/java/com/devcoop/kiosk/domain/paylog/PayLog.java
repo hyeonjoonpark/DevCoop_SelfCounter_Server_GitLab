@@ -1,5 +1,6 @@
 package com.devcoop.kiosk.domain.paylog;
 
+import com.devcoop.kiosk.domain.item.types.EventType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -24,9 +25,10 @@ public class PayLog {
   private String chargerId;
   private String verifyKey;
   private String studentName;
+  private EventType eventType;
 
   @Builder
-  public PayLog(int payNum, String codeNumber, LocalDateTime date, Short type, int innerPoint, int point, String chargerId, String verifyKey, String studentName) {
+  public PayLog(int payNum, String codeNumber, LocalDateTime date, Short type, int innerPoint, int point, String chargerId, String verifyKey, String studentName, EventType eventType) {
     this.payNum = payNum;
     this.codeNumber = codeNumber;
     this.date = date;
@@ -36,5 +38,6 @@ public class PayLog {
     this.chargerId = chargerId;
     this.verifyKey = verifyKey;
     this.studentName = studentName;
+    this.eventType = eventType;
   }
 }
