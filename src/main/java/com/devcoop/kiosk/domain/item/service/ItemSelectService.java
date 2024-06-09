@@ -3,6 +3,7 @@ package com.devcoop.kiosk.domain.item.service;
 import com.devcoop.kiosk.domain.item.Item;
 import com.devcoop.kiosk.domain.item.presentation.dto.ItemResponse;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
+import com.devcoop.kiosk.domain.item.types.EventType;
 import com.devcoop.kiosk.domain.receipt.repository.KioskReceiptRepository;
 import com.devcoop.kiosk.global.exception.GlobalException;
 import com.devcoop.kiosk.global.exception.enums.ErrorCode;
@@ -18,31 +19,43 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class ItemSelectService {
-  private final KioskReceiptRepository kioskReceiptRepository;
+    private final KioskReceiptRepository kioskReceiptRepository;
 
-  private final ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
 
-  @Transactional(readOnly = true)
-  public List<ItemResponse> get(List<String> barcodes) throws GlobalException {
-    List<ItemResponse> itemResponses = new ArrayList<>();
+    @Transactional(readOnly = true)
+    public List<ItemResponse> get(List<String> barcodes) throws GlobalException {
+        List<ItemResponse> itemResponses = new ArrayList<>();
 
-    for (String barcode : barcodes) {
-      log.info("service에서 barcode = {}", barcode);
-      Item item = itemRepository.findByBarcode(barcode);
-      log.info("item = {}", item);
+        for (String barcode : barcodes) {
+            log.info("service에서 barcode = {}", barcode);
+            Item item = itemRepository.findByBarcode(barcode);
+            log.info("item = {}", item);
 
-      if (item == null) {
-        throw new GlobalException(ErrorCode.BARCODE_NOT_VALID);
-      }
+            if (item == null) {
+                throw new GlobalException(ErrorCode.BARCODE_NOT_VALID);
+            }
 
-      ItemResponse itemResponse = ItemResponse.builder()
-        .name(item.getItemName())
-        .price(item.getItemPrice())
-        .build();
+            if (item.getEvent().equals(EventType.ONE_PLUS_ONE)) {
+                ItemResponse itemResponse = ItemResponse.builder()
+                        .name(item.getItemName())
+                        .price(item.getItemPrice())
+                        .quantity(2)
+                        .eventStatus(EventType.ONE_PLUS_ONE)
+                        .build();
+                itemResponses.add(itemResponse);
+            }
 
-      itemResponses.add(itemResponse);
+            ItemResponse itemResponse = ItemResponse.builder()
+                    .name(item.getItemName())
+                    .price(item.getItemPrice())
+                    .quantity(1)
+                    .eventStatus(EventType.NONE)
+                    .build();
+
+            itemResponses.add(itemResponse);
+        }
+
+        return itemResponses;
     }
-
-    return itemResponses;
-  }
 }
