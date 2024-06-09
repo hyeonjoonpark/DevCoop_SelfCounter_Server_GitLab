@@ -13,22 +13,22 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class EventItemService {
-  private final ItemRepository itemRepository;
+    private final ItemRepository itemRepository;
 
-  @Transactional(readOnly = true)
-  public List<EventItemResponse> read() {
-    List<Item> items = itemRepository.findAllByEvent();
-    return items.stream()
-      .map(
-        item -> EventItemResponse.builder()
-          .barcode(item.getBarcode())
-          .itemName(item.getItemName())
-          .itemPrice(item.getItemPrice())
-          .event(item.getEvent())
-          .eventStartDate(item.getEventStartDate())
-          .eventEndDate(item.getEventEndDate())
-          .build())
-        .collect(Collectors.toList()
-      );
-  }
+    @Transactional(readOnly = true)
+    public List<EventItemResponse> read() {
+        List<Item> items = itemRepository.findAllByEvent();
+        return items.stream()
+                .map(
+                        item -> EventItemResponse.builder()
+                                .barcode(item.getBarcode())
+                                .itemName(item.getItemName())
+                                .itemPrice(item.getItemPrice())
+                                .event(item.getEvent())
+                                .eventStartDate(item.getEventStartDate())
+                                .eventEndDate(item.getEventEndDate())
+                                .build())
+                .collect(Collectors.toList()
+                );
+    }
 }
