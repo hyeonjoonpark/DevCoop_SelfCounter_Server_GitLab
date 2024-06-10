@@ -4,6 +4,7 @@ import com.devcoop.kiosk.domain.item.types.EventType;
 import com.devcoop.kiosk.domain.receipt.types.ReceiptType;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Check;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -13,6 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @ToString
 @NoArgsConstructor
+@Check(constraints = "event_type IN ('ONE_PLUS_ONE', 'NONE')")
 public class KioskReceipt {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
