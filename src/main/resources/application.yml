@@ -15,6 +15,9 @@ spring:
 jwt:
   secret: DevCoopKioskAuthCertificateJsonWebTokenSecretKey
 
+db:
+  imageUrl: ~/server/kiosk/devcoop_self_counter_server_v1/infra/images
+
 server:
   servlet:
     context-path: /kiosk

@@ -4,6 +4,7 @@ import com.devcoop.kiosk.domain.item.Item;
 import com.devcoop.kiosk.domain.item.presentation.dto.EventItemResponse;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,6 +16,9 @@ import java.util.stream.Collectors;
 public class EventItemService {
     private final ItemRepository itemRepository;
 
+    @Value("db.imageUrl")
+    private String defaultUrl;
+
     @Transactional(readOnly = true)
     public List<EventItemResponse> read() {
         List<Item> items = itemRepository.findAllByEvent();
@@ -25,8 +29,7 @@ public class EventItemService {
                                 .itemName(item.getItemName())
                                 .itemPrice(item.getItemPrice())
                                 .event(item.getEvent())
-                                .eventStartDate(item.getEventStartDate())
-                                .eventEndDate(item.getEventEndDate())
+                                .image(item.getItemImage())
                                 .build())
                 .collect(Collectors.toList()
                 );
