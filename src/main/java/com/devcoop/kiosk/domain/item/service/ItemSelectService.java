@@ -36,21 +36,19 @@ public class ItemSelectService {
                 throw new GlobalException(ErrorCode.BARCODE_NOT_VALID);
             }
 
+            int quantity = 1;
+            EventType eventStatus = EventType.NONE;
+
             if (item.getEvent().equals(EventType.ONE_PLUS_ONE)) {
-                ItemResponse itemResponse = ItemResponse.builder()
-                        .name(item.getItemName())
-                        .price(item.getItemPrice())
-                        .quantity(2)
-                        .eventStatus(EventType.ONE_PLUS_ONE)
-                        .build();
-                itemResponses.add(itemResponse);
+                quantity = 2;
+                eventStatus = EventType.ONE_PLUS_ONE;
             }
 
             ItemResponse itemResponse = ItemResponse.builder()
                     .name(item.getItemName())
                     .price(item.getItemPrice())
-                    .quantity(1)
-                    .eventStatus(EventType.NONE)
+                    .quantity(quantity)
+                    .eventStatus(eventStatus)
                     .build();
 
             itemResponses.add(itemResponse);
