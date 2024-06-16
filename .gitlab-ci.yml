@@ -21,7 +21,7 @@ build:
   stage: build
   script:
     - cd $DOCKER_COMPOSE_PATH
-    - docker-compose build kiosk
+    - docker-compose -f docker-compose.kiosk.yml build kiosk
   only:
     - main
   tags:
