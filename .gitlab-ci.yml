@@ -4,11 +4,13 @@ stages:
   - deploy
 
 before_script:
-  - cd $PROJECT_PATH
+  - cd $DOCKER_COMPOSE_PATH
 
 pull:
   stage: pull
   script:
+    - docker-compose -f docker-compose.kiosk.yml down kiosk
+    - cd $PROJECT_PATH
     - git pull
   only:
     - main
@@ -20,7 +22,6 @@ pull:
 build:
   stage: build
   script:
-    - cd $DOCKER_COMPOSE_PATH
     - docker-compose -f docker-compose.kiosk.yml build kiosk
   only:
     - main
@@ -30,8 +31,7 @@ build:
 deploy:
   stage: deploy
   script:
-    - cd $DOCKER_COMPOSE_PATH
-    - docker-compose up -d kiosk
+    - docker-compose -f docker-compose.kiosk.yml up -d
   only:
     - main
   tags:
