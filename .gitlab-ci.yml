@@ -9,7 +9,7 @@ before_script:
 pull:
   stage: pull
   script:
-    - docker-compose -f docker-compose.kiosk.yml down kiosk
+    - docker-compose -f docker-compose.kiosk.yml stop kiosk
     - cd $PROJECT_PATH
     - git pull
   only:
