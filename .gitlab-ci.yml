@@ -9,7 +9,7 @@ before_script:
 pull:
   stage: pull
   script:
-    - docker-compose -f docker-compose.kiosk.yml stop kiosk
+    - docker-compose -p kiosk -f docker-compose.kiosk.yml stop kiosk
     - cd $PROJECT_PATH
     - git pull
   only:
@@ -22,7 +22,7 @@ pull:
 build:
   stage: build
   script:
-    - docker-compose -f docker-compose.kiosk.yml build kiosk
+    - docker-compose -p kiosk -f docker-compose.kiosk.yml build kiosk
   only:
     - main
   tags:
@@ -31,7 +31,7 @@ build:
 deploy:
   stage: deploy
   script:
-    - docker-compose -f docker-compose.kiosk.yml up -d
+    - docker-compose -p kiosk -f docker-compose.kiosk.yml up -d
   only:
     - main
   tags:
