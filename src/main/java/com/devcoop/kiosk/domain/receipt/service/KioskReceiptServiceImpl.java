@@ -3,6 +3,7 @@ package com.devcoop.kiosk.domain.receipt.service;
 
 import com.devcoop.kiosk.domain.item.Item;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
+import com.devcoop.kiosk.domain.item.types.EventType;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskItemInfo;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskRequest;
 import com.devcoop.kiosk.domain.receipt.KioskReceipt;
@@ -20,35 +21,42 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class KioskReceiptServiceImpl implements ReceiptService {
-  private final KioskReceiptRepository kioskReceiptRepository;
-  private final ItemRepository itemRepository;
+    private final KioskReceiptRepository kioskReceiptRepository;
+    private final ItemRepository itemRepository;
 
-  @Override
-  public ResponseEntity<Object> save(KioskRequest kioskRequest) {
-    List<KioskItemInfo> requestItems = kioskRequest.getItems();
-    System.out.println("requestItemList = " + requestItems);
-    for(KioskItemInfo itemInfo : requestItems) {
-      System.out.println("itemInfo = " + itemInfo);
-      Item item = itemRepository.findByItemName(itemInfo.itemName());
-      System.out.println("item = " + item);
+    @Override
+    public ResponseEntity<Object> save(KioskRequest kioskRequest) {
+        List<KioskItemInfo> requestItems = kioskRequest.getItems();
+        System.out.println("requestItemList = " + requestItems);
+        for (KioskItemInfo itemInfo : requestItems) {
+            System.out.println("itemInfo = " + itemInfo);
+            Item item = itemRepository.findByItemName(itemInfo.itemName());
+            System.out.println("item = " + item);
 
-      if(item == null) {
-        throw new NotFoundException("없는 상품입니다");
-      }
+            if (item == null) {
+                throw new NotFoundException("없는 상품입니다");
+            }
 
-      KioskReceipt kioskReceipt = KioskReceipt.builder()
-        .dcmSaleAmt(itemInfo.dcmSaleAmt())
-        .itemName(item.getItemName())
-        .saleQty((short) itemInfo.saleQty())
-        .userId(kioskRequest.getUserId())
-        .itemId(String.valueOf(item.getItemId()))
-        .saleYn(ReceiptType.Y)
-        .build();
-      System.out.println("kioskReceipt = " + kioskReceipt);
+            EventType eventType = EventType.NONE;
 
-      kioskReceiptRepository.save(kioskReceipt);
+            if (item.getEvent().equals(EventType.NONE)) {
+                eventType = EventType.ONE_PLUS_ONE;
+            }
+
+            KioskReceipt kioskReceipt = KioskReceipt.builder()
+                    .dcmSaleAmt(itemInfo.dcmSaleAmt())
+                    .itemName(item.getItemName())
+                    .saleQty((short) itemInfo.saleQty())
+                    .userId(kioskRequest.getUserId())
+                    .itemId(String.valueOf(item.getItemId()))
+                    .saleYn(ReceiptType.Y)
+                    .eventType(eventType)
+                    .build();
+            System.out.println("kioskReceipt = " + kioskReceipt);
+
+            kioskReceiptRepository.save(kioskReceipt);
+        }
+
+        return ResponseEntity.ok().build();
     }
-
-    return ResponseEntity.ok().build();
-  }
 }
