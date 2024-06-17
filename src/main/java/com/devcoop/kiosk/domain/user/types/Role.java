@@ -4,13 +4,14 @@ import lombok.Getter;
 
 @Getter
 public enum Role {
-  ROLE_USER_NOT_COOP("일반 사용자 (협동조합 아님)"),
-  ROLE_USER_COOP("협동조합 사용자"),
-  ROLE_ADMIN("관리자 (매점부원)");
+    ROLE_USER_NOT_COOP("협동조합을 가입하지 않은 학생"),
+    ROLE_USER_COOP("협동조합 학생"),
+    ROLE_ADMIN("매점부원"),
+    ROLE_TEACHER("선생님");
 
-  private final String description;
+    private final String description;
 
-  Role(String description) {
-    this.description = description;
-  }
+    Role(String description) {
+        this.description = description;
+    }
 }
