@@ -13,6 +13,8 @@ spring:
     hibernate:
       ddl-auto: update
     properties:
+      hibernate.hibernate.format_sql: true
+      hibernate.hibernate.default_batch_fetch_size: 100
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
     generate-ddl: true
