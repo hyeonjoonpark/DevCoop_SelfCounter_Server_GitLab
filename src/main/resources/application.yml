@@ -15,8 +15,6 @@ spring:
     properties:
       hibernate.hibernate.format_sql: true
       hibernate.hibernate.default_batch_fetch_size: 100
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
     generate-ddl: true
     show-sql: true
   main:
@@ -24,9 +22,6 @@ spring:
 
 jwt:
   secret: DevCoopKioskAuthCertificateJsonWebTokenSecretKey
-
-db:
-  imageUrl: ~/server/kiosk/devcoop_self_counter_server_v1/infra/images
 
 server:
   servlet:
