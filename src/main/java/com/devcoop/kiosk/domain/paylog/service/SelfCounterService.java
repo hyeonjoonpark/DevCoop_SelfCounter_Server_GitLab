@@ -2,7 +2,6 @@ package com.devcoop.kiosk.domain.paylog.service;
 
 import com.devcoop.kiosk.domain.item.Item;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
-import com.devcoop.kiosk.domain.item.types.EventType;
 import com.devcoop.kiosk.domain.paylog.PayLog;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskItemInfo;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskRequest;
@@ -75,19 +74,19 @@ public class SelfCounterService {
                 if (item == null) {
                     throw new RuntimeException("없는 상품입니다.");
                 }
-
-                if (item.getEvent().equals(EventType.ONE_PLUS_ONE)) {
-                    KioskReceipt kioskReceipt = KioskReceipt.builder()
-                            .dcmSaleAmt(itemInfo.dcmSaleAmt())
-                            .itemName(item.getItemName())
-                            .saleQty((short) itemInfo.saleQty())
-                            .userId(kioskRequest.getUserId())
-                            .itemId(String.valueOf(item.getItemId()))
-                            .saleYn(ReceiptType.Y)
-                            .eventType(EventType.ONE_PLUS_ONE)
-                            .build();
-                    kioskReceiptRepository.save(kioskReceipt);
-                }
+                
+//                if (item.getEvent().equals(EventType.ONE_PLUS_ONE)) {
+//                    KioskReceipt kioskReceipt = KioskReceipt.builder()
+//                            .dcmSaleAmt(itemInfo.dcmSaleAmt())
+//                            .itemName(item.getItemName())
+//                            .saleQty((short) itemInfo.saleQty())
+//                            .userId(kioskRequest.getUserId())
+//                            .itemId(String.valueOf(item.getItemId()))
+//                            .saleYn(ReceiptType.Y)
+//                            .eventType(EventType.ONE_PLUS_ONE)
+//                            .build();
+//                    kioskReceiptRepository.save(kioskReceipt);
+//                }
 
 
                 KioskReceipt kioskReceipt = KioskReceipt.builder()
