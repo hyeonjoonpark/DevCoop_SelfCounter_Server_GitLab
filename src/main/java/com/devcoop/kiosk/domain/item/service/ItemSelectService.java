@@ -39,10 +39,10 @@ public class ItemSelectService {
             int quantity = 1;
             EventType eventStatus = EventType.NONE;
 
-            if (item.getEvent().equals(EventType.ONE_PLUS_ONE)) {
-                quantity = 2;
-                eventStatus = EventType.ONE_PLUS_ONE;
-            }
+//            if (item.getEvent().equals(EventType.ONE_PLUS_ONE)) {
+//                quantity = 2;
+//                eventStatus = EventType.ONE_PLUS_ONE;
+//            }
 
             ItemResponse itemResponse = ItemResponse.builder()
                     .name(item.getItemName())
