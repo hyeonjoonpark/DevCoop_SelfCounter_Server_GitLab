@@ -93,7 +93,7 @@ public class UserAuthService {
             throw new GlobalException(ErrorCode.USER_NOT_FOUND);
         }
 
-        user.update(resetPassword);
+        user.update(bCryptPasswordEncoder.encode(resetPassword));
         userRepository.save(user);
     }
 }
