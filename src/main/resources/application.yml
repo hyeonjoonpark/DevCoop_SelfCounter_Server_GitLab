@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://${DB_HOST}/${DB_NAME}?serverTimezone=UTC&characterEncoding=UTF-8&autoReconnect=true
-    password: ${DB_PASSWORD}
-    username: ${DB_USERNAME}
+    url: jdbc:mysql://10.0.5.4:6006/AriPay?serverTimezone=UTC&characterEncoding=UTF-8&autoReconnect=true
+    password: Devcoop1Qw@
+    username: devcoop
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       minimum-idle: 10
