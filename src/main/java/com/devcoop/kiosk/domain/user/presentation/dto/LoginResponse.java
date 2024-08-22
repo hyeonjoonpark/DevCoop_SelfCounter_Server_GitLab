@@ -8,9 +8,9 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class LoginResponse {
-  private String token;
-  private int studentNumber;
-  private String codeNumber;
-  private String studentName;
-  private int point;
+    private String token;
+    private String userNumber; // studentNumber -> userNumber
+    private String userCode;   // codeNumber -> userCode
+    private String userName;   // studentName -> userName
+    private int userPoint;     // point -> userPoint
 }

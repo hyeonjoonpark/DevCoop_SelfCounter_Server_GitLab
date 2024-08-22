@@ -35,17 +35,17 @@ public class SelfCounterService {
     private final ItemRepository itemRepository;
 
     public int deductPoints(UserPointRequest userPointRequest) {
-        log.info("userPointRequestDto = " + userPointRequest);
-        String codeNumber = userPointRequest.codeNumber();
-        User user = userRepository.findByCodeNumber(codeNumber);
+        log.info("userPointRequest = " + userPointRequest);
+        String userCode = userPointRequest.userCode();
+        User user = userRepository.findByUserCode(userCode);
 
         if (user == null) {
             throw new RuntimeException("사용자를 찾을 수 없습니다.");
         }
 
-        if (user.getPoint() >= userPointRequest.totalPrice()) {
-            int newPoint = user.getPoint() - userPointRequest.totalPrice();
-            user.setPoint(newPoint);
+        if (user.getUserPoint() >= userPointRequest.totalPrice()) {
+            int newPoint = user.getUserPoint() - userPointRequest.totalPrice();
+            user.setUserPoint(newPoint);
             userRepository.save(user);
             return newPoint; // 새로운 포인트 반환
         } else {
@@ -55,9 +55,8 @@ public class SelfCounterService {
 
     public void savePayLog(PayLogRequest payLogRequest) {
         try {
-            // findByStudentName() 이 이름중복인 사람이 있으면 에러 발생시킴 -> findByCodeNumber()
-            User user = userRepository.findByCodeNumber(payLogRequest.codeNumber());
-            PayLog payLog = payLogRequest.toEntity(user.getPoint());
+            User user = userRepository.findByUserCode(payLogRequest.userCode());
+            PayLog payLog = payLogRequest.toEntity(user.getUserPoint());
             payLogRepository.save(payLog);
         } catch (Exception e) {
             throw new RuntimeException("결제 로그 저장 중 오류가 발생하였습니다.", e);
@@ -78,19 +77,14 @@ public class SelfCounterService {
 
                 EventType eventType = EventType.NONE;
 
-//                if (item.getEvent().equals(EventType.ONE_PLUS_ONE)) {
-//                    eventType = EventType.ONE_PLUS_ONE;
-//                }
-
-
                 KioskReceipt kioskReceipt = KioskReceipt.builder()
-                        .dcmSaleAmt(itemInfo.dcmSaleAmt())
+                        .tradedPoint(itemInfo.dcmSaleAmt())  // 필드명 변경
                         .itemName(item.getItemName())
                         .saleQty((short) itemInfo.saleQty())
-                        .userId(kioskRequest.getUserId())
-                        .itemId(String.valueOf(item.getItemId()))
-                        .saleYn(ReceiptType.Y)
-                        .eventType(eventType)
+                        .userCode(kioskRequest.getUserId())  // 필드명 변경
+                        .itemCode(String.valueOf(item.getItemId()))  // 필드명 변경
+                        .saleType("0")
+                        .eventType(eventType.name())  // eventType을 enum이 아닌 String으로 처리
                         .build();
 
                 kioskReceiptRepository.save(kioskReceipt);

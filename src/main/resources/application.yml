@@ -12,7 +12,9 @@ spring:
       max-lifetime: 1800000
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     properties:
       hibernate.hibernate.format_sql: true
       hibernate.hibernate.default_batch_fetch_size: 100
@@ -31,3 +33,7 @@ server:
       charset: UTF-8
       enabled: true
       force: true
+
+
+db:
+  imageUrl: "./"

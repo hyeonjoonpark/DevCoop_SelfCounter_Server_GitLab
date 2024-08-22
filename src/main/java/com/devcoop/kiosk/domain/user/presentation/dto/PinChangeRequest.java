@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PinChangeRequest {
-  private String codeNumber;
-  private String pin;
-  private String newPin;
+    private String userCode; // codeNumber -> userCode
+    private String userPin;  // pin -> userPin
+    private String newPin;
 }

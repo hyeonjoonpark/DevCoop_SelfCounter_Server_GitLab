@@ -20,16 +20,15 @@ import java.util.List;
 @Slf4j
 public class ItemSelectService {
     private final KioskReceiptRepository kioskReceiptRepository;
-
     private final ItemRepository itemRepository;
 
     @Transactional(readOnly = true)
-    public List<ItemResponse> get(List<String> barcodes) throws GlobalException {
+    public List<ItemResponse> get(List<String> itemCodes) throws GlobalException {
         List<ItemResponse> itemResponses = new ArrayList<>();
 
-        for (String barcode : barcodes) {
-            log.info("service에서 barcode = {}", barcode);
-            Item item = itemRepository.findByBarcode(barcode);
+        for (String itemCode : itemCodes) {
+            log.info("Service에서 itemCode = {}", itemCode);
+            Item item = itemRepository.findByItemCode(itemCode);
             log.info("item = {}", item);
 
             if (item == null) {
@@ -39,14 +38,15 @@ public class ItemSelectService {
             int quantity = 1;
             EventType eventStatus = EventType.NONE;
 
-//            if (item.getEvent().equals(EventType.ONE_PLUS_ONE)) {
-//                quantity = 2;
-//                eventStatus = EventType.ONE_PLUS_ONE;
-//            }
+            // 이벤트에 따른 수량 및 상태 처리 로직
+            if (item.getEvent().equals(EventType.ONE_PLUS_ONE)) {
+                quantity = 2;
+                eventStatus = EventType.ONE_PLUS_ONE;
+            }
 
             ItemResponse itemResponse = ItemResponse.builder()
-                    .name(item.getItemName())
-                    .price(item.getItemPrice())
+                    .itemName(item.getItemName())  // 필드 이름 일치
+                    .itemPrice(item.getItemPrice())  // 필드 이름 일치
                     .quantity(quantity)
                     .eventStatus(eventStatus)
                     .build();

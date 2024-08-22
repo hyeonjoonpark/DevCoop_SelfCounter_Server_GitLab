@@ -1,17 +1,9 @@
 package com.devcoop.kiosk.domain.user.types;
 
-import lombok.Getter;
-
-@Getter
 public enum Role {
-    ROLE_USER_NOT_COOP("협동조합을 가입하지 않은 학생"),
-    ROLE_USER_COOP("협동조합 학생"),
-    ROLE_ADMIN("매점부원"),
-    ROLE_TEACHER("선생님");
-
-    private final String description;
-
-    Role(String description) {
-        this.description = description;
-    }
+    ROLE_DEACTIVATED, // 비활성화된 사용자
+    ROLE_USER,        // 일반 사용자
+    ROLE_MEMBER,      // 조합원
+    ROLE_COOP,        // 매점부
+    ROLE_ADMIN        // 관리자
 }

@@ -1,7 +1,6 @@
 package com.devcoop.kiosk.domain.item.presentation;
 
 import com.devcoop.kiosk.domain.item.presentation.dto.ItemResponse;
-import com.devcoop.kiosk.domain.item.presentation.dto.RecommandResponse;
 import com.devcoop.kiosk.domain.item.service.ItemSelectService;
 import com.devcoop.kiosk.global.exception.GlobalException;
 import io.swagger.v3.oas.annotations.Operation;

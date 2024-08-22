@@ -7,13 +7,14 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class RecommandResponse {
-  private String name;
-  private int price;
-  private int studentsCount; // 이 필드를 설정하는 로직이 필요합니다.
+  private String itemName;    // 엔티티의 필드 이름과 일치시킴
+  private int itemPrice;      // 엔티티의 필드 이름과 일치시킴
+  private int studentsCount;
+
   @Builder
   public RecommandResponse(String itemName, int itemPrice, int studentsCount) {
-    this.name = itemName;
-    this.price = itemPrice;
-    this.studentsCount = studentsCount; // 이제 생성자를 통해 이 필드를 설정할 수 있습니다.
+    this.itemName = itemName;
+    this.itemPrice = itemPrice;
+    this.studentsCount = studentsCount;
   }
 }

@@ -5,11 +5,11 @@ import lombok.Builder;
 
 @Builder
 public record EventItemResponse(
-        String barcode,
+        String itemCode,  // barcode를 itemCode로 수정
         String itemName,
         int itemPrice,
         EventType event,
-        String image // image 경로
+        String image // 이미지 경로
 ) {
 
 }

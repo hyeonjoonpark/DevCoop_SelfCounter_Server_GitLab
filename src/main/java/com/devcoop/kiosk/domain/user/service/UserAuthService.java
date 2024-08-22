@@ -17,83 +17,77 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class UserAuthService {
+
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final Long exprTime = 1000 * 60 * 60L;
+
     @Value("${jwt.secret}")
     private String secretKey;
 
     @Transactional
     public LoginResponse login(LoginRequest dto) throws GlobalException {
-        String codeNumber = dto.getCodeNumber();
-        String pin = dto.getPin();
+        String userCode = dto.getUserCode(); // codeNumber를 userCode로 변경
+        String userPin = dto.getUserPin(); // pin을 userPin으로 변경
 
-        User user = userRepository.findByCodeNumber(codeNumber);
+        User user = userRepository.findByUserCode(userCode); // 메서드 호출 수정
 
         if (user == null) {
             throw new GlobalException(ErrorCode.USER_NOT_FOUND);
         }
 
-        System.out.println("user = " + user.getPin());
-
-        if (!bCryptPasswordEncoder.matches(pin, user.getPin())) {
+        if (!bCryptPasswordEncoder.matches(userPin, user.getUserPin())) {
             throw new RuntimeException("핀 번호가 옳지 않습니다");
         }
 
-        String token = JwtUtil.createJwt(codeNumber, secretKey, exprTime);
+        String token = JwtUtil.createJwt(userCode, secretKey, exprTime);
 
-        System.out.println("user.getStudentName = " + user.getStudentName());
-
-        LoginResponse loginResponse = LoginResponse.builder()
+        return LoginResponse.builder()
                 .token(token)
-                .studentNumber(user.getStudentNumber())
-                .codeNumber(user.getCodeNumber())
-                .studentName(user.getStudentName())
-                .point(user.getPoint())
+                .userNumber(user.getUserNumber()) // studentNumber를 userNumber로 변경
+                .userCode(user.getUserCode()) // codeNumber를 userCode로 변경
+                .userName(user.getUserName()) // studentName을 userName으로 변경
+                .userPoint(user.getUserPoint()) // point를 userPoint로 변경
                 .build();
-
-        return loginResponse;
-
     }
 
     @Transactional
     public void changePassword(PinChangeRequest dto) throws GlobalException {
-        String codeNumber = dto.getCodeNumber();
-        String pin = dto.getPin();
+        String userCode = dto.getUserCode(); // codeNumber를 userCode로 변경
+        String userPin = dto.getUserPin(); // pin을 userPin으로 변경
         String newPin = dto.getNewPin();
 
-        User user = userRepository.findByCodeNumber(codeNumber);
-        System.out.println("user = " + user);
+        User user = userRepository.findByUserCode(userCode); // 메서드 호출 수정
 
         if (user == null) {
             throw new GlobalException(ErrorCode.USER_NOT_FOUND);
         }
 
-        if (!bCryptPasswordEncoder.matches(pin, user.getPin())) {
-            throw new RuntimeException("현재핀 번호가 옳지 않습니다");
+        if (!bCryptPasswordEncoder.matches(userPin, user.getUserPin())) {
+            throw new RuntimeException("현재 핀 번호가 옳지 않습니다");
         }
 
-        if (bCryptPasswordEncoder.matches(newPin, user.getPin())) {
+        if (bCryptPasswordEncoder.matches(newPin, user.getUserPin())) {
             throw new RuntimeException("현재 핀번호와 다른 핀번호를 입력해주세요");
         }
 
         String encodedPin = bCryptPasswordEncoder.encode(newPin);
 
-        user.update(encodedPin);
+        user.changePin(encodedPin); // update 메서드를 changePin으로 변경
         userRepository.save(user);
     }
 
     @Transactional
-    public void resetPassword(String codeNumber) throws GlobalException {
+    public void resetPassword(String userCode) throws GlobalException {
         String resetPassword = "1234";
 
-        User user = userRepository.findByCodeNumber(codeNumber);
+        User user = userRepository.findByUserCode(userCode); // 메서드 호출 수정
 
         if (user == null) {
             throw new GlobalException(ErrorCode.USER_NOT_FOUND);
         }
 
-        user.update(bCryptPasswordEncoder.encode(resetPassword));
+        user.changePin(bCryptPasswordEncoder.encode(resetPassword)); // update 메서드를 changePin으로 변경
         userRepository.save(user);
     }
 }

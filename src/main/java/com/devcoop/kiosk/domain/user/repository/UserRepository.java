@@ -7,20 +7,21 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Integer> {
-  User findByCodeNumber(String codeNumber);
+public interface UserRepository extends JpaRepository<User, String> {
+    User findByUserCode(String userCode);
 
-  @Query("select u.pin " +
-    "from User u " +
-    "where u.codeNumber = :codeNumber and u.pin = :pin")
-  String findPinByCodeNumberAndPin(@Param("codeNumber") String codenumber, @Param("pin") String pin);
+    @Query("select u.userPin " +
+           "from User u " +
+           "where u.userCode = :userCode and u.userPin = :userPin")
+    String findPinByUserCodeAndUserPin(@Param("userCode") String userCode, @Param("userPin") String userPin);
 
-  @Query("select u.studentNumber, u.codeNumber, u.studentName, u.point " +
-    "from User u " +
-    "where u.codeNumber = :codeNumber and u.pin = :pin")
-  User findUserDetailByCodeNumberAndPin(@Param("codeNumber") String codenumber, @Param("pin") String pin);
+    @Query("select u.userNumber, u.userCode, u.userName, u.userPoint " +
+           "from User u " +
+           "where u.userCode = :userCode and u.userPin = :userPin")
+    User findUserDetailByUserCodeAndUserPin(@Param("userCode") String userCode, @Param("userPin") String userPin);
 
-  boolean existsByCodeNumber(String codeNumber);
+    boolean existsByUserCode(String userCode);
 
-    User findByStudentName(String studentName);
+    User findByUserName(String userName);
+    User findByUserEmail(String userEmail);
 }

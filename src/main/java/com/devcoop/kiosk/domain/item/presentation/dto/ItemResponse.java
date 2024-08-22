@@ -5,8 +5,8 @@ import lombok.Builder;
 
 @Builder
 public record ItemResponse(
-        String name,
-        int price,
+        String itemName,   // name을 itemName으로 변경
+        int itemPrice,
         int quantity,
         EventType eventStatus
 ) {

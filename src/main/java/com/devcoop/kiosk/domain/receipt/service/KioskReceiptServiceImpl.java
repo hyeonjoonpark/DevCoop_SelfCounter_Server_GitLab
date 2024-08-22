@@ -1,14 +1,11 @@
-// KioskReceiptServiceImpl.java 수정
 package com.devcoop.kiosk.domain.receipt.service;
 
 import com.devcoop.kiosk.domain.item.Item;
 import com.devcoop.kiosk.domain.item.repository.ItemRepository;
-import com.devcoop.kiosk.domain.item.types.EventType;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskItemInfo;
 import com.devcoop.kiosk.domain.paylog.presentation.dto.KioskRequest;
 import com.devcoop.kiosk.domain.receipt.KioskReceipt;
 import com.devcoop.kiosk.domain.receipt.repository.KioskReceiptRepository;
-import com.devcoop.kiosk.domain.receipt.types.ReceiptType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +25,7 @@ public class KioskReceiptServiceImpl implements ReceiptService {
     public ResponseEntity<Object> save(KioskRequest kioskRequest) {
         List<KioskItemInfo> requestItems = kioskRequest.getItems();
         System.out.println("requestItemList = " + requestItems);
+
         for (KioskItemInfo itemInfo : requestItems) {
             System.out.println("itemInfo = " + itemInfo);
             Item item = itemRepository.findByItemName(itemInfo.itemName());
@@ -37,26 +35,27 @@ public class KioskReceiptServiceImpl implements ReceiptService {
                 throw new NotFoundException("없는 상품입니다");
             }
 
-            EventType eventType = EventType.NONE;
-
-            if (item.getEvent().equals(EventType.NONE)) {
-                eventType = EventType.ONE_PLUS_ONE;
+            // 이벤트 타입 설정
+            String eventType = "NONE";
+            if (item.getEvent().equals("ONE_PLUS_ONE")) {
+                eventType = "ONE_PLUS_ONE";
             }
 
+            // KioskReceipt 객체 생성 및 데이터베이스 저장
             KioskReceipt kioskReceipt = KioskReceipt.builder()
-                    .dcmSaleAmt(itemInfo.dcmSaleAmt())
-                    .itemName(item.getItemName())
-                    .saleQty((short) itemInfo.saleQty())
-                    .userId(kioskRequest.getUserId())
-                    .itemId(String.valueOf(item.getItemId()))
-                    .saleYn(ReceiptType.Y)
-                    .eventType(eventType)
+                    .tradedPoint(itemInfo.dcmSaleAmt()) // 거래 금액 설정
+                    .itemName(item.getItemName()) // 품목 이름 설정
+                    .saleQty(itemInfo.saleQty()) // 품목 수량 설정
+                    .userCode(kioskRequest.getUserId()) // 사용자 바코드 설정
+                    .itemCode(String.valueOf(item.getItemId())) // 품목 코드 설정
+                    .saleType("Y") // 결제 타입 설정 (예: Y, N)
+                    .eventType(eventType) // 이벤트 타입 설정
                     .build();
             System.out.println("kioskReceipt = " + kioskReceipt);
 
-            kioskReceiptRepository.save(kioskReceipt);
+            kioskReceiptRepository.save(kioskReceipt); // 데이터베이스에 저장
         }
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().build(); // 응답 반환
     }
 }

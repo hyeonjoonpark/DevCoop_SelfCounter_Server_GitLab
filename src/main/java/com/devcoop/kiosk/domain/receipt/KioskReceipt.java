@@ -1,50 +1,49 @@
 package com.devcoop.kiosk.domain.receipt;
 
-import com.devcoop.kiosk.domain.item.types.EventType;
-import com.devcoop.kiosk.domain.receipt.types.ReceiptType;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Check;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "kiosk_receipts")
+@Table(name = "occount_kioskReceipts") // 테이블 이름 변경
 @Getter
 @ToString
 @NoArgsConstructor
-@Check(constraints = "event_type IN ('ONE_PLUS_ONE', 'NONE')")
 public class KioskReceipt {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int number;
-    private int dcmSaleAmt;// 팔린 금액
-    @Setter
-    private String itemId;// 아이템 Id
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ReceiptType saleYn;// 팔렸으면 Y 안 팔리면 N
-    private String userId;// 영수증 번호
-    private String itemName; // 아이템 이름
-    private Short saleQty; // 팔린 양
+    private int receiptId; // 거래식별용 id
+    
+    private String itemCode; // 품목 id
+    
+    private int tradedPoint; // 거래 가격
+    
+    private String itemName; // 품목 이름
+    
+    private int saleQty; // 품목 수량
+    
     @CreationTimestamp
-    private LocalDateTime date = LocalDateTime.now(); // 팔린 날짜
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private EventType eventType = EventType.NONE;
+    private LocalDateTime saleDate = LocalDateTime.now(); // 거래 발생 시간
+    
+    private String userCode; // 사용자 바코드
+    
+    private String saleType; // 결제 타입
+    
+    private String eventType; // 이벤트 여부 ('ONE_PLUS_ONE', 'NONE' 등)
 
     @Builder
-    public KioskReceipt(int number, int dcmSaleAmt, String itemId, ReceiptType saleYn, String userId, String itemName, Short saleQty, LocalDateTime date, EventType eventType) {
-        this.number = number;
-        this.dcmSaleAmt = dcmSaleAmt;
-        this.itemId = itemId;
-        this.saleYn = saleYn;
-        this.userId = userId;
+    public KioskReceipt(int receiptId, String itemCode, int tradedPoint, String itemName, int saleQty, LocalDateTime saleDate, String userCode, String saleType, String eventType) {
+        this.receiptId = receiptId;
+        this.itemCode = itemCode;
+        this.tradedPoint = tradedPoint;
         this.itemName = itemName;
         this.saleQty = saleQty;
-        this.date = date;
+        this.saleDate = saleDate;
+        this.userCode = userCode;
+        this.saleType = saleType;
         this.eventType = eventType;
     }
 }

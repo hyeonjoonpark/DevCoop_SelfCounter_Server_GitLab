@@ -19,9 +19,9 @@ public class PaylogServiceImpl implements LogService {
   @Override
   public ResponseEntity<Object> savePayLog(PayLogRequest payLogRequest) {
     try {
-      User user = userRepository.findByStudentName(payLogRequest.studentName());
+      User user = userRepository.findByUserEmail(payLogRequest.managedEmail());
 
-      PayLog payLog = payLogRequest.toEntity(user.getPoint());
+      PayLog payLog = payLogRequest.toEntity(user.getUserPoint());
 
       payLogRepository.save(payLog);
       return ResponseEntity.ok().build();
