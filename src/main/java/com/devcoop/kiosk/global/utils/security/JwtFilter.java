@@ -1,7 +1,6 @@
 package com.devcoop.kiosk.global.utils.security;
 
 import com.devcoop.kiosk.domain.item.service.ItemSelectService;
-import com.devcoop.kiosk.domain.paylog.service.LogService;
 import com.devcoop.kiosk.domain.paylog.service.SelfCounterService;
 import com.devcoop.kiosk.domain.receipt.service.ReceiptService;
 import jakarta.servlet.FilterChain;

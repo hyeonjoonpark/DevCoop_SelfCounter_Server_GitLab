@@ -51,26 +51,8 @@ public class SelfCounterService {
         }
     }
 
-    public void savePayLog(PayLogRequest payLogRequest) {
+    public void savePayLog(int beforePoint, int afterPoint, PayLogRequest payLogRequest) {
         try {
-            // 결제 전 User 상태를 조회하여 beforePoint를 얻습니다.
-            User userBeforePayment = userRepository.findByUserCode(payLogRequest.userCode());
-            
-            if (userBeforePayment == null) {
-                throw new RuntimeException("사용자를 찾을 수 없습니다.");
-            }
-    
-            int beforePoint = userBeforePayment.getUserPoint();
-    
-            // 결제된 포인트가 보유 포인트보다 많으면 오류 발생
-            if (payLogRequest.payedPoint() > beforePoint) {
-                throw new RuntimeException("결제 포인트가 보유 포인트보다 많습니다.");
-            }
-    
-            // 포인트 차감 후 User 상태를 다시 조회하여 afterPoint를 얻습니다.
-            User userAfterPayment = userRepository.findByUserCode(payLogRequest.userCode());
-            int afterPoint = userAfterPayment.getUserPoint();
-    
             // PayLog 엔티티 생성 시, 정확한 beforePoint와 afterPoint를 사용
             PayLog payLog = payLogRequest.toEntity(beforePoint, afterPoint);
             payLogRepository.save(payLog);
@@ -79,6 +61,7 @@ public class SelfCounterService {
             throw new RuntimeException("결제 로그 저장 중 오류가 발생하였습니다.", e);
         }
     }
+    
     
     
 
@@ -121,38 +104,35 @@ public class SelfCounterService {
     @Transactional(rollbackFor = Exception.class)
     public Map<String, Object> executeAllTransactions(Payments payments) {
         Map<String, Object> response = new HashMap<>();
-    
+
         try {
             // 포인트 차감 전 beforePoint를 얻기 위해 User 상태 조회
             User userBeforePayment = userRepository.findByUserCode(payments.payLogRequest().userCode());
             int beforePoint = userBeforePayment.getUserPoint();
-    
+
             // 포인트 차감
             UserPointRequest userPointRequestDto = payments.userPointRequest();
             int newPoints = deductPoints(userPointRequestDto);
             response.put("remainingPoints", newPoints); // 새로운 포인트 반환
-    
-            // 결제 후 상태를 얻기 위해 다시 User 상태 조회
-            User userAfterPayment = userRepository.findByUserCode(payments.payLogRequest().userCode());
-            int afterPoint = userAfterPayment.getUserPoint();
-    
+
+            // afterPoint는 차감된 포인트 값을 사용하여 직접 계산
+            int afterPoint = newPoints; // 이미 차감된 후의 포인트가 newPoints에 저장되어 있음
+
             // 결제 로그 저장 시 정확한 beforePoint와 afterPoint를 전달
-            PayLogRequest payLogRequest = payments.payLogRequest();
-            PayLog payLog = payLogRequest.toEntity(beforePoint, afterPoint);  // PayLog 객체 생성
-            savePayLog(payLogRequest); // PayLogRequest 객체를 전달해야 함
-    
+            savePayLog(beforePoint, afterPoint, payments.payLogRequest());
+
             // 영수증 저장
             saveReceipt(payments.kioskRequest());
-    
+
             response.put("status", "success");
             response.put("message", "결제가 성공적으로 완료되었습니다.");
         } catch (Exception e) {
             log.error("트랜잭션 실패 및 롤백", e);
             throw new RuntimeException(e.getMessage(), e); // 예외를 다시 던져 트랜잭션을 롤백합니다.
         }
-    
+
         return response;
     }
-    
+
 
 }
