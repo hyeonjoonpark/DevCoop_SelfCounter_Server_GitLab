@@ -27,38 +27,46 @@ public class JwtFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-    // header에서 authorization을 꺼냄
-    final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
-    log.info("Authorization: {}", authorization);
-
-    // token을 보내지 않으면 block
-    if (authorization == null || !authorization.startsWith("Bearer ")) {
-      log.error("authorization을 잘못 보냈습니다");
+      // header에서 authorization을 꺼냄
+      final String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
+      log.info("Authorization: {}", authorization);
+  
+      // token을 보내지 않으면 block
+      if (authorization == null || !authorization.startsWith("Bearer ")) {
+          log.error("authorization을 잘못 보냈습니다");
+          filterChain.doFilter(request, response);
+          return;
+      }
+  
+      // token 꺼내기
+      String token = authorization.split(" ")[1];
+  
+      // Token이 만료되었는지 확인
+      if (JwtUtil.isExpired(token, secretKey)) {
+          log.error("토큰이 만료되었습니다");
+          filterChain.doFilter(request, response);
+          return;
+      }
+  
+      // UserId 토큰에서 꺼내기
+      String userCode = JwtUtil.getCodeNumber(token, secretKey);
+      log.info("userCode: {}", userCode);
+  
+      // userCode가 null이거나 비어 있지 않은지 확인
+      if (userCode == null || userCode.isBlank()) {
+          log.error("userCode가 null 또는 빈 값입니다.");
+          filterChain.doFilter(request, response);
+          return;
+      }
+  
+      // 권한부여
+      UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userCode, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
+  
+      // Detail을 넣어줍니다
+      authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+      SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+  
       filterChain.doFilter(request, response);
-      return;
-    }
-
-    // token 꺼내기
-    String token = authorization.split(" ")[1];
-
-    // Token이 만료되었는지 확인
-    if (JwtUtil.isExpired(token, secretKey)) {
-      log.error("토큰이 만료되었습니다");
-      filterChain.doFilter(request, response);
-      return;
-    }
-
-    // UserId 토큰에서 꺼내기
-    String codeNumber = JwtUtil.getCodeNumber(token, secretKey);
-    log.info("codeNumber: {}", codeNumber);
-
-    // 권한부여
-    UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(codeNumber, null, List.of(new SimpleGrantedAuthority("ROLE_USER")));
-
-    // Detail을 넣어줍니다
-    authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-    SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
-    filterChain.doFilter(request, response);
   }
+  
 }

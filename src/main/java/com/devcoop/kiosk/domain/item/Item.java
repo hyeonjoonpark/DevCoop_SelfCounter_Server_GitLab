@@ -1,6 +1,5 @@
 package com.devcoop.kiosk.domain.item;
 
-import com.devcoop.kiosk.domain.item.types.EventType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -38,9 +37,8 @@ public class Item {
     @Column(name = "itemQuantity", nullable = false, columnDefinition = "int DEFAULT 0")
     private int itemQuantity;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "event", columnDefinition = "enum('DISCOUNT','NONE','ONE_PLUS_ONE','TWO_PLUS_ONE') CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'NONE'")
-    private EventType event = EventType.NONE;
+    @Column(name = "event", length = 45, columnDefinition = "varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT 'NONE'")
+    private String event = "NONE"; // 이벤트 타입을 String으로 설정
 
     @Column(name = "event_start_date", columnDefinition = "date DEFAULT NULL")
     private LocalDate eventStartDate;
@@ -52,7 +50,7 @@ public class Item {
     private String itemImage;
 
     @Builder
-    public Item(Integer itemId, String itemCode, String itemName, String itemExplain, int itemPrice, String itemCategory, int itemQuantity, EventType event, LocalDate eventStartDate, LocalDate eventEndDate, String itemImage) {
+    public Item(Integer itemId, String itemCode, String itemName, String itemExplain, int itemPrice, String itemCategory, int itemQuantity, String event, LocalDate eventStartDate, LocalDate eventEndDate, String itemImage) {
         this.itemId = itemId;
         this.itemCode = itemCode;
         this.itemName = itemName;

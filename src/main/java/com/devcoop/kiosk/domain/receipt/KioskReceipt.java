@@ -7,7 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "occount_kioskReceipts") // 테이블 이름 변경
+@Table(name = "occount_kioskReceipts")
 @Getter
 @ToString
 @NoArgsConstructor
@@ -30,12 +30,12 @@ public class KioskReceipt {
     
     private String userCode; // 사용자 바코드
     
-    private String saleType; // 결제 타입
+    private byte saleType; // 결제 타입 (0: 정상 결제, 1: 환불 결제 등)
     
     private String eventType; // 이벤트 여부 ('ONE_PLUS_ONE', 'NONE' 등)
 
     @Builder
-    public KioskReceipt(int receiptId, String itemCode, int tradedPoint, String itemName, int saleQty, LocalDateTime saleDate, String userCode, String saleType, String eventType) {
+    public KioskReceipt(int receiptId, String itemCode, int tradedPoint, String itemName, int saleQty, LocalDateTime saleDate, String userCode, byte saleType, String eventType) {
         this.receiptId = receiptId;
         this.itemCode = itemCode;
         this.tradedPoint = tradedPoint;

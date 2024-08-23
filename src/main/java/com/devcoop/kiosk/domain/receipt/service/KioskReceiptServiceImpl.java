@@ -43,15 +43,16 @@ public class KioskReceiptServiceImpl implements ReceiptService {
 
             // KioskReceipt 객체 생성 및 데이터베이스 저장
             KioskReceipt kioskReceipt = KioskReceipt.builder()
-                    .tradedPoint(itemInfo.dcmSaleAmt()) // 거래 금액 설정
-                    .itemName(item.getItemName()) // 품목 이름 설정
-                    .saleQty(itemInfo.saleQty()) // 품목 수량 설정
-                    .userCode(kioskRequest.getUserId()) // 사용자 바코드 설정
-                    .itemCode(String.valueOf(item.getItemId())) // 품목 코드 설정
-                    .saleType("Y") // 결제 타입 설정 (예: Y, N)
-                    .eventType(eventType) // 이벤트 타입 설정
-                    .build();
+                .tradedPoint(itemInfo.dcmSaleAmt()) // 거래 금액 설정
+                .itemName(item.getItemName()) // 품목 이름 설정
+                .saleQty(itemInfo.saleQty()) // 품목 수량 설정
+                .userCode(kioskRequest.getUserId()) // 사용자 바코드 설정
+                .itemCode(String.valueOf(item.getItemId())) // 품목 코드 설정
+                .saleType((byte) 0) // 결제 타입 설정 (0: 정상 결제)
+                .eventType(eventType) // 이벤트 타입 설정
+                .build();
             System.out.println("kioskReceipt = " + kioskReceipt);
+    
 
             kioskReceiptRepository.save(kioskReceipt); // 데이터베이스에 저장
         }

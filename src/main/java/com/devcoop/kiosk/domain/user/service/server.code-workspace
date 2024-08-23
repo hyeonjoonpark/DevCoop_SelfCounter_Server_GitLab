@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"name": "server",
+			"path": "../../../../../../../../../../.."
+		}
+	],
+	"settings": {
+		"java.compile.nullAnalysis.mode": "automatic",
+		"vim.vimrc.path": "~/.vimrc"
+	}
+}

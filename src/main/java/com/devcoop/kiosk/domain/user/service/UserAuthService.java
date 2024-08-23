@@ -13,10 +13,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 
 @Service
 @RequiredArgsConstructor
 public class UserAuthService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserAuthService.class);
 
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -27,27 +32,37 @@ public class UserAuthService {
 
     @Transactional
     public LoginResponse login(LoginRequest dto) throws GlobalException {
-        String userCode = dto.getUserCode(); // codeNumber를 userCode로 변경
-        String userPin = dto.getUserPin(); // pin을 userPin으로 변경
+        String userCode = dto.getUserCode();
+        String userPin = dto.getUserPin();
+        logger.info(userPin);
+        logger.info("Attempting login foa userCode: {}", userCode);
 
-        User user = userRepository.findByUserCode(userCode); // 메서드 호출 수정
+        User user = userRepository.findByUserCode(userCode);
 
         if (user == null) {
+            logger.error("User not found for userCode: {}", userCode);
             throw new GlobalException(ErrorCode.USER_NOT_FOUND);
         }
 
+        logger.info("User found: {} - Verifying PIN", user.getUserName());
+
         if (!bCryptPasswordEncoder.matches(userPin, user.getUserPin())) {
+            logger.error("Invalid PIN for userCode: {}", userCode);
             throw new RuntimeException("핀 번호가 옳지 않습니다");
         }
 
+        logger.info("PIN verified for userCode: {} - Generating JWT token", userCode);
+
         String token = JwtUtil.createJwt(userCode, secretKey, exprTime);
+
+        logger.info("JWT token generated for userCode: {}", userCode);
 
         return LoginResponse.builder()
                 .token(token)
-                .userNumber(user.getUserNumber()) // studentNumber를 userNumber로 변경
-                .userCode(user.getUserCode()) // codeNumber를 userCode로 변경
-                .userName(user.getUserName()) // studentName을 userName으로 변경
-                .userPoint(user.getUserPoint()) // point를 userPoint로 변경
+                .userNumber(user.getUserNumber())
+                .userCode(user.getUserCode())
+                .userName(user.getUserName())
+                .userPoint(user.getUserPoint())
                 .build();
     }
 

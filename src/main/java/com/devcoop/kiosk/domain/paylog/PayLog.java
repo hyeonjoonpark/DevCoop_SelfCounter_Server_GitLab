@@ -32,12 +32,12 @@ public class PayLog {
     
     private String managedEmail; // 담당 매점부 이메일, 기존 chargerId를 managedEmail로 변경
     
-    private Short eventType; // 이벤트 유형, 기존 verifyKey와 studentName을 제거하고 eventType을 추가
+    private String eventType; // 이벤트 유형, 기존 verifyKey와 studentName을 제거하고 eventType을 추가
 
     @Builder
     public PayLog(int payId, String userCode, LocalDateTime payDate, String payType, 
                   int beforePoint, int payedPoint, int afterPoint, 
-                  String managedEmail, Short eventType) {
+                  String managedEmail, String eventType) {
         this.payId = payId;
         this.userCode = userCode;
         this.payDate = payDate;
