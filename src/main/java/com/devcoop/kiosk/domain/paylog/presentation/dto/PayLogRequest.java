@@ -18,7 +18,7 @@ public record PayLogRequest(
                 .beforePoint(beforePoint)
                 .payedPoint(payedPoint)
                 .afterPoint(afterPoint) // 결제 후 남은 포인트
-                .managedEmail(managedEmail)
+                .managedEmail("Kiosk")
                 .payType("1") 
                 .eventType("") 
                 .build();

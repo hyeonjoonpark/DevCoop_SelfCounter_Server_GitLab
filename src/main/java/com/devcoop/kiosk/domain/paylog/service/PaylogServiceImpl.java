@@ -19,13 +19,22 @@ public class PaylogServiceImpl implements LogService {
   @Override
   public ResponseEntity<Object> savePayLog(PayLogRequest payLogRequest) {
     try {
+      // 결제 전 사용자 포인트 (beforePoint)
       User user = userRepository.findByUserEmail(payLogRequest.managedEmail());
+      int beforePoint = user.getUserPoint();
 
-      PayLog payLog = payLogRequest.toEntity(user.getUserPoint());
+      // 결제된 포인트만큼 차감하여 afterPoint 계산
+      int afterPoint = beforePoint - payLogRequest.payedPoint();
 
+      // toEntity 메서드에 beforePoint와 afterPoint를 모두 전달
+      PayLog payLog = payLogRequest.toEntity(beforePoint, afterPoint);
+
+      // PayLog 저장
       payLogRepository.save(payLog);
+
       return ResponseEntity.ok().build();
     } catch (Exception e) {
+      // 오류 발생 시 500 응답 반환
       return ResponseEntity.internalServerError().build();
     }
   }
